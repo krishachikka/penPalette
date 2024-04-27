@@ -1,0 +1,32 @@
+*{
+    font-family: "Poppins";
+}
+body{
+    margin: 0;
+    padding: 0;
+    width: 100vw;
+    height: 100vh;
+}
+/* .scontainer{
+    top: 70px;
+} */
+.signup-card{    
+    background-color: #1c0831;
+    padding: 50px;
+    width: 33%;
+    min-width: 300px;
+    margin-left: 33%;
+    border-radius: 25px;
+    color: white;
+    border: 2px solid #52297a;
+    transition: 0.3s ease-in-out;
+}
+.signup-card:hover{
+    box-shadow: 0 0 20px 2px #7f39c5;
+}
+.cool{
+    width: 500px;
+    height: 500px;
+    margin: 20px;
+    right: 205;
+}
