@@ -1,0 +1,99 @@
+.container-fluid {
+  background-color: #1c0831; /* Match the background color of the login page */
+  padding: 20px; 
+}
+
+.dashboard-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.left-section,
+.right-section,
+.center-section {
+  flex: 1;
+  margin: 0 10px;
+}
+
+.left-section,
+.right-section {
+  padding: 20px;
+}
+.card {
+  background-color: #1c0831; /* Match the background color of the login card */
+  border: 2px solid #52297a; /* Border color */
+  border-radius: 25px; /* Border radius */
+  box-shadow: 0 0 20px 2px #7f39c5; /* Box shadow */
+  transition: 0.3s ease-in-out; /* Smooth transition on hover */
+  color: white; /* Text color */
+  margin-bottom: 20px; /* Add margin between cards */
+}
+
+.card:hover {
+  box-shadow: 0 0 20px 5px #7f39c5; /* Increase box shadow on hover */
+}
+
+.card-img-top {
+  border-top-left-radius: 25px; /* Ensure rounded corners for top-left of the image */
+  border-top-right-radius: 25px; /* Ensure rounded corners for top-right of the image */
+  cursor: pointer; /* Change cursor to pointer on hover */
+}
+
+.card-body {
+  padding: 20px; /* Add padding inside the card body */
+}
+
+.card-title {
+  font-size: 1.5rem; /* Increase font size of the title */
+  font-weight: bold; /* Make title bold */
+}
+
+.card-text {
+  font-size: 1rem; /* Adjust font size of text */
+}
+
+/* Add styles for the search input */
+.form-control {
+  border-radius: 25px; /* Border radius */
+  background-color: #b46aff; /* Background color */
+  opacity: 0.5; /* Opacity */
+  color: white; /* Text color */
+  font-size: 18px; /* Font size */
+  padding: 10px; /* Padding */
+}
+
+/* Add styles for the buttons */
+.button {
+  border-radius: 25px; /* Border radius */
+  padding: 10px; /* Padding */
+  background-color: transparent; /* Transparent background */
+  border: 2px solid #7f39c5; /* Border color */
+  transition: 0.3s ease-in-out; /* Smooth transition */
+  color: white; /* Text color */
+}
+
+.button:hover {
+  background-color: transparent; /* Transparent background on hover */
+  border: 2px solid #b46aff; /* Border color on hover */
+  box-shadow: 0 0 10px 1px #b46aff; /* Box shadow on hover */
+}
+
+/* Add styles for the text center */
+.text-center {
+  text-align: center; /* Center text */
+}
+
+/* Add styles for the link text */
+.linktext {
+  text-decoration: none; /* Remove underline */
+  color: #b46aff; /* Link color */
+}
+
+.profile-icon, .icon {
+  color: white;
+}
+
+#searchbar{
+  border-radius: 25px;
+}
