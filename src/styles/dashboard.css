@@ -1,0 +1,154 @@
+.container-fluid {
+  background-color: #1c0831; /* Match the background color of the login page */
+  padding: 0 0 0 20px; 
+  left: 0 ;
+}
+
+.dashboard-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.right-section,
+.center-section {
+  flex: 1;
+  margin: 0 10px;
+}
+
+.right-section {
+  padding: 20px;
+}
+.card {
+  background-color: #1c0831; /* Match the background color of the login card */
+  border: 2px solid #52297a; /* Border color */
+  border-radius: 25px; /* Border radius */
+  box-shadow: 0 0 20px 2px #7f39c5; /* Box shadow */
+  transition: 0.3s ease-in-out; /* Smooth transition on hover */
+  color: white; /* Text color */
+  margin-bottom: 20px; /* Add margin between cards */
+}
+
+.card:hover {
+  box-shadow: 0 0 20px 5px #7f39c5; /* Increase box shadow on hover */
+}
+
+.card-img-top {
+  border-top-left-radius: 25px; /* Ensure rounded corners for top-left of the image */
+  border-top-right-radius: 25px; /* Ensure rounded corners for top-right of the image */
+  cursor: pointer; /* Change cursor to pointer on hover */
+}
+
+.card-body {
+  padding: 20px; /* Add padding inside the card body */
+}
+
+.card-title {
+  font-size: 1.5rem; /* Increase font size of the title */
+  font-weight: bold; /* Make title bold */
+}
+
+.card-text {
+  font-size: 1rem; /* Adjust font size of text */
+}
+
+/* Add styles for the search input */
+.form-control {
+  border-radius: 25px; /* Border radius */
+  background-color: #b46aff; /* Background color */
+  opacity: 0.8; /* Opacity */
+  color: white; /* Text color */
+  font-size: 18px; /* Font size */
+  padding: 10px; /* Padding */
+}
+
+/* Add styles for the buttons */
+.button {
+  border-radius: 25px; /* Border radius */
+  padding: 10px; /* Padding */
+  background-color: transparent; /* Transparent background */
+  border: 2px solid #7f39c5; /* Border color */
+  transition: 0.3s ease-in-out; /* Smooth transition */
+  color: white; /* Text color */
+}
+
+.button:hover {
+  background-color: transparent; /* Transparent background on hover */
+  border: 2px solid #b46aff; /* Border color on hover */
+  box-shadow: 0 0 10px 1px #b46aff; /* Box shadow on hover */
+}
+
+/* Add styles for the text center */
+.text-center {
+  text-align: center; /* Center text */
+}
+
+/* Add styles for the link text */
+.linktext {
+  text-decoration: none; /* Remove underline */
+  color: #b46aff; /* Link color */
+}
+
+.profile-icon, .icon {
+  color: white;
+  width: 30px;
+}
+
+#searchbar{
+  border-radius: 25px;
+}
+
+.card-img-top {
+  border-top-left-radius: 25px;
+  border-top-right-radius: 25px;
+  cursor: pointer;
+}
+
+.card-body {
+  padding: 20px;
+}
+
+.card-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.card-text {
+  font-size: 1rem;
+}
+
+.others-file-card {
+  display: flex;
+  justify-content: center;
+}
+
+.others-file-card .card-body {
+  width: 80%;
+}
+header{
+  position: sticky;
+  z-index: 999;
+  top: 0;
+  left: 0;
+  height: 5%;
+  width: 99vw;
+  padding: 5px;
+  margin-bottom: 20px;
+  background-color: rgb(41, 1, 75);
+}
+
+
+/* .card {
+  background-color: #1c0831;
+  border: 2px solid #52297a;
+  border-radius: 25px;
+  box-shadow: 0 0 20px 2px #7f39c5;
+  transition: 0.3s ease-in-out;
+  color: white;
+  margin-bottom: 20px;
+  width: 100%; 
+ }
+
+.card:hover {
+  box-shadow: 0 0 20px 5px #7f39c5;
+} */

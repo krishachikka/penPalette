@@ -5,3 +5,19 @@
 body{
     font-family: "Poppins";
 }
+
+.bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  /* Other styles remain unchanged */
+  

@@ -1,5 +1,4 @@
 import React, { useRef, useState } from "react";
-import { Form, Button, Card, Alert } from "react-bootstrap";
 import { useAuth } from "../contexts/AuthContexts";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -23,7 +22,7 @@ export default function UpdateProfile() {
 
     try {
       await updatePassword(passwordRef.current.value);
-      navigate("/");
+      navigate("/dashboard");
     } catch {
       setError("Failed to update account");
     }
@@ -32,47 +31,52 @@ export default function UpdateProfile() {
   }
 
   return (
-    <>
-      <Card>
-        <Card.Body>
+    <div style={{backgroundColor:"rgb(41, 1, 75)", height:"100vh", padding:"50px"}}>
+      <div className="signup-card">
+        <div className="card-body">
           <h2 className="text-center mb-4">Update Profile</h2>
-          {error && <Alert variant="danger">{error}</Alert>}
-          <Form onSubmit={handleSubmit}>
-            <Form.Group id="email">
-              <Form.Label>Email</Form.Label>
-              <Form.Control
+          {error && <div className="alert alert-danger">{error}</div>}
+          <form onSubmit={handleSubmit}>
+            <div className="form-group">
+              <label>Email</label>
+              <input
                 type="email"
                 value={currentUser.email}
                 disabled
+                className="form-control" id="form-control"
               />
-            </Form.Group>
-            <Form.Group id="password">
-              <Form.Label>New Password</Form.Label>
-              <Form.Control
+            </div>
+            <div className="form-group">
+              <label>New Password</label>
+              <input
                 type="password"
                 ref={passwordRef}
                 required
                 placeholder="Enter new password"
+                className="form-control" id="form-control"
               />
-            </Form.Group>
-            <Form.Group id="password-confirm">
-              <Form.Label>Password Confirmation</Form.Label>
-              <Form.Control
+            </div>
+            <div className="form-group">
+              <label>Password Confirmation</label>
+              <input
                 type="password"
                 ref={passwordConfirmRef}
                 required
                 placeholder="Confirm new password"
+                className="form-control" id="form-control"
               />
-            </Form.Group>
-            <Button disabled={loading} className="w-100" type="submit">
+            </div>
+            <button disabled={loading} className="button" type="submit">
               Update Password
-            </Button>
-          </Form>
-        </Card.Body>
-      </Card>
-      <div className="w-100 text-center mt-2">
-        <Link to="/">Cancel</Link>
+            </button>
+          </form>
+          <button className="button"><Link to="/dashboard" style={{textDecoration:"none", color:"white"}}>Cancel</Link></button>
+        </div>
+        <div className="w-100 text-center mt-2">
+        
       </div>
-    </>
+      </div>
+      
+    </div>
   );
 }

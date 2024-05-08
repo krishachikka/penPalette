@@ -1,0 +1,22 @@
+.card-body{
+    padding-top: 20px;
+    margin: 10px;
+    border-radius: 15px;
+  }
+.bttn{
+  min-width: 100px;
+  padding: 10px;
+  border-radius: 25px;
+  opacity: 0.8;
+  margin: 5px;
+  font-weight: bolder;
+}
+.cardbitch{
+  border: 5px solid rgb(90, 3, 152);
+  box-shadow: none;
+  background-color: rgba(229, 209, 249, 0.9);
+  border-radius: 15px;
+}
+.cardbitch:hover{
+  box-shadow: 0 0 5px 3px white;
+}
