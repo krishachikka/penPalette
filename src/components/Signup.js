@@ -66,29 +66,29 @@ export default function Signup() {
             <form onSubmit={handleSubmit}>
               <div className="form-group">
                 <label>Email</label>
-                <input 
-                  type="email" 
-                  ref={emailRef} 
-                  required 
+                <input
+                  type="email"
+                  ref={emailRef}
+                  required
                   className="form-control mt-3" id="form-control"
-                  />
+                />
               </div>
               <div className="form-group">
                 <label>Password</label>
-                <input 
-                type="password" 
-                ref={passwordRef} 
-                required 
-                className="form-control mt-3" id="form-control"
+                <input
+                  type="password"
+                  ref={passwordRef}
+                  required
+                  className="form-control mt-3" id="form-control"
                 />
               </div>
               <div className="form-group">
                 <label>Password Confirmation</label>
-                <input 
-                type="password" 
-                ref={passwordConfirmRef} 
-                required 
-                className="form-control mt-3" id="form-control"
+                <input
+                  type="password"
+                  ref={passwordConfirmRef}
+                  required
+                  className="form-control mt-3" id="form-control"
                 />
               </div>
               <button disabled={loading} className="button w-100" type="submit">
@@ -97,10 +97,10 @@ export default function Signup() {
             </form>
           </div>
           <div className="text-center mt-3">
-          Already have an account? <Link to="/login" className="linktext">Log In</Link>
+            Already have an account? <Link to="/login" className="linktext">Log In</Link>
+          </div>
         </div>
-        </div>
-        
+
       </div>
     </body>
   );

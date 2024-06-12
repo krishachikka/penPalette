@@ -20,7 +20,7 @@
 .book {
     height: 150px;
 }
-.title {
+.titlel {
     color: white;
     text-align: center;
     margin-top: 50px;
@@ -44,6 +44,7 @@
     background-color: transparent;
     color: white;
     transition: 0.3s ease-in-out;
+    border: 1px solid white;
 }
 .button-link{
     text-decoration: none;
@@ -52,3 +53,52 @@
 .buttonlp:hover{
     box-shadow: 0 0 7px 3px white;
 } 
+
+.fade-in {
+    opacity: 1;
+}
+
+.fade-in-logo {
+    animation: fadeInLogo 1s ease-in-out;
+}
+
+.fade-in-block {
+    animation: fadeInBlock 1s ease-in-out;
+}
+
+.fade-in-button {
+    animation: fadeInButton 1s ease-in-out;
+}
+
+@keyframes fadeInLogo {
+    0% {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInBlock {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInButton {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

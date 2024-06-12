@@ -88,10 +88,10 @@ export default function Login() {
           <div className="w-100 text-center mt-2 pt-4">
             Need an account? <Link to="/signup" className="linktext">Sign Up</Link>
           </div>
-          </div>
-          <img src={cool} alt="cool" className="cool"/>
         </div>
-      
+        <img src={cool} alt="cool" className="cool" />
+      </div>
+
     </div>
   );
 }

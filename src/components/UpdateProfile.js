@@ -4,25 +4,33 @@ import { useAuth } from "../contexts/AuthContexts";
 import { Link, useNavigate } from "react-router-dom";
 
 export default function UpdateProfile() {
+  const emailRef = useRef();
   const passwordRef = useRef();
   const passwordConfirmRef = useRef();
-  const { currentUser, updatePassword } = useAuth();
+  const { currentUser, updatePassword, updateEmail } = useAuth();
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   async function handleSubmit(e) {
     e.preventDefault();
-
     if (passwordRef.current.value !== passwordConfirmRef.current.value) {
       return setError("Passwords do not match");
     }
 
-    setError("");
+    const promises = [];
     setLoading(true);
+    setError("");
+
+    if (emailRef.current.value !== currentUser.email) {
+      promises.push(updateEmail(emailRef.current.value));
+    }
+    if (passwordRef.current.value) {
+      promises.push(updatePassword(passwordRef.current.value));
+    }
 
     try {
-      await updatePassword(passwordRef.current.value);
+      await Promise.all(promises);
       navigate("/");
     } catch {
       setError("Failed to update account");
@@ -42,8 +50,9 @@ export default function UpdateProfile() {
               <Form.Label>Email</Form.Label>
               <Form.Control
                 type="email"
-                value={currentUser.email}
-                disabled
+                ref={emailRef}
+                required
+                defaultValue={currentUser.email}
               />
             </Form.Group>
             <Form.Group id="password">
@@ -51,8 +60,7 @@ export default function UpdateProfile() {
               <Form.Control
                 type="password"
                 ref={passwordRef}
-                required
-                placeholder="Enter new password"
+                placeholder="Leave blank to keep the same"
               />
             </Form.Group>
             <Form.Group id="password-confirm">
@@ -60,12 +68,11 @@ export default function UpdateProfile() {
               <Form.Control
                 type="password"
                 ref={passwordConfirmRef}
-                required
-                placeholder="Confirm new password"
+                placeholder="Leave blank to keep the same"
               />
             </Form.Group>
             <Button disabled={loading} className="w-100" type="submit">
-              Update Password
+              Update Profile
             </Button>
           </Form>
         </Card.Body>

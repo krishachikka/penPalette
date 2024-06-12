@@ -60,7 +60,7 @@ export default function ForgotPassword() {
           <form onSubmit={handleSubmit}>
             <div className="form-group">
               <label className="form-label">Email</label>
-              <input type="email" ref={emailRef} required className="form-control" id="form-control"/>
+              <input type="email" ref={emailRef} required className="form-control" id="form-control" />
             </div>
             <button disabled={loading} className="button w-100" type="submit">
               Reset Password
@@ -71,10 +71,10 @@ export default function ForgotPassword() {
           </div>
         </div>
         <div className="w-100 text-center mt-5">
-        Need an account? <Link to="/signup" className="linktext">Sign Up</Link>
+          Need an account? <Link to="/signup" className="linktext">Sign Up</Link>
+        </div>
       </div>
-      </div>
-      
+
     </body>
   );
 }

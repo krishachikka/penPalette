@@ -1,7 +1,9 @@
-import React, { useRef, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
-// import { Link } from "react-router-dom";
+// LandingPage.js
+
+import React, { useRef, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import WAVES from 'vanta/src/vanta.waves';
+import { auth } from "../firebase"; // Import Firebase auth instance
 import "../styles/landingpage.css"; // Import the CSS file
 import logo from "../images/logo.png";
 import book from "../images/book.png";
@@ -9,8 +11,10 @@ import book from "../images/book.png";
 function LandingPage() {
     const vantaRef = useRef(null);
     const navigate = useNavigate();
+    const [fadeIn, setFadeIn] = useState(false);
 
     useEffect(() => {
+        // Vanta.js effect setup
         const vantaEffect = WAVES({
             el: vantaRef.current,
             mouseControls: true,
@@ -26,29 +30,48 @@ function LandingPage() {
             zoom: 1.20
         });
 
+        // Clean up Vanta.js effect
         return () => {
             if (vantaEffect) vantaEffect.destroy();
         };
     }, [vantaRef]);
 
+    useEffect(() => {
+        // Trigger fade in animation after 100ms delay
+        const timer = setTimeout(() => {
+            setFadeIn(true);
+        }, 100);
+
+        // Clear timer on component unmount
+        return () => clearTimeout(timer);
+    }, []);
+
+    const handleGetStarted = () => {
+        if (auth.currentUser) {
+            // Redirect to dashboard if user is logged in
+            navigate('/dashboard');
+        } else {
+            // Redirect to login if user is not logged in
+            navigate('/login');
+        }
+    };
 
     return (
-        <div className="bg" ref={vantaRef}>
-            <img src={logo} alt="Logo" className="logo" />
-            <div className="block">
-                <img src={book} alt="Book" className="book" />
-                <div>
-                    <h1 className="title">Welcome to Our Website!</h1>
-                    <p className="subtitle">Please log in or sign up to access our services.</p>
+        <div>
+            <div className={`bg ${fadeIn ? 'fade-in' : ''}`} ref={vantaRef}>
+                <img src={logo} alt="Logo" className={`logo ${fadeIn ? 'fade-in-logo' : ''}`} />
+                <div className={`block ${fadeIn ? 'fade-in-block' : ''}`}>
+                    <img src={book} alt="Book" className="book" />
+                    <div>
+                        <h1 className="titlel">Welcome to Our Website!</h1>
+                        <p className="subtitle">Please log in or sign up to access our services.</p>
+                    </div>
                 </div>
-            </div>
-            <div className="button-container">
-                <button className="buttonlp" onClick={() => navigate('/login')}>
-                  Login
-                </button>
-                <button className="buttonlp" onClick={() => navigate('/signup')}>
-                  Signup
-                </button>
+                <div className={`button-container ${fadeIn ? 'fade-in-button' : ''}`}>
+                    <button className="buttonlp" onClick={handleGetStarted}>
+                        Get Started
+                    </button>
+                </div>
             </div>
         </div>
     );
