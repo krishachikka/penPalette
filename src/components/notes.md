@@ -45,7 +45,7 @@ follow
 
 # 12/06/2024 [krisha]
 - npm install framer-motion
-CHANGES IN :
+- CHANGES IN :
 - all files in /dashboard
 - dashboard.js, FileUpload.js, profileDrawer.js
 - index.css, card.css, modal.css, profileDrawer.css, dashboard.css, landingpage.css
