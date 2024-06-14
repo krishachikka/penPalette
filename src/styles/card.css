@@ -14,6 +14,8 @@
   --card-bg: #f3ddc3;
   --intro-bg: #d4affa;
   --font-color: #807b7b;
+  --red: #e67272;
+  --blue: #7472e6;
   
   --transition: transform 0.7s ease-in-out;
 }
@@ -62,11 +64,6 @@
     left: 250px;
     z-index: 5;
     transform: translateZ(28.5px);
-  }
-  .card-img-top {
-    width: 160px;
-    left: 255px;
-    top: 182px;
   }
 
   .book-side {
@@ -131,6 +128,16 @@
   margin: 10px;
   border-radius: 15px;
 }
+.card-body {
+  padding: 20px;
+}
+.card-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+.card-text {
+  font-size: 1rem;
+}
 .bttn{
 min-width: 100px;
 padding: 10px;
@@ -138,6 +145,9 @@ border-radius: 25px;
 opacity: 0.8;
 margin: 5px;
 font-weight: bolder;
+}
+.bttn:hover{
+  border: 1px solid black;
 }
 .closebttn{
   right: 0;
@@ -152,3 +162,29 @@ border-radius: 15px;
 box-shadow: 0 0 5px 3px white;
 }
 
+.card-img-top {
+  width: 160px;
+  border-radius: 15px;
+}
+.image-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 400px; /* Adjust this height as necessary */
+  overflow: hidden;
+  background-color: var(--intro-bg);
+}
+.image-container img {
+  width: 60%;
+}
+
+.card {
+  margin: 15px;
+  width: 380px;
+  border-radius: 25px;
+  transition: all 0.5s ease-in-out;
+}
+.card:hover {
+  transform: translateY(-15px); /* Move the card slightly upwards */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add a subtle box shadow */
+}

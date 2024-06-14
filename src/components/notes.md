@@ -51,3 +51,27 @@ follow
 - index.css, card.css, modal.css, profileDrawer.css, dashboard.css, landingpage.css
 
 - Done with Viewing modals for cards, header, adding animations, correcting the ui
+
+# 13/06/2024 [yash]
+
+- scroll bar on dashboard removed
+- publish in profile drawer model improvement
+- removed all the unnecessary books
+- text editor publish is saving pdf properly now
+- also changed the uploaded files section modal
+- publish done -- wtf (sexyyyyy)
+
+- files changed:
+  uploaded files section.js
+  dashboard.css
+  Texteditor.js
+
+# 13/06/24 [krisha]
+- made the modal after writing the new story
+
+- files changed:
+  FileUpload.js
+  UploadedFiles.js
+  card.css
+  dashboard.css
+  TextEditor.js

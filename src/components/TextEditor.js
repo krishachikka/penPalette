@@ -3,10 +3,12 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 import JoditEditor from 'jodit-react';
-import { storage, db } from '../firebase';
+import { useAuth } from '../contexts/AuthContexts';
+import { db, storage } from '../firebase'; // Import the Firebase database and storage instances
 import '../styles/TextEditor.css';
 
-function TextEditor({ currentUser }) {
+function TextEditor() {
+    const { currentUser } = useAuth();
     const [chapterName, setChapterName] = useState('');
     const [content, setContent] = useState('');
     const [chapters, setChapters] = useState([]);
@@ -32,60 +34,65 @@ function TextEditor({ currentUser }) {
 
         const pdfPromises = chapters.map((chapter, index) => {
             return new Promise((resolve, reject) => {
-                const chapterContent = chapter.content;
+                const chapterElement = document.getElementById(`pdf-chapter-${index}`);
 
-                html2canvas(document.getElementById(`chapter-${index}`)).then(canvas => {
+                html2canvas(chapterElement, { scale: 2 }).then(canvas => {
                     const imgData = canvas.toDataURL('image/png');
-                    const imgWidth = 595.28;
-                    const pageHeight = 842;
+                    const imgWidth = 595.28; // Width of A4 page
+                    const pageHeight = 842; // Height of A4 page
                     const imgHeight = (canvas.height * imgWidth) / canvas.width;
-                    let heightLeft = imgHeight;
-                    let position = 0;
 
-                    pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-                    heightLeft -= pageHeight;
-
-                    while (heightLeft >= 0) {
-                        position = heightLeft - imgHeight;
-                        pdf.addPage();
-                        pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-                        heightLeft -= pageHeight;
-                    }
+                    pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, pageHeight);
 
                     if (index !== chapters.length - 1) {
                         pdf.addPage();
-                    } else {
-                        const pdfBlob = pdf.output('blob');
-                        const fileName = `${uploadedFileTitle}.pdf`; // Use title name for the PDF file
-                        const pdfURL = URL.createObjectURL(pdfBlob);
-                        const link = document.createElement('a');
-                        link.href = pdfURL;
-                        link.setAttribute('download', fileName);
-                        document.body.appendChild(link);
-                        link.click();
-                        document.body.removeChild(link);
-                        resolve();
                     }
-                });
+                    resolve();
+                }).catch(error => reject(error));
             });
         });
 
         try {
             await Promise.all(pdfPromises);
 
+            const fileName = `${uploadedFileTitle}.pdf`; // Use title name for the PDF file
+            pdf.save(fileName);
+
+            // Store the PDF file to Firebase Storage
+            const pdfFileRef = storage.ref().child(fileName);
+            await pdfFileRef.put(pdf.output('blob'));
+
+            // Get the download URL for the PDF file
+            const pdfURL = await pdfFileRef.getDownloadURL();
+
+            // Save the file details to Firebase Database
+            const newFileKey = db.ref().child("files").push().key;
+            await db.ref(`files/${newFileKey}`).set({
+                title: uploadedFileTitle,
+                description: uploadedFileDescription,
+                coverPageURL,
+                pdfURL,
+                uploaderEmail: currentUser ? currentUser.email : 'abc@gmail.com', // Use default email if currentUser is not available
+                createdBy: currentUser ? currentUser.uid : null,
+                createdAt: new Date().toISOString(),
+                views: 0,
+            });
+
+            alert("File published successfully!");
+
             // Redirect to the dashboard after the file is published
             navigate('/dashboard');
         } catch (error) {
-            console.error("Error saving PDF file:", error);
+            console.error("Error publishing file:", error);
+            alert("An error occurred while publishing the file. Please try again.");
         }
     }
-
     const handleImageUpload = (event) => {
         const file = event.target.files[0];
         const reader = new FileReader();
         reader.onload = (e) => {
             const imgBase64 = e.target.result;
-            setContent((prevContent) => `${prevContent}<img src="${imgBase64}" alt="Uploaded Image" />`);
+            setContent((prevContent) => `${prevContent}<img src="${imgBase64}" alt="Uploaded Image" class="uploaded-image" />`);
         };
         reader.readAsDataURL(file);
     };
@@ -101,10 +108,16 @@ function TextEditor({ currentUser }) {
     };
 
     const addChapter = () => {
+        if (!chapterName.trim() || !content.trim()) {
+            alert("Chapter name and content cannot be empty");
+            return;
+        }
+
         const newChapter = {
             name: chapterName,
             content: content
         };
+
         if (editingIndex !== null) {
             const updatedChapters = [...chapters];
             updatedChapters[editingIndex] = newChapter;
@@ -113,6 +126,7 @@ function TextEditor({ currentUser }) {
         } else {
             setChapters([...chapters, newChapter]);
         }
+
         setChapterName('');
         setContent('');
     };
@@ -121,6 +135,37 @@ function TextEditor({ currentUser }) {
         setChapterName(chapters[index].name);
         setContent(chapters[index].content);
         setEditingIndex(index);
+    };
+
+    const saveStory = async () => {
+        try {
+            if (chapters.length === 0) {
+                alert("No chapters to save");
+                return;
+            }
+
+            // Save the working story to the "My Stories" node in the database
+            const storyRef = await db.ref('MyStories').push();
+            const storyId = storyRef.key;
+
+            // Save story details without the PDF
+            await storyRef.set({
+                title: uploadedFileTitle,
+                description: uploadedFileDescription,
+                chapters: chapters,
+                createdAt: new Date().toISOString(),
+                createdBy: currentUser ? currentUser.uid : null
+            });
+
+            // Save the cover page image to storage with the story ID as filename
+            const coverPageRef = storage.ref().child(`covers/${storyId}`);
+            await coverPageRef.putString(coverPageURL, 'data_url');
+
+            alert("Story saved successfully!");
+        } catch (error) {
+            console.error("Error saving story:", error);
+            alert("An error occurred while saving the story. Please try again.");
+        }
     };
 
     const editorConfig = {
@@ -156,6 +201,10 @@ function TextEditor({ currentUser }) {
                 </div>
             </div>
 
+            <div className="section email-section">
+                <p>Email: {currentUser ? currentUser.email : 'Not logged in'}</p>
+            </div>
+
             {chapters.map((chapter, index) => (
                 <div key={index} id={`chapter-${index}`} className="section editor-section">
                     <h2>{chapter.name}</h2>
@@ -163,6 +212,16 @@ function TextEditor({ currentUser }) {
                     <button className="edit-btn" onClick={() => editChapter(index)}>Edit</button>
                 </div>
             ))}
+
+            {/* Hidden container for PDF generation */}
+            <div className="hidden-pdf-container">
+                {chapters.map((chapter, index) => (
+                    <div key={index} id={`pdf-chapter-${index}`} className="pdf-chapter">
+                        <h2>{chapter.name}</h2>
+                        <div dangerouslySetInnerHTML={{ __html: chapter.content }} />
+                    </div>
+                ))}
+            </div>
 
             <div className="section editor-section">
                 <input
@@ -185,6 +244,11 @@ function TextEditor({ currentUser }) {
                     <input type="file" accept="image/*" onChange={handleImageUpload} />
                     <input type="file" accept=".txt" onChange={handleTextFileUpload} />
                 </div>
+            </div>
+
+            {/* Save button */}
+            <div className="button-section">
+                <button className="save-btn" onClick={saveStory}>Save</button>
             </div>
         </div>
     );
