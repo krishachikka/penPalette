@@ -30,49 +30,61 @@ function TextEditor() {
         const pdf = new jsPDF('p', 'pt', 'a4');
         pdf.setFontSize(12);
 
-        const uploaderEmail = currentUser ? currentUser.email : 'abc@gmail.com'; // Use default email if currentUser is not available
-
-        const pdfPromises = chapters.map((chapter, index) => {
-            return new Promise((resolve, reject) => {
-                const chapterElement = document.getElementById(`pdf-chapter-${index}`);
-
-                html2canvas(chapterElement, { scale: 2 }).then(canvas => {
-                    const imgData = canvas.toDataURL('image/png');
-                    const imgWidth = 595.28; // Width of A4 page
-                    const pageHeight = 842; // Height of A4 page
-                    const imgHeight = (canvas.height * imgWidth) / canvas.width;
-
-                    pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, pageHeight);
-
-                    if (index !== chapters.length - 1) {
-                        pdf.addPage();
-                    }
-                    resolve();
-                }).catch(error => reject(error));
-            });
-        });
-
         try {
+            const coverPageURL = location.state?.coverPageURL;
+
+            if (!coverPageURL) {
+                throw new Error("Cover page URL is missing or invalid");
+            }
+
+            const uploaderEmail = currentUser ? currentUser.email : 'abc@gmail.com'; // Use default email if currentUser is not available
+
+            const pdfPromises = chapters.map((chapter, index) => {
+                return new Promise((resolve, reject) => {
+                    const chapterElement = document.getElementById(`pdf-chapter-${index}`);
+
+                    html2canvas(chapterElement, { scale: 2 }).then(canvas => {
+                        const imgData = canvas.toDataURL('image/png');
+                        const imgWidth = 595.28; // Width of A4 page
+                        const pageHeight = 842; // Height of A4 page
+                        const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+                        pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, pageHeight);
+
+                        if (index !== chapters.length - 1) {
+                            pdf.addPage();
+                        }
+                        resolve();
+                    }).catch(error => reject(error));
+                });
+            });
+
             await Promise.all(pdfPromises);
 
             const fileName = `${uploadedFileTitle}.pdf`; // Use title name for the PDF file
             pdf.save(fileName);
 
-            // Store the PDF file to Firebase Storage
             const pdfFileRef = storage.ref().child(fileName);
-            await pdfFileRef.put(pdf.output('blob'));
+            await pdfFileRef.put(pdf.output('blob')); // Upload PDF file
 
-            // Get the download URL for the PDF file
             const pdfURL = await pdfFileRef.getDownloadURL();
 
-            // Save the file details to Firebase Database
+            // Upload cover page to Firebase Storage
+            const coverPageRef = storage.ref().child(`covers/${fileName}`);
+            const response = await fetch(coverPageURL);
+            const coverPageBlob = await response.blob();
+            await coverPageRef.put(coverPageBlob);
+
+            // Get the download URL for the cover page
+            const coverPageDownloadURL = await coverPageRef.getDownloadURL();
+
             const newFileKey = db.ref().child("files").push().key;
             await db.ref(`files/${newFileKey}`).set({
                 title: uploadedFileTitle,
                 description: uploadedFileDescription,
-                coverPageURL,
+                coverPageURL: coverPageDownloadURL, // Use the downloaded cover page URL
                 pdfURL,
-                uploaderEmail: currentUser ? currentUser.email : 'abc@gmail.com', // Use default email if currentUser is not available
+                uploaderEmail: currentUser ? currentUser.email : 'abc@gmail.com',
                 createdBy: currentUser ? currentUser.uid : null,
                 createdAt: new Date().toISOString(),
                 views: 0,
@@ -80,13 +92,13 @@ function TextEditor() {
 
             alert("File published successfully!");
 
-            // Redirect to the dashboard after the file is published
             navigate('/dashboard');
         } catch (error) {
             console.error("Error publishing file:", error);
             alert("An error occurred while publishing the file. Please try again.");
         }
     }
+
     const handleImageUpload = (event) => {
         const file = event.target.files[0];
         const reader = new FileReader();
