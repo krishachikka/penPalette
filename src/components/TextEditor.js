@@ -1,5 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 import JoditEditor from 'jodit-react';
@@ -14,6 +15,7 @@ function TextEditor() {
     const [chapters, setChapters] = useState([]);
     const [editingIndex, setEditingIndex] = useState(null);
     const editorRef = useRef(null);
+    const [mode, setMode] = useState('light');
 
     const location = useLocation();
     const navigate = useNavigate();
@@ -193,22 +195,39 @@ function TextEditor() {
         height: 600
     };
 
+    const toggleMode = () => {
+        setMode(mode === 'light' ? 'dark' : 'light');
+    };
+
+    const transition = { duration: 0.5 };
+
     return (
-        <div className="text-editor-container">
+        <motion.div 
+            className={`text-editor-container ${mode === 'dark' ? 'dark-mode' : 'light-mode'}`}
+            initial={{ opacity: 1 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={transition}
+            style={{
+                transition: 'background-color 0.5s ease, color 0.5s ease'
+            }}
+            >
             <div className="button-section">
-                <button className="go-back-button" onClick={goBack}>Go Back</button>
-                <button className="add-btn" onClick={addChapter}>{editingIndex !== null ? 'Update' : 'Add'}</button>
-                <button className="publish-button" onClick={downloadPdf}>Publish</button>
+                <button className="go-back-button" onClick={goBack}><ion-icon name="arrow-back" size="small"></ion-icon>  Go Back</button>
+                <button className="add-btn" onClick={addChapter}>{editingIndex !== null ? 'Update' : 'Add'}         <ion-icon name="share"></ion-icon></button>
+                <button className="draft-btn"> Draft <ion-icon name="document"></ion-icon></button>
+                <button className="publish-button" onClick={downloadPdf}>Publish   <ion-icon name="create"></ion-icon></button>
+                <button className={`themebtn ${mode === 'dark' ? 'dark-mode' : 'light-mode'}`} onClick={toggleMode}><div className='circle'><ion-icon name="bulb-outline" size="large"></ion-icon></div></button>
             </div>
 
-            <div className="section title-section">
+            <div className="section title-section" style={{ backgroundImage: `url(${coverPageURL})`}}>
                 {coverPageURL && (
                     <div className="cover-page">
-                        <img src={coverPageURL} alt="Cover Page" style={{ height: 100 }} />
+                        <img src={coverPageURL} alt="Cover Page" />
                     </div>
                 )}
                 <div className="title-description-container">
-                    <h1 className="title">{uploadedFileTitle}</h1>
+                    <h1 className="titlek">{uploadedFileTitle}</h1>
                     <p className="description">{uploadedFileDescription}</p>
                 </div>
             </div>
@@ -253,16 +272,17 @@ function TextEditor() {
                     ref={editorRef}
                 />
                 <div className="upload-section">
-                    <input type="file" accept="image/*" onChange={handleImageUpload} />
-                    <input type="file" accept=".txt" onChange={handleTextFileUpload} />
+                <h7><b>IMAGE</b> <input type="file" accept="image/*" onChange={handleImageUpload} />
+                </h7>
+                    <h7><b>TEXT FILE</b>  <input type="file" accept=".txt" onChange={handleTextFileUpload} /></h7>
                 </div>
             </div>
 
             {/* Save button */}
-            <div className="button-section">
+            <div className="button-section footer">
                 <button className="save-btn" onClick={saveStory}>Save</button>
             </div>
-        </div>
+        </motion.div>
     );
 }
 
