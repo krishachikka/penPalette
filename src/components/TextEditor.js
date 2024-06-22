@@ -1,19 +1,24 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 import JoditEditor from 'jodit-react';
 import { useAuth } from '../contexts/AuthContexts';
 import { db, storage } from '../firebase'; // Import the Firebase database and storage instances
 import '../styles/TextEditor.css';
+import SideDrawer from './SideDrawer';
 
 function TextEditor() {
     const { currentUser } = useAuth();
     const [chapterName, setChapterName] = useState('');
     const [content, setContent] = useState('');
     const [chapters, setChapters] = useState([]);
+    const [activeChapterIndex, setActiveChapterIndex] = useState(null);
     const [editingIndex, setEditingIndex] = useState(null);
+    const [isDrawerOpen, setIsDrawerOpen] = useState(false);
     const editorRef = useRef(null);
+    const [mode, setMode] = useState('light');
 
     const location = useLocation();
     const navigate = useNavigate();
@@ -21,6 +26,10 @@ function TextEditor() {
     const uploadedFileTitle = location.state?.fileTitle;
     const uploadedFileDescription = location.state?.fileDescription;
     const coverPageURL = location.state?.coverPageURL;
+
+    const toggleDrawer = () => {
+        setIsDrawerOpen(!isDrawerOpen);
+    };
 
     const goBack = () => {
         navigate('/dashboard');
@@ -31,8 +40,6 @@ function TextEditor() {
         pdf.setFontSize(12);
 
         try {
-            const coverPageURL = location.state?.coverPageURL;
-
             if (!coverPageURL) {
                 throw new Error("Cover page URL is missing or invalid");
             }
@@ -88,11 +95,13 @@ function TextEditor() {
                 createdBy: currentUser ? currentUser.uid : null,
                 createdAt: new Date().toISOString(),
                 views: 0,
+                chapters: chapters // Ensure chapters are saved
             });
 
             alert("File published successfully!");
 
-            navigate('/dashboard');
+            // Navigate to the book preview page
+            navigate(`/book/${newFileKey}`);
         } catch (error) {
             console.error("Error publishing file:", error);
             alert("An error occurred while publishing the file. Please try again.");
@@ -193,22 +202,54 @@ function TextEditor() {
         height: 600
     };
 
+    // Effect to scroll to active chapter
+    useEffect(() => {
+        if (activeChapterIndex !== null && editorRef.current) {
+            const chapterElement = document.getElementById(`chapter-${activeChapterIndex}`);
+            if (chapterElement) {
+                chapterElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
+    }, [activeChapterIndex]);
+
+    const toggleMode = () => {
+        setMode(mode === 'light' ? 'dark' : 'light');
+    };
+
+    const transition = { duration: 0.5 };
+
     return (
-        <div className="text-editor-container">
+        <motion.div 
+            className={`text-editor-container ${mode === 'dark' ? 'dark-mode' : 'light-mode'}`}
+            initial={{ opacity: 1 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={transition}
+            style={{
+                transition: 'background-color 0.5s ease, color 0.5s ease'
+            }}
+            >
             <div className="button-section">
-                <button className="go-back-button" onClick={goBack}>Go Back</button>
-                <button className="add-btn" onClick={addChapter}>{editingIndex !== null ? 'Update' : 'Add'}</button>
-                <button className="publish-button" onClick={downloadPdf}>Publish</button>
+                <div>
+                    <button onClick={toggleDrawer}>Toggle Drawer</button>
+                    <SideDrawer isOpen={isDrawerOpen} toggle={toggleDrawer} chapters={chapters} setActiveChapterIndex={setActiveChapterIndex} />
+                    {/* Other content of your app */}
+                </div>
+                <button className="go-back-button" onClick={goBack}><ion-icon name="arrow-back" size="small"></ion-icon>  Go Back</button>
+                <button className="add-btn" onClick={addChapter}>{editingIndex !== null ? 'Update' : 'Add'}         <ion-icon name="share"></ion-icon></button>
+                {/* <button className="draft-btn"> Draft <ion-icon name="document"></ion-icon></button> */}
+                <button className="publish-button" onClick={downloadPdf}>Publish   <ion-icon name="create"></ion-icon></button>
+                <button className={`themebtn ${mode === 'dark' ? 'dark-mode' : 'light-mode'}`} onClick={toggleMode}><div className='circle'><ion-icon name="bulb-outline" size="large"></ion-icon></div></button>
             </div>
 
-            <div className="section title-section">
+            <div className="section title-section" style={{ backgroundImage: `url(${coverPageURL})`}}>
                 {coverPageURL && (
                     <div className="cover-page">
-                        <img src={coverPageURL} alt="Cover Page" style={{ height: 100 }} />
+                        <img src={coverPageURL} alt="Cover Page" />
                     </div>
                 )}
                 <div className="title-description-container">
-                    <h1 className="title">{uploadedFileTitle}</h1>
+                    <h1 className="titlek">{uploadedFileTitle}</h1>
                     <p className="description">{uploadedFileDescription}</p>
                 </div>
             </div>
@@ -218,14 +259,13 @@ function TextEditor() {
             </div>
 
             {chapters.map((chapter, index) => (
-                <div key={index} id={`chapter-${index}`} className="section editor-section">
+                <div key={index} id={`chapter-${index}`} className={`section editor-section ${index === activeChapterIndex ? 'active-chapter' : ''}`}>
                     <h2>{chapter.name}</h2>
                     <div dangerouslySetInnerHTML={{ __html: chapter.content }} />
                     <button className="edit-btn" onClick={() => editChapter(index)}>Edit</button>
                 </div>
             ))}
 
-            {/* Hidden container for PDF generation */}
             <div className="hidden-pdf-container">
                 {chapters.map((chapter, index) => (
                     <div key={index} id={`pdf-chapter-${index}`} className="pdf-chapter">
@@ -258,11 +298,10 @@ function TextEditor() {
                 </div>
             </div>
 
-            {/* Save button */}
-            <div className="button-section">
+            <div className="button-section footer">
                 <button className="save-btn" onClick={saveStory}>Save</button>
             </div>
-        </div>
+        </motion.div>
     );
 }
 

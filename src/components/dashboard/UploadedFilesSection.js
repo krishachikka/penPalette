@@ -574,6 +574,6 @@ export default function UploadedFilesSection({ currentUser }) {
             </AnimatePresence>
 
             <ToastContainer />
-        </div >
+        </div>
     );
 }
