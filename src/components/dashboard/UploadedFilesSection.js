@@ -307,15 +307,17 @@ export default function UploadedFilesSection({ currentUser }) {
             <br />
             <br />
             <br />
-
+            <div className="searchname">
             <h2 className="text-center mb-4" style={{ color: "white" }}>Your Uploaded Books</h2>
+            <div className="row">
             <input
                 type="text"
                 placeholder="Search by title..."
                 value={searchQuery}
                 onChange={handleSearchChange} className="form-control mb-3"
                 id="searchbar"
-            />
+            /></div>
+            </div>
             <AnimatePresence>
                 {loading && (
                     <motion.div

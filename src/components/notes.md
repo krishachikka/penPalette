@@ -82,3 +82,4 @@ follow
 - dashboard.css
 - TextEditor.js
 - card.css
+- uploadedFilesSection.js
