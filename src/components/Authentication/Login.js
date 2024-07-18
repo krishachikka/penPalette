@@ -1,11 +1,11 @@
 import React, { useRef, useEffect, useState } from "react";
-import { useAuth } from "../contexts/AuthContexts";
+import { useAuth } from "../../contexts/AuthContexts";
 import { Link, useNavigate } from "react-router-dom";
-import "../styles/login.css"; // Import CSS styles
+import "../../styles/Authentication/login.css"; // Import CSS styles
 import WAVES from 'vanta/src/vanta.waves'; // Import Vanta Waves
-import "../styles/landingpage.css"; // Import the CSS file
-import logo from "../images/logo.png";
-import cool from "../images/cool.gif";
+import "../../styles/Authentication/landingpage.css"; // Import the CSS file
+import logo from "../../images/logo.png";
+import cool from "../../images/cool.gif";
 
 export default function Login() {
   const emailRef = useRef();

@@ -1,11 +1,11 @@
 import React, { useRef, useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "../contexts/AuthContexts";
+import { useAuth } from "../../contexts/AuthContexts";
 import WAVES from 'vanta/src/vanta.waves';
-import "../styles/signup.css";
-import logo from "../images/logo.png"
+import "../../styles/Authentication/signup.css";
+import logo from "../../images/logo.png"
 
-export default function Signup() {
+function Signup() {
   const emailRef = useRef();
   const passwordRef = useRef();
   const passwordConfirmRef = useRef();
@@ -105,3 +105,5 @@ export default function Signup() {
     </body>
   );
 }
+
+export default Signup;

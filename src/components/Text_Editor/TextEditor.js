@@ -1,12 +1,12 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
+import { motion } from 'framer-motion';
 import JoditEditor from 'jodit-react';
-import { useAuth } from '../contexts/AuthContexts';
-import { db, storage } from '../firebase'; // Import the Firebase database and storage instances
-import '../styles/TextEditor.css';
+import { useAuth } from '../../contexts/AuthContexts';
+import { db, storage } from '../../firebase';
+import '../../styles/Text_Editor/TextEditor.css';
 import SideDrawer from './SideDrawer';
 
 function TextEditor() {
@@ -44,7 +44,7 @@ function TextEditor() {
                 throw new Error("Cover page URL is missing or invalid");
             }
 
-            const uploaderEmail = currentUser ? currentUser.email : 'abc@gmail.com'; // Use default email if currentUser is not available
+            const uploaderEmail = currentUser ? currentUser.email : 'abc@gmail.com';
 
             const pdfPromises = chapters.map((chapter, index) => {
                 return new Promise((resolve, reject) => {
@@ -52,8 +52,8 @@ function TextEditor() {
 
                     html2canvas(chapterElement, { scale: 2 }).then(canvas => {
                         const imgData = canvas.toDataURL('image/png');
-                        const imgWidth = 595.28; // Width of A4 page
-                        const pageHeight = 842; // Height of A4 page
+                        const imgWidth = 595.28;
+                        const pageHeight = 842;
                         const imgHeight = (canvas.height * imgWidth) / canvas.width;
 
                         pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, pageHeight);
@@ -68,39 +68,36 @@ function TextEditor() {
 
             await Promise.all(pdfPromises);
 
-            const fileName = `${uploadedFileTitle}.pdf`; // Use title name for the PDF file
+            const fileName = `${uploadedFileTitle}.pdf`;
             pdf.save(fileName);
 
             const pdfFileRef = storage.ref().child(fileName);
-            await pdfFileRef.put(pdf.output('blob')); // Upload PDF file
+            await pdfFileRef.put(pdf.output('blob'));
 
             const pdfURL = await pdfFileRef.getDownloadURL();
 
-            // Upload cover page to Firebase Storage
             const coverPageRef = storage.ref().child(`covers/${fileName}`);
             const response = await fetch(coverPageURL);
             const coverPageBlob = await response.blob();
             await coverPageRef.put(coverPageBlob);
 
-            // Get the download URL for the cover page
             const coverPageDownloadURL = await coverPageRef.getDownloadURL();
 
             const newFileKey = db.ref().child("files").push().key;
             await db.ref(`files/${newFileKey}`).set({
                 title: uploadedFileTitle,
                 description: uploadedFileDescription,
-                coverPageURL: coverPageDownloadURL, // Use the downloaded cover page URL
+                coverPageURL: coverPageDownloadURL,
                 pdfURL,
                 uploaderEmail: currentUser ? currentUser.email : 'abc@gmail.com',
                 createdBy: currentUser ? currentUser.uid : null,
                 createdAt: new Date().toISOString(),
                 views: 0,
-                chapters: chapters // Ensure chapters are saved
+                chapters: chapters
             });
 
             alert("File published successfully!");
 
-            // Navigate to the book preview page
             navigate(`/book/${newFileKey}`);
         } catch (error) {
             console.error("Error publishing file:", error);
@@ -165,11 +162,9 @@ function TextEditor() {
                 return;
             }
 
-            // Save the working story to the "My Stories" node in the database
             const storyRef = await db.ref('MyStories').push();
             const storyId = storyRef.key;
 
-            // Save story details without the PDF
             await storyRef.set({
                 title: uploadedFileTitle,
                 description: uploadedFileDescription,
@@ -178,7 +173,6 @@ function TextEditor() {
                 createdBy: currentUser ? currentUser.uid : null
             });
 
-            // Save the cover page image to storage with the story ID as filename
             const coverPageRef = storage.ref().child(`covers/${storyId}`);
             await coverPageRef.putString(coverPageURL, 'data_url');
 
@@ -202,7 +196,6 @@ function TextEditor() {
         height: 600
     };
 
-    // Effect to scroll to active chapter
     useEffect(() => {
         if (activeChapterIndex !== null && editorRef.current) {
             const chapterElement = document.getElementById(`chapter-${activeChapterIndex}`);
@@ -218,8 +211,13 @@ function TextEditor() {
 
     const transition = { duration: 0.5 };
 
+    const navigateToChapter = (index) => {
+        setActiveChapterIndex(index);
+        toggleDrawer();
+    };
+
     return (
-        <motion.div 
+        <motion.div
             className={`text-editor-container ${mode === 'dark' ? 'dark-mode' : 'light-mode'}`}
             initial={{ opacity: 1 }}
             animate={{ opacity: 1 }}
@@ -228,21 +226,17 @@ function TextEditor() {
             style={{
                 transition: 'background-color 0.5s ease, color 0.5s ease'
             }}
-            >
+        >
             <div className="button-section">
-                <div>
-                    <button onClick={toggleDrawer}>Toggle Drawer</button>
-                    <SideDrawer isOpen={isDrawerOpen} toggle={toggleDrawer} chapters={chapters} setActiveChapterIndex={setActiveChapterIndex} />
-                    {/* Other content of your app */}
-                </div>
+                <button onClick={toggleDrawer}>Toggle Drawer</button>
+                <SideDrawer isOpen={isDrawerOpen} toggle={toggleDrawer} chapters={chapters} navigateToChapter={navigateToChapter} />
                 <button className="go-back-button" onClick={goBack}><ion-icon name="arrow-back" size="small"></ion-icon>  Go Back</button>
-                <button className="add-btn" onClick={addChapter}>{editingIndex !== null ? 'Update' : 'Add'}         <ion-icon name="share"></ion-icon></button>
-                {/* <button className="draft-btn"> Draft <ion-icon name="document"></ion-icon></button> */}
-                <button className="publish-button" onClick={downloadPdf}>Publish   <ion-icon name="create"></ion-icon></button>
+                <button className="add-btn" onClick={addChapter}>{editingIndex !== null ? 'Update' : 'Add'} <ion-icon name="share"></ion-icon></button>
+                <button className="publish-button" onClick={downloadPdf}>Publish <ion-icon name="create"></ion-icon></button>
                 <button className={`themebtn ${mode === 'dark' ? 'dark-mode' : 'light-mode'}`} onClick={toggleMode}><div className='circle'><ion-icon name="bulb-outline" size="large"></ion-icon></div></button>
             </div>
 
-            <div className="section title-section" style={{ backgroundImage: `url(${coverPageURL})`}}>
+            <div className="section title-section" style={{ backgroundImage: `url(${coverPageURL})` }}>
                 {coverPageURL && (
                     <div className="cover-page">
                         <img src={coverPageURL} alt="Cover Page" />

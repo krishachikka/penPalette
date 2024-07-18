@@ -3,11 +3,15 @@ import { Button, Spinner, Modal, Form } from "react-bootstrap";
 import { db } from "../../firebase";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import "../../styles/dashboard.css"; // Import the dashboard CSS file
+import "../../styles/dashboard/dashboard.css"; // Import the dashboard CSS file
+import { useNavigate } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import "../../styles/card.css";
 
 export default function UploadedFilesSection({ currentUser }) {
+
+    const navigate = useNavigate();
+
     const [loading, setLoading] = useState(false);
     const [fileData, setFileData] = useState([]);
     const [toastVisible, setToastVisible] = useState(false);
@@ -105,11 +109,15 @@ export default function UploadedFilesSection({ currentUser }) {
             setSelectedFile(file);
             setShowFileModal(true);
             fetchComments(fileId);
+
+            // Navigate to the dynamic route with the book ID
+            navigate(`/book/${fileId}`);
         } catch (error) {
             console.error(error);
             showToast("Failed to open file");
         }
     };
+
 
     const fetchComments = async (fileId) => {
         try {
@@ -144,7 +152,6 @@ export default function UploadedFilesSection({ currentUser }) {
     };
 
 
-
     const saveEditedFile = async () => {
         try {
             setLoading(true);
@@ -153,9 +160,13 @@ export default function UploadedFilesSection({ currentUser }) {
                 description: editDescription
             };
 
-            // if (editFile) {
-            //     updates.coverPageURL = fileURL; // Update the coverPageURL in the updates object
-            // }
+            if (editFile) {
+                const fileRef = db.storage().ref().child(`files/${fileToEdit.id}`);
+                await fileRef.put(editFile);
+                const fileURL = await fileRef.getDownloadURL();
+                updates.coverPageURL = fileURL;
+                setEditCoverPageURL(fileURL); // Update editCoverPageURL with the new URL
+            }
 
             await db.ref(`files/${fileToEdit.id}`).update(updates);
             showToast("File updated successfully!");
@@ -170,35 +181,6 @@ export default function UploadedFilesSection({ currentUser }) {
         }
     };
 
-
-    // const saveEditedFile = async () => {
-    //     try {
-    //         setLoading(true);
-    //         const updates = {
-    //             title: editTitle,
-    //             description: editDescription
-    //         };
-
-    //         if (editFile) {
-    //             const fileRef = db.storage().ref().child(`files/${fileToEdit.id}`);
-    //             await fileRef.put(editFile);
-    //             const fileURL = await fileRef.getDownloadURL();
-    //             updates.coverPageURL = fileURL;
-    //             setEditCoverPageURL(fileURL); // Update editCoverPageURL with the new URL
-    //         }
-
-    //         await db.ref(`files/${fileToEdit.id}`).update(updates);
-    //         showToast("File updated successfully!");
-    //     } catch (error) {
-    //         console.error(error);
-    //         showToast("Failed to update file");
-    //     } finally {
-    //         setLoading(false);
-    //         setShowEditModal(false);
-    //         setFileToEdit(null);
-    //         setEditFile(null);
-    //     }
-    // };
 
     const handleFileChange = (e) => {
         const file = e.target.files[0];
@@ -384,28 +366,41 @@ export default function UploadedFilesSection({ currentUser }) {
                                 </div>
                                 <div className="mt-3 d-flex">
                                     <button
-                                        className="bttn" style={{backgroundColor:"skyblue"}}
+                                        className="bttn" style={{ backgroundColor: "skyblue" }}
                                         onClick={() => handleEdit(file)}
                                     >
                                         Edit
                                     </button>
                                     <button
-                                        className="bttn" style={{backgroundColor:"#e67272"}}
+                                        className="bttn" style={{ backgroundColor: "#e67272" }}
                                         onClick={() => handleConfirmDelete(file.id)}
                                     >
                                         Delete
                                     </button>
                                     <button
                                         className="bttn btn-secondary"
-                                        onClick={() => openFile(file.id, file.fileURL, file.createdBy)}
+                                        onClick={() => {
+                                            setShowFileModal(true);
+                                            setSelectedFile(file);
+                                            fetchComments(file.id);
+                                        }}
                                     >
                                         Open
                                     </button>
+                                    {/* <button
+                                        className="bttn"
+                                        style={{ backgroundColor: "skyblue" }}
+                                        onClick={() => openFile(file.id, file.fileURL, file.createdBy)}
+                                    >
+                                        Read
+                                    </button> */}
                                 </div>
                             </div>
                         </div>
                     </motion.div>
                 ))}
+
+
             </div>
 
 
@@ -558,20 +553,26 @@ export default function UploadedFilesSection({ currentUser }) {
                                         </div>
                                     ))}
                                 </div>
-
                             </div>
                             <div className="modal-footer">
-                                <button className="modalbtn" onClick={() => handleOpen(selectedFile.coverPageURL)}>
-                                    Read
-                                </button>
+                                {selectedFile && (
+                                    <button
+                                        className="bttn"
+                                        style={{ backgroundColor: "skyblue" }}
+                                        onClick={() => openFile(selectedFile.id, selectedFile.fileURL, selectedFile.createdBy)}
+                                    >
+                                        Read
+                                    </button>
+                                )}
                                 <button className="modalbtn" onClick={toggleSave}>
-                                    {selectedFile.isSaved ? "Unsave" : "Save"}
+                                    {selectedFile && selectedFile.isSaved ? "Unsave" : "Save"}
                                 </button>
                             </div>
                         </motion.div>
                     </motion.div>
                 )}
             </AnimatePresence>
+
 
             <ToastContainer />
         </div>

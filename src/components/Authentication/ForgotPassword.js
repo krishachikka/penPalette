@@ -1,8 +1,8 @@
 import React, { useRef, useState, useEffect } from "react";
-import { useAuth } from "../contexts/AuthContexts";
+import { useAuth } from "../../contexts/AuthContexts";
 import { Link } from "react-router-dom";
 import WAVES from 'vanta/src/vanta.waves'; // Import Vanta Waves
-import "../styles/forgot.css";
+import "../../styles/Authentication/forgot.css";
 
 export default function ForgotPassword() {
   const emailRef = useRef();

@@ -75,3 +75,10 @@ follow
   card.css
   dashboard.css
   TextEditor.js
+
+# 18/7/24 [krisha]
+- arrangement of files
+- changes in dashboard.js
+- dashboard.css
+- TextEditor.js
+- card.css

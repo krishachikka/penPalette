@@ -23,11 +23,12 @@ body::-webkit-scrollbar {
   scrollbar-width: none;
 } */
 
-/* .right-section,
-.center-section {
-  flex: 1;
-  width: 100%;
-} */
+.searchname{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 98%;
+}
 
 .right-section, .center-section{
   /* margin-top: 70px; */
@@ -67,7 +68,7 @@ body::-webkit-scrollbar {
   color: #b46aff;
 }
 
-#profile-icon {
+#profile-icon{
   color: white;
   width: 40px;
   margin: 10px;
@@ -77,10 +78,14 @@ body::-webkit-scrollbar {
   display: flex;
   flex-direction: row;
 }
-
+.searchname{
+  color: white;
+}
 #searchbar {
   border-radius: 25px;
   width: 98%;
+  min-width: 500px;
+  padding-left: 20px;
 }
 
 .others-file-card {

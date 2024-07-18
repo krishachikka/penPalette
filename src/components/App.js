@@ -1,15 +1,16 @@
 import React from "react";
 import { AuthProvider } from "../contexts/AuthContexts";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Signup from "./Signup";
 import Dashboard from "./Dashboard";
-import Login from "./Login";
+import Login from "./Authentication/Login";
 import PrivateRoute from "./PrivateRoute";
-import ForgotPassword from "./ForgotPassword";
-import UpdateProfile from "./UpdateProfile";
-import LandingPage from "./LandingPage";
-import TextEditor from "./TextEditor";
-import BookPreview from "./BookPreview";
+import ForgotPassword from "./Authentication/ForgotPassword";
+import UpdateProfile from "./Authentication/UpdateProfile";
+import LandingPage from "./Authentication/LandingPage";
+import TextEditor from "./Text_Editor/TextEditor";
+import BookPreview from "./Text_Editor/BookPreview";
+import Signup from "./Authentication/Signup";
+
 
 function App() {
   return (
