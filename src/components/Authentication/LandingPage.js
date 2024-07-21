@@ -6,7 +6,7 @@ import WAVES from 'vanta/src/vanta.waves';
 import { auth } from "../../firebase"; // Import Firebase auth instance
 import "../../styles/Authentication/landingpage.css"; // Import the CSS file
 import logo from "../../images/logo.png";
-import book from "../../images/book.png";
+import book from "../../images/logomeow.png";
 
 function LandingPage() {
     const vantaRef = useRef(null);
