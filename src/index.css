@@ -10,7 +10,7 @@ html,body{
 }
 html,body::-webkit-scrollbar {
     display: none;
-  }
+}
   
 .bg {
     position: fixed;
