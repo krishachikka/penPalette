@@ -136,7 +136,7 @@
     background-color: rgb(41, 1, 75);
     z-index: 5;
     padding: 20px;
-    height: fit-content;
+    /* height: fit-content; */
 }
 .footer{
     margin-bottom: 0 ;
@@ -189,6 +189,8 @@
     /* position: sticky; */
 }
 .themebtn, .circle{
+    margin-top: auto;
+    margin-bottom: auto;
     width: 40px;
     height: 40px;
     background-color: white;

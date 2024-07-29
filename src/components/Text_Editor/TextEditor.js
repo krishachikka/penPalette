@@ -294,7 +294,7 @@ function TextEditor() {
             style={{ transition: 'background-color 0.5s ease, color 0.5s ease' }}
         >
             <div className="button-section">
-                <button onClick={toggleDrawer}>Toggle Drawer</button>
+                <button className="Chplist" onClick={toggleDrawer}><ion-icon name="list" size="large"></ion-icon></button>
                 <SideDrawer isOpen={isDrawerOpen} toggle={toggleDrawer} chapters={chapters} navigateToChapter={navigateToChapter} />
                 <button className="go-back-button" onClick={goBack}>
                     <ion-icon name="arrow-back" size="small"></ion-icon> Go Back

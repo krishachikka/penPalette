@@ -3,6 +3,8 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { db } from '../../firebase';
 import SideDrawer from './SideDrawer'; // Assuming you have a SideDrawer component similar to the one in TextEditor
 import "../../styles/Text_Editor/BookPreview.css";
+import { motion } from 'framer-motion';
+import logomeow from "../../images/logomeow.png";
 
 function BookPreview() {
     const { id } = useParams();
@@ -11,6 +13,7 @@ function BookPreview() {
     const [activeChapterIndex, setActiveChapterIndex] = useState(null);
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
     const contentRef = useRef(null);
+    const [mode, setMode] = useState('light');
 
     useEffect(() => {
         const fetchBookData = async () => {
@@ -41,11 +44,31 @@ function BookPreview() {
         return <div>Loading...</div>;
     }
 
+    const toggleMode = () => {
+        setMode(mode === 'light' ? 'dark' : 'light');
+    };
+
+    const transition = { duration: 0.5 };
+    // const isPublishDisabled = !chapters.length || !bookDetails.title;
+
     return (
-        <div>
+        <motion.div
+            className={`text-editor-container ${mode === 'dark' ? 'dark-mode' : 'light-mode'}`}
+            initial={{ opacity: 1 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={transition}
+            style={{ transition: 'background-color 0.5s ease, color 0.5s ease' }}
+        >
             <div className="button-section">
                 <button className="Chplist" onClick={toggleDrawer}><ion-icon name="list" size="large"></ion-icon></button>
+                <img src={logomeow} alt="Meow" id="logoMeow"></img>
+                <button className={`themebtn ${mode === 'dark' ? 'dark-mode' : 'light-mode'}`} onClick={toggleMode}>
+                    <div className='circle'><ion-icon name="bulb-outline" size="large"></ion-icon></div>
+                </button>
+                <SideDrawer isOpen={isDrawerOpen} toggle={toggleDrawer} chapters={bookData.chapters} navigateToChapter={navigateToChapter} />
             </div>
+            
             <div className="book-preview">
                 
                 <div className="content-section" ref={contentRef}>
@@ -73,9 +96,8 @@ function BookPreview() {
                         <p>No chapters available</p>
                     )}
                 </div>
-                <SideDrawer isOpen={isDrawerOpen} toggle={toggleDrawer} chapters={bookData.chapters} navigateToChapter={navigateToChapter} />
             </div>
-        </div>
+        </motion.div>
     );
 }
 

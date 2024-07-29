@@ -4,10 +4,7 @@
     transition: all ease-in-out 0.3s;
 }
 .side-drawer{
-    padding-top: 70px;
-}
-.content-section{
-    margin-top: 50px;
+    padding-top: 20px;
 }
 .title-section{
     border: 2px solid black;
@@ -46,4 +43,15 @@
 .drawerClosebtn:hover{
     color: black;
     background-color: rgb(240, 200, 251);
+}
+.dark-mode{
+    .side-drawer{
+        background-color: rgb(58, 39, 86);
+    }
+    .side-drawer li:hover{
+        background-color: black;
+    }
+}
+#logoMeow{
+    width: 5%;
 }
