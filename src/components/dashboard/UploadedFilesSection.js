@@ -88,6 +88,31 @@ export default function UploadedFilesSection({ currentUser }) {
         }
     };
 
+    const handleAdd = async (file) => {
+        try {
+            // Retrieve additional details (title, uploaderEmail, description, coverPageURL) for the book
+            const fileDetailsSnapshot = await db.ref(`files/${file.id}`).once('value');
+            const { title, uploaderEmail, description, coverPageURL } = fileDetailsSnapshot.val();
+
+            // Navigate to the text editor route with the file ID and other details
+            navigate(`/dashboard/textEditor/${file.id}`, {
+                state: {
+                    fileTitle: title,
+                    fileUploaderEmail: uploaderEmail,
+                    fileDescription: description,
+                    coverPageURL // Pass the cover page URL to the text editor
+                }
+            });
+        } catch (error) {
+            console.error("Error retrieving file details:", error);
+        }
+    };
+
+
+
+
+
+
     const deleteFiles = async (fileIds) => {
         if (toastVisible) return; // Prevent deleting files if toast is visible
         try {
@@ -307,17 +332,15 @@ export default function UploadedFilesSection({ currentUser }) {
             <br />
             <br />
             <br />
-            <div className="searchname">
+
             <h2 className="text-center mb-4" style={{ color: "white" }}>Your Uploaded Books</h2>
-            <div className="row">
             <input
                 type="text"
                 placeholder="Search by title..."
                 value={searchQuery}
                 onChange={handleSearchChange} className="form-control mb-3"
                 id="searchbar"
-            /></div>
-            </div>
+            />
             <AnimatePresence>
                 {loading && (
                     <motion.div
@@ -341,21 +364,23 @@ export default function UploadedFilesSection({ currentUser }) {
                     </motion.p>
                 )}
             </AnimatePresence>
-            <div className="row">
+            <div className="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
                 {filteredFiles.map((file) => (
                     <motion.div
                         key={file.id}
-                        className="col-lg-4 col-md-6 col-sm-12 mb-4"
+                        className="col mb-4"
+                        style={{ maxWidth: "100%", height: "500px" }}
                         initial={{ opacity: 0, scale: 0.8 }}
                         animate={{ opacity: 1, scale: 1 }}
                         exit={{ opacity: 0, scale: 0.8 }}
                     >
-                        <div className="card flex bg-white shadow">
+                        <div className="card flex bg-white shadow h-100">
                             <div className="image-container">
                                 <img
-                                    src={file.coverPageURL}
+                                    src={file.coverPageURL} // Ensure coverPageURL is used here
                                     className="card-img-top"
                                     alt={file.title}
+                                    style={{ objectFit: "cover", height: "200px" }}
                                 />
                             </div>
                             <div className="card-body d-flex flex-column">
@@ -366,21 +391,21 @@ export default function UploadedFilesSection({ currentUser }) {
                                         <p className="card-text"><b>Uploaded at: </b>{formatTime(file.createdAt)}</p>
                                     </div>
                                 </div>
-                                <div className="mt-3 d-flex">
+                                <div className="mt-3 d-flex justify-content-around align-items-center">
                                     <button
-                                        className="bttn" style={{ backgroundColor: "skyblue" }}
+                                        className="btn btn-sm btn-primary"
                                         onClick={() => handleEdit(file)}
                                     >
                                         Edit
                                     </button>
                                     <button
-                                        className="bttn" style={{ backgroundColor: "#e67272" }}
+                                        className="btn btn-sm btn-danger"
                                         onClick={() => handleConfirmDelete(file.id)}
                                     >
                                         Delete
                                     </button>
                                     <button
-                                        className="bttn btn-secondary"
+                                        className="btn btn-sm btn-secondary"
                                         onClick={() => {
                                             setShowFileModal(true);
                                             setSelectedFile(file);
@@ -389,21 +414,21 @@ export default function UploadedFilesSection({ currentUser }) {
                                     >
                                         Open
                                     </button>
-                                    {/* <button
-                                        className="bttn"
-                                        style={{ backgroundColor: "skyblue" }}
-                                        onClick={() => openFile(file.id, file.fileURL, file.createdBy)}
+                                    <Button
+                                        variant="success"
+                                        onClick={() => handleAdd(file)}
                                     >
-                                        Read
-                                    </button> */}
+                                        Add
+                                    </Button>
                                 </div>
                             </div>
                         </div>
                     </motion.div>
                 ))}
 
-
             </div>
+
+
 
 
             <AnimatePresence>
@@ -566,9 +591,9 @@ export default function UploadedFilesSection({ currentUser }) {
                                         Read
                                     </button>
                                 )}
-                                <button className="modalbtn" onClick={toggleSave}>
+                                {/* <button className="modalbtn" onClick={toggleSave}>
                                     {selectedFile && selectedFile.isSaved ? "Unsave" : "Save"}
-                                </button>
+                                </button> */}
                             </div>
                         </motion.div>
                     </motion.div>

@@ -5,16 +5,22 @@ body::-webkit-scrollbar {
 
 .container-fluid {
   background-color: #1c0831;
-  left: 0 ;
+  left: 0;
   padding: 0;
   margin: 0;
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; 
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
   overflow: hidden;
 }
-.container-fluid::-webkit-scrollbar , .dashboard-container::-webkit-scrollbar , .file-upload-container::-webkit-scrollbar, .modal::-webkit-scrollbar{
+
+.container-fluid::-webkit-scrollbar,
+.dashboard-container::-webkit-scrollbar,
+.file-upload-container::-webkit-scrollbar,
+.modal::-webkit-scrollbar {
   display: none;
 }
+
 /* .dashboard-container {
   display: flex;
   justify-content: space-between;
@@ -23,14 +29,15 @@ body::-webkit-scrollbar {
   scrollbar-width: none;
 } */
 
-.searchname{
+.searchname {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   width: 98%;
 }
 
-.right-section, .center-section{
+.right-section,
+.center-section {
   /* margin-top: 70px; */
   padding: 20px;
 }
@@ -68,19 +75,22 @@ body::-webkit-scrollbar {
   color: #b46aff;
 }
 
-#profile-icon{
+#profile-icon {
   color: white;
-  width: 13% ;
+  width: 13%;
   margin: 5px;
   cursor: pointer;
 }
-.profile-icon{
+
+.profile-icon {
   display: flex;
   flex-direction: row;
 }
-.searchname{
+
+.searchname {
   color: white;
 }
+
 #searchbar {
   border-radius: 25px;
   width: 98%;
@@ -132,10 +142,11 @@ header {
   background-color: #b46aff;
 }
 
-.header-buttons{
+.header-buttons {
   display: flex;
   flex-direction: row;
 }
-.logod{
+
+.logod {
   width: 50%;
 }

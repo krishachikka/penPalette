@@ -1,11 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 import { motion } from 'framer-motion';
 import JoditEditor from 'jodit-react';
 import { useAuth } from '../../contexts/AuthContexts';
-import { db, storage } from '../../firebase';
+import { storage, db } from '../../firebase';
 import '../../styles/Text_Editor/TextEditor.css';
 import SideDrawer from './SideDrawer';
 
@@ -19,13 +19,49 @@ function TextEditor() {
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
     const editorRef = useRef(null);
     const [mode, setMode] = useState('light');
+    const [bookDetails, setBookDetails] = useState({
+        title: '',
+        description: '',
+        coverPageURL: '',
+        email: 'Not logged in',
+    });
+    const [isExistingBook, setIsExistingBook] = useState(false);
 
+    const { fileId } = useParams(); // Get fileId from URL
     const location = useLocation();
     const navigate = useNavigate();
 
-    const uploadedFileTitle = location.state?.fileTitle;
-    const uploadedFileDescription = location.state?.fileDescription;
-    const coverPageURL = location.state?.coverPageURL;
+    useEffect(() => {
+        const fetchFileData = async () => {
+            if (fileId) {
+                setIsExistingBook(true);
+                try {
+                    const fileSnapshot = await db.ref(`files/${fileId}`).once('value');
+                    const fileData = fileSnapshot.val();
+                    if (fileData) {
+                        setChapters(fileData.chapters || []);
+                        setBookDetails({
+                            title: fileData.title,
+                            description: fileData.description,
+                            coverPageURL: fileData.coverPageURL,
+                            email: fileData.uploaderEmail || 'Not logged in',
+                        });
+                    }
+                } catch (error) {
+                    console.error("Error fetching file data:", error);
+                }
+            } else {
+                setBookDetails({
+                    title: location.state?.fileTitle || '',
+                    description: location.state?.fileDescription || '',
+                    coverPageURL: location.state?.coverPageURL || '',
+                    email: currentUser ? currentUser.email : 'Not logged in',
+                });
+            }
+        };
+
+        fetchFileData();
+    }, [fileId, location.state, currentUser]);
 
     const toggleDrawer = () => {
         setIsDrawerOpen(!isDrawerOpen);
@@ -35,21 +71,39 @@ function TextEditor() {
         navigate('/dashboard');
     };
 
-    async function downloadPdf() {
+    const downloadPdf = async () => {
+        if (!bookDetails.title) {
+            alert("File title is missing.");
+            return;
+        }
+
+        if (chapters.length === 0) {
+            alert("No chapters to include in the PDF.");
+            return;
+        }
+
         const pdf = new jsPDF('p', 'pt', 'a4');
         pdf.setFontSize(12);
 
         try {
-            if (!coverPageURL) {
-                throw new Error("Cover page URL is missing or invalid");
+            // Upload cover image to Firebase Storage if it's not already uploaded
+            if (!bookDetails.coverPageURL.startsWith('https://firebasestorage.googleapis.com')) {
+                const storageRef = storage.ref();
+                const imagesRef = storageRef.child(`cover_images/${bookDetails.title}-cover`);
+
+                // Convert cover image URL to blob
+                const response = await fetch(bookDetails.coverPageURL);
+                const blob = await response.blob();
+
+                // Upload blob to Firebase Storage
+                const snapshot = await imagesRef.put(blob);
+                bookDetails.coverPageURL = await snapshot.ref.getDownloadURL();
             }
 
-            const uploaderEmail = currentUser ? currentUser.email : 'abc@gmail.com';
-
+            // Generate PDF with chapters
             const pdfPromises = chapters.map((chapter, index) => {
                 return new Promise((resolve, reject) => {
                     const chapterElement = document.getElementById(`pdf-chapter-${index}`);
-
                     html2canvas(chapterElement, { scale: 2 }).then(canvas => {
                         const imgData = canvas.toDataURL('image/png');
                         const imgWidth = 595.28;
@@ -68,27 +122,23 @@ function TextEditor() {
 
             await Promise.all(pdfPromises);
 
-            const fileName = `${uploadedFileTitle}.pdf`;
+            const fileName = `${bookDetails.title}.pdf`;
             pdf.save(fileName);
 
-            const pdfFileRef = storage.ref().child(fileName);
-            await pdfFileRef.put(pdf.output('blob'));
+            // Remove the existing book from the database if it exists
+            if (fileId) {
+                await db.ref(`files/${fileId}`).remove();
+            }
 
-            const pdfURL = await pdfFileRef.getDownloadURL();
+            // Create new book with updated coverPageURL
+            const newFileRef = db.ref('files').push();
+            const newFileId = newFileRef.key; // Generate a new file ID
 
-            const coverPageRef = storage.ref().child(`covers/${fileName}`);
-            const response = await fetch(coverPageURL);
-            const coverPageBlob = await response.blob();
-            await coverPageRef.put(coverPageBlob);
-
-            const coverPageDownloadURL = await coverPageRef.getDownloadURL();
-
-            const newFileKey = db.ref().child("files").push().key;
-            await db.ref(`files/${newFileKey}`).set({
-                title: uploadedFileTitle,
-                description: uploadedFileDescription,
-                coverPageURL: coverPageDownloadURL,
-                pdfURL,
+            await newFileRef.set({
+                title: bookDetails.title,
+                description: bookDetails.description,
+                coverPageURL: bookDetails.coverPageURL,
+                pdfURL: '', // No PDF URL storage in this case
                 uploaderEmail: currentUser ? currentUser.email : 'abc@gmail.com',
                 createdBy: currentUser ? currentUser.uid : null,
                 createdAt: new Date().toISOString(),
@@ -96,24 +146,33 @@ function TextEditor() {
                 chapters: chapters
             });
 
-            alert("File published successfully!");
-
-            navigate(`/book/${newFileKey}`);
+            alert("Book created and published successfully!");
+            navigate(`/book/${newFileId}`);
         } catch (error) {
             console.error("Error publishing file:", error);
-            alert("An error occurred while publishing the file. Please try again.");
+            alert(`An error occurred while publishing the file: ${error.message}`);
         }
-    }
-
-    const handleImageUpload = (event) => {
-        const file = event.target.files[0];
-        const reader = new FileReader();
-        reader.onload = (e) => {
-            const imgBase64 = e.target.result;
-            setContent((prevContent) => `${prevContent}<img src="${imgBase64}" alt="Uploaded Image" class="uploaded-image" />`);
-        };
-        reader.readAsDataURL(file);
     };
+
+
+    const handleImageUpload = async (event) => {
+        const file = event.target.files[0];
+        const storageRef = storage.ref();
+        const imagesRef = storageRef.child(`images/${file.name}`);
+
+        try {
+            // Upload file to Firebase Storage
+            const snapshot = await imagesRef.put(file);
+            const imageUrl = await snapshot.ref.getDownloadURL();
+
+            // Update content with the image URL
+            setContent((prevContent) => `${prevContent}<img src="${imageUrl}" alt="Uploaded Image" class="uploaded-image" />`);
+        } catch (error) {
+            console.error("Error uploading image:", error);
+            alert("Failed to upload image. Please try again.");
+        }
+    };
+
 
     const handleTextFileUpload = (event) => {
         const file = event.target.files[0];
@@ -125,7 +184,7 @@ function TextEditor() {
         reader.readAsText(file);
     };
 
-    const addChapter = () => {
+    const addChapter = async () => {
         if (!chapterName.trim() || !content.trim()) {
             alert("Chapter name and content cannot be empty");
             return;
@@ -136,17 +195,28 @@ function TextEditor() {
             content: content
         };
 
-        if (editingIndex !== null) {
-            const updatedChapters = [...chapters];
-            updatedChapters[editingIndex] = newChapter;
-            setChapters(updatedChapters);
-            setEditingIndex(null);
-        } else {
-            setChapters([...chapters, newChapter]);
-        }
+        try {
+            if (editingIndex !== null) {
+                const updatedChapters = [...chapters];
+                updatedChapters[editingIndex] = newChapter;
+                setChapters(updatedChapters);
+                setEditingIndex(null);
+            } else {
+                setChapters([...chapters, newChapter]);
+            }
 
-        setChapterName('');
-        setContent('');
+            setChapterName('');
+            setContent('');
+
+            if (fileId) {
+                // Update existing book chapters
+                await db.ref(`files/${fileId}/chapters`).set(chapters);
+                alert("Chapter added/updated successfully!");
+            }
+        } catch (error) {
+            console.error("Error adding/updating chapter:", error);
+            alert("An error occurred while adding/updating the chapter. Please try again.");
+        }
     };
 
     const editChapter = (index) => {
@@ -166,15 +236,12 @@ function TextEditor() {
             const storyId = storyRef.key;
 
             await storyRef.set({
-                title: uploadedFileTitle,
-                description: uploadedFileDescription,
+                title: bookDetails.title,
+                description: bookDetails.description,
                 chapters: chapters,
                 createdAt: new Date().toISOString(),
                 createdBy: currentUser ? currentUser.uid : null
             });
-
-            const coverPageRef = storage.ref().child(`covers/${storyId}`);
-            await coverPageRef.putString(coverPageURL, 'data_url');
 
             alert("Story saved successfully!");
         } catch (error) {
@@ -210,6 +277,7 @@ function TextEditor() {
     };
 
     const transition = { duration: 0.5 };
+    const isPublishDisabled = !chapters.length || !bookDetails.title;
 
     const navigateToChapter = (index) => {
         setActiveChapterIndex(index);
@@ -223,33 +291,39 @@ function TextEditor() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={transition}
-            style={{
-                transition: 'background-color 0.5s ease, color 0.5s ease'
-            }}
+            style={{ transition: 'background-color 0.5s ease, color 0.5s ease' }}
         >
             <div className="button-section">
                 <button onClick={toggleDrawer}>Toggle Drawer</button>
                 <SideDrawer isOpen={isDrawerOpen} toggle={toggleDrawer} chapters={chapters} navigateToChapter={navigateToChapter} />
-                <button className="go-back-button" onClick={goBack}><ion-icon name="arrow-back" size="small"></ion-icon>  Go Back</button>
-                <button className="add-btn" onClick={addChapter}>{editingIndex !== null ? 'Update' : 'Add'} <ion-icon name="share"></ion-icon></button>
-                <button className="publish-button" onClick={downloadPdf}>Publish <ion-icon name="create"></ion-icon></button>
-                <button className={`themebtn ${mode === 'dark' ? 'dark-mode' : 'light-mode'}`} onClick={toggleMode}><div className='circle'><ion-icon name="bulb-outline" size="large"></ion-icon></div></button>
+                <button className="go-back-button" onClick={goBack}>
+                    <ion-icon name="arrow-back" size="small"></ion-icon> Go Back
+                </button>
+                <button className="add-btn" onClick={addChapter}>
+                    {editingIndex !== null ? 'Update' : 'Add'} <ion-icon name="share"></ion-icon>
+                </button>
+                <button className="publish-button" onClick={downloadPdf} disabled={isPublishDisabled}>
+                    Publish <ion-icon name="create"></ion-icon>
+                </button>
+                <button className={`themebtn ${mode === 'dark' ? 'dark-mode' : 'light-mode'}`} onClick={toggleMode}>
+                    <div className='circle'><ion-icon name="bulb-outline" size="large"></ion-icon></div>
+                </button>
             </div>
 
-            <div className="section title-section" style={{ backgroundImage: `url(${coverPageURL})` }}>
-                {coverPageURL && (
+            <div className="section title-section" style={{ backgroundImage: `url(${bookDetails.coverPageURL})` }}>
+                {bookDetails.coverPageURL && (
                     <div className="cover-page">
-                        <img src={coverPageURL} alt="Cover Page" />
+                        <img src={bookDetails.coverPageURL} alt="Cover Page" />
                     </div>
                 )}
                 <div className="title-description-container">
-                    <h1 className="titlek">{uploadedFileTitle}</h1>
-                    <p className="description">{uploadedFileDescription}</p>
+                    <h1 className="titlek">{bookDetails.title}</h1>
+                    <p className="description">{bookDetails.description}</p>
                 </div>
             </div>
 
             <div className="section email-section">
-                <p>Email: {currentUser ? currentUser.email : 'Not logged in'}</p>
+                <p>Email: {bookDetails.email}</p>
             </div>
 
             {chapters.map((chapter, index) => (

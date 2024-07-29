@@ -20,7 +20,7 @@ const SideDrawer = ({ isOpen, toggle, chapters, navigateToChapter }) => {
                     <li>No chapters available</li>
                 )}
             </ul>
-            <button onClick={toggle}>Close Drawer</button>
+            <button className="drawerClosebtn button" onClick={toggle}>Close Drawer</button>
         </div>
     );
 };

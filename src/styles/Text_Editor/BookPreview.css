@@ -1,0 +1,49 @@
+.book-preview{
+    padding: 50px;
+    padding-top: 0;
+    transition: all ease-in-out 0.3s;
+}
+.side-drawer{
+    padding-top: 70px;
+}
+.content-section{
+    margin-top: 50px;
+}
+.title-section{
+    border: 2px solid black;
+    padding: 20px;
+    margin: 20px;
+}
+.title-details h1{
+    background-color: rgba(255, 255, 255, 0.508);
+    padding: 40px;
+    font-weight: bold;
+}
+.title-details{
+    background-color: rgba(0, 0, 0, 0.566);
+    padding: 20px;
+    color: white;
+    border-radius: 20px;
+}
+.Chplist{
+    background-color: transparent;
+    color: white;
+}
+.chpContent{
+    margin: auto;
+    width: 70%;
+}
+.chpContent h2{
+    background-color: rgba(40, 1, 75, 0.726);
+    padding: 20px;
+    border-radius: 10px;
+    color: white;
+}
+.drawerClosebtn{
+    width: 80%;
+    background-color: rgb(41, 1, 75) ;
+}
+.drawerClosebtn:hover{
+    color: black;
+    background-color: rgb(240, 200, 251);
+}

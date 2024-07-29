@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { db } from '../../firebase';
 import SideDrawer from './SideDrawer'; // Assuming you have a SideDrawer component similar to the one in TextEditor
+import "../../styles/Text_Editor/BookPreview.css";
 
 function BookPreview() {
     const { id } = useParams();
@@ -41,28 +42,39 @@ function BookPreview() {
     }
 
     return (
-        <div className="book-preview">
+        <div>
             <div className="button-section">
-                <button onClick={toggleDrawer}>Toggle Drawer</button>
+                <button className="Chplist" onClick={toggleDrawer}><ion-icon name="list" size="large"></ion-icon></button>
             </div>
-            <div className="content-section" ref={contentRef}>
-                <h1>{bookData.title}</h1>
-                {bookData.coverPageURL && (
-                    <img src={bookData.coverPageURL} alt="Cover Page" style={{ height: 100 }} />
-                )}
-                <p>{bookData.description}</p>
-                {bookData.chapters && bookData.chapters.length > 0 ? (
-                    bookData.chapters.map((chapter, index) => (
-                        <div key={index} id={`chapter-${index}`} className={index === activeChapterIndex ? 'active-chapter' : ''}>
-                            <h2>{chapter.name}</h2>
-                            <div dangerouslySetInnerHTML={{ __html: chapter.content }} />
+            <div className="book-preview">
+                
+                <div className="content-section" ref={contentRef}>
+                    <section className='title-section' style={{ backgroundImage: `url(${bookData.coverPageURL})` }}>
+                        {bookData.coverPageURL && (
+                            <div className='cover-page'>
+                            <img src={bookData.coverPageURL} alt="Cover Page" />
+                            </div>
+                        )}
+                        <div className='title-details'>
+                            <h1>{bookData.title}</h1>
+                            <p>{bookData.description}</p>    
                         </div>
-                    ))
-                ) : (
-                    <p>No chapters available</p>
-                )}
+                    </section>
+                    {bookData.chapters && bookData.chapters.length > 0 ? (
+                        bookData.chapters.map((chapter, index) => (
+                            <section className='chpContent'>
+                                <div key={index} id={`chapter-${index}`} className= {index === activeChapterIndex ? 'active-chapter' : ''}>
+                                    <h2>{chapter.name}</h2>
+                                    <div dangerouslySetInnerHTML={{ __html: chapter.content }} />
+                                </div>
+                            </section>
+                        ))
+                    ) : (
+                        <p>No chapters available</p>
+                    )}
+                </div>
+                <SideDrawer isOpen={isDrawerOpen} toggle={toggleDrawer} chapters={bookData.chapters} navigateToChapter={navigateToChapter} />
             </div>
-            <SideDrawer isOpen={isDrawerOpen} toggle={toggleDrawer} chapters={bookData.chapters} navigateToChapter={navigateToChapter} />
         </div>
     );
 }
