@@ -294,7 +294,7 @@ function TextEditor() {
             style={{ transition: 'background-color 0.5s ease, color 0.5s ease' }}
         >
             <div className="button-section">
-                <button className="Chplist" onClick={toggleDrawer}><ion-icon name="list" size="large"></ion-icon></button>
+                <button className="save-btn" onClick={toggleDrawer}>Chapters</button>
                 <SideDrawer isOpen={isDrawerOpen} toggle={toggleDrawer} chapters={chapters} navigateToChapter={navigateToChapter} />
                 <button className="go-back-button" onClick={goBack}>
                     <ion-icon name="arrow-back" size="small"></ion-icon> Go Back
@@ -334,14 +334,14 @@ function TextEditor() {
                 </div>
             ))}
 
-            <div className="hidden-pdf-container">
+            {/* <div className="hidden-pdf-container">
                 {chapters.map((chapter, index) => (
                     <div key={index} id={`pdf-chapter-${index}`} className="pdf-chapter">
                         <h2>{chapter.name}</h2>
                         <div dangerouslySetInnerHTML={{ __html: chapter.content }} />
                     </div>
                 ))}
-            </div>
+            </div> */}
 
             <div className="section editor-section">
                 <input
@@ -360,14 +360,49 @@ function TextEditor() {
                     className="editor"
                     ref={editorRef}
                 />
-                <div className="upload-section">
-                    <input type="file" accept="image/*" onChange={handleImageUpload} />
-                    <input type="file" accept=".txt" onChange={handleTextFileUpload} />
-                </div>
-            </div>
+                <div style={{ display: 'flex', gap: '10px' }}>
+                    <label
+                        htmlFor="image-upload"
+                        className="save-btn"
+                        style={{
+                            display: 'inline-block',
+                            padding: '10px 20px',
+                            cursor: 'pointer',
+                            textAlign: 'center',
+                        }}
+                    >
+                        Upload Image
+                    </label>
+                    <input
 
-            <div className="button-section footer">
-                <button className="save-btn" onClick={saveStory}>Save</button>
+                        id="image-upload"
+                        type="file"
+                        accept="image/*"
+                        onChange={handleImageUpload}
+                        style={{ display: 'none' }}
+                    />
+
+                    <label
+                        className="save-btn"
+                        htmlFor="text-upload"
+                        style={{
+                            display: 'inline-block',
+                            padding: '10px 20px',
+                            cursor: 'pointer',
+                            textAlign: 'center',
+                        }}
+                    >
+                        Upload Text File
+                    </label>
+                    <input
+                        id="text-upload"
+                        type="file"
+                        accept=".txt"
+                        onChange={handleTextFileUpload}
+                        style={{ display: 'none' }}
+                    />
+                </div>
+
             </div>
         </motion.div>
     );

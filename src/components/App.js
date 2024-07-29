@@ -23,6 +23,7 @@ function App() {
           <Route path="/signup" element={<Signup />} />
           <Route path="/login" element={<Login />} />
           <Route path="/dashboard/textEditor" element={<PrivateRoute><TextEditor /></PrivateRoute>} />
+          <Route path="/dashboard/textEditor/:fileId" element={<TextEditor />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/book/:id" element={<PrivateRoute><BookPreview /></PrivateRoute>} />
         </Routes>
