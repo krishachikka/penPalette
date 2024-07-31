@@ -22,7 +22,7 @@ export default function Login() {
       mouseControls: true,
       touchControls: true,
       gyroControls: false,
-      minHeight: 200.00,
+      minHeight: 500.00,
       minWidth: 200.00,
       scale: 1.00,
       scaleMobile: 1.00,
@@ -53,45 +53,51 @@ export default function Login() {
   }
 
   return (
-    <div className="bg" ref={vantaRef}>
-      <img src={logo} alt="Logo" className="logosml" />
-      <div className="container">
-        <div className="login-card">
-          <h2 className="text-center mb-4">Log In</h2>
-          {error && <div className="alert alert-danger">{error}</div>}
-          <form onSubmit={handleSubmit}>
-            <div className="form-group">
-              <label>Email</label>
-              <input
-                type="email"
-                ref={emailRef}
-                required
-                className="form-control mt-3" id="form-control"
-              />
+    <div className="outer">
+      <div className="bg" ref={vantaRef}>
+        <img src={logo} alt="Logo" className="logosml" />
+        <div className="container">
+          <div className="login-card">
+            <h2 className="text-center mb-4">Log In</h2>
+            {error && <div className="alert alert-danger">{error}</div>}
+            <form onSubmit={handleSubmit}>
+              <div className="form-group">
+                <label>Email</label>
+                <input
+                  type="email"
+                  ref={emailRef}
+                  required
+                  className="form-control mt-3" id="form-control"
+                />
+              </div>
+              <div className="form-group">
+                <label>Password</label>
+                <input
+                  type="password"
+                  ref={passwordRef}
+                  required
+                  className="form-control mt-3" id="form-control"
+                />
+              </div>
+              <button disabled={loading} className="button w-100" type="submit">
+                Log In
+              </button>
+            </form>
+            <div className="w-100 text-center mt-3">
+              <Link to="/forgot-password" className="linktext">Forgot Password?</Link>
             </div>
-            <div className="form-group">
-              <label>Password</label>
-              <input
-                type="password"
-                ref={passwordRef}
-                required
-                className="form-control mt-3" id="form-control"
-              />
+            <div className="w-100 text-center mt-2 pt-4">
+              Need an account? <Link to="/signup" className="linktext">Sign Up</Link>
             </div>
-            <button disabled={loading} className="button w-100" type="submit">
-              Log In
-            </button>
-          </form>
-          <div className="w-100 text-center mt-3">
-            <Link to="/forgot-password" className="linktext">Forgot Password?</Link>
           </div>
-          <div className="w-100 text-center mt-2 pt-4">
-            Need an account? <Link to="/signup" className="linktext">Sign Up</Link>
-          </div>
+          <img className="cool" src={cool} alt="cool" />
         </div>
-        <img src={cool} alt="cool" className="cool" />
-      </div>
 
+        {/* Additional content at the bottom */}
+        <footer className="footer">
+          <p className="text-center">&copy; 2024 Your Website. All rights reserved.</p>
+        </footer>
+      </div>
     </div>
   );
 }

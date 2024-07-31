@@ -429,7 +429,7 @@ export default function UploadedFilesSection({ currentUser }) {
             </div>
 
 
-            <AnimatePresence>
+            <AnimatePresence> 
                 {showConfirmDelete && (
                     <motion.div
                         className="modal-backdrop"

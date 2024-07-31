@@ -1,42 +1,69 @@
-body{
+body {
     margin: 0;
     padding: 0;
-    width: 100vw;
-    height: 100vh;
-    font-family: "Poppins";
+    width: 100%;
+    height: 100%;
+    font-family: "Poppins", sans-serif;
+    overflow-x: hidden;
+    /* Prevent horizontal scroll */
 }
-.container{
+
+.bg {
+    width: 100%;
+    height: 100%;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
+    align-items: center;
+
     justify-content: center;
 }
-.login-card{    
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 100%;
+    padding: 0 20px;
+    /* Add padding for better mobile view */
+}
+
+.login-card {
     background-color: #1c0831;
     padding: 50px;
-    width: 35%;
-    min-width: 300px;
-    margin-left: 10%;
+    width: 100%;
+    /* Adjusted for responsiveness */
+    max-width: 400px;
+    /* Limit width on larger screens */
     border-radius: 25px;
     color: white;
     border: 2px solid #52297a;
     transition: 0.3s ease-in-out;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    margin-bottom: 20px;
+    /* Space between card and other elements */
 }
-.login-card:hover{
+
+.login-card:hover {
     box-shadow: 0 0 20px 2px #7f39c5;
 }
-.heading{
-    text-align: center;
-    padding-bottom: 10px;
-}
-#form-control{
-    border-radius: 25px;
+
+.form-group {
     margin-bottom: 20px;
+}
+
+#form-control {
+    border-radius: 25px;
     background-color: #b46aff;
     opacity: 0.5;
     font-size: 18px;
     padding: 10px;
+    width: 100%;
+    box-sizing: border-box;
+    border: none;
+    color: white;
 }
-.button{
+
+.button {
     border-radius: 25px;
     width: 100%;
     margin-top: 25px;
@@ -46,20 +73,69 @@ body{
     transition: 0.3s ease-in-out;
     color: white;
 }
-.button:hover{
+
+.button:hover {
     background-color: transparent;
     border: 2px solid #b46aff;
     box-shadow: 0 0 10px 1px #b46aff;
 }
-.text-center{
+
+.text-center {
     color: white;
     text-align: center;
 }
-.linktext{
+
+.linktext {
     text-decoration: none;
     color: #b46aff;
 }
-.logosml{
-    height: 100px;
-    margin: 0%;
+
+.logosml {
+    height: auto;
+    /* Ensure logo scales with its container */
+    max-width: 100%;
+    margin-bottom: 20px;
+    /* Space between logo and form */
+}
+
+.cool {
+    max-width: 100%;
+    height: auto;
+    /* Ensure gif scales with its container */
+}
+
+@media (min-width: 768px) {
+    .container {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: flex-start;
+        padding: 0 50px;
+
+
+
+
+        /* Increase padding for larger screens */
+    }
+
+    .login-card {
+        width: 45%;
+        /* Adjust width for larger screens */
+        max-width: 400px;
+        /* Limit maximum width on larger screens */
+        margin-left: auto;
+        /* Push login card to the right */
+        margin-right: auto;
+    }
+}
+
+@media (max-width: 576px) {
+    .login-card {
+        padding: 30px;
+        /* Adjust padding for smaller screens */
+    }
+
+    .cool {
+        display: none;
+    }
+
 }

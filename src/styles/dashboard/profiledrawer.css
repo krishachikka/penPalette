@@ -2,48 +2,46 @@
   0% { opacity: 0; transform: translateY(-10%); }
   100% { opacity: 1; transform: translateY(0); }
 }
+
 .profile-drawer {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 500px;
-    height: 100vh;
-    z-index: 999;
-    background-color: #470276;
-    /* box-shadow: 0 0 10px rgba(208, 208, 208, 0.555); */
-    transform: translateX(-100%);
-    transition: transform 0.5s ease-in-out;
-    padding: 25px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 500px;
+  height: 100vh;
+  z-index: 999;
+  background-color: #470276;
+  transform: translateX(-100%);
+  transition: transform 0.5s ease-in-out;
+  padding: 25px;
+}
+
+.profile-drawer.open {
+  transform: translateX(0);
+}
+
+@media (max-width: 768px) {
+  .profile-drawer {
+    width: 100%;
   }
-  
-  .profile-drawer.open {
-    transform: translateX(0);
-  }
-  
-  .profile-drawer ul {
-    list-style: none;
-    padding: 20px;
-  }
-  
-  .profile-drawer li {
-    margin-bottom: 10px;
-  }
-  
-  .close-button {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    cursor: pointer;
-    background-color: transparent;
-    border: none;
-    color: white;
-  }
-  #btnicon{
-    padding-right: 20px;
-    font-size: 20px;
+}
+
+@media (max-width: 480px) {
+  .profile-drawer {
+    width: 100%;
   }
 
-.modal-container{
+  /* .modal-container {
+    margin: 10px;
+    padding: 15px;
+  } */
+
+  #btnicon {
+    font-size: 18px;
+  }
+}
+
+.modal-container {
   background-color: #1c0831;
   margin: 15px;
   padding: 20px;
@@ -51,13 +49,50 @@
   animation: slideDown 0.5s ease-in-out;
   border-radius: 20px;
 }
+
+/* .modal-content {
+  max-width: 100%;
+} */
+
+/* Overlay background */
 .blur-background {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5); /* Adjust the opacity as needed */
-  backdrop-filter: blur(5px); /* Adjust the blur strength as needed */
-  z-index: 999; /* Ensure it's above other content */
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(5px);
+  z-index: 999;
+}
+
+/* Button styles */
+.button {
+  font-size: 16px;
+  /* Adjust button size for better readability */
+}
+
+.close-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+  background-color: transparent;
+  border: none;
+  color: white;
+}
+
+#btnicon {
+  padding-right: 20px;
+  font-size: 20px;
+}
+
+/* List styles */
+.profile-drawer ul {
+  list-style: none;
+  padding: 20px;
+}
+
+.profile-drawer li {
+  margin-bottom: 10px;
 }

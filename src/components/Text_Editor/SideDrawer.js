@@ -2,18 +2,19 @@ import React from 'react';
 import '../../styles/Text_Editor/SideDrawer.css';
 
 const SideDrawer = ({ isOpen, toggle, chapters, navigateToChapter }) => {
-    const onClickChapter = (index) => {
-        navigateToChapter(index);
-    };
+    const totalChapters = chapters ? chapters.length : 0;
 
     return (
         <div className={`side-drawer ${isOpen ? 'open' : ''}`}>
-            <h2>Chapters</h2>
+            <h2>Chapters ({totalChapters})</h2>
             <ul>
                 {chapters && chapters.length > 0 ? (
                     chapters.map((chapter, index) => (
-                        <li key={index} onClick={() => onClickChapter(index)}>
-                            {chapter.name}
+                        <li
+                            key={index}
+                            onClick={() => navigateToChapter(index)}
+                        >
+                            {index + 1}. {chapter.name}
                         </li>
                     ))
                 ) : (

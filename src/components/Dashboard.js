@@ -29,12 +29,17 @@ export default function Dashboard() {
   const [toastVisible, setToastVisible] = useState(false);
   const [profileDrawerOpen, setProfileDrawerOpen] = useState(false);
   const { currentUser, logout } = useAuth();
+  const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
 
   const toggleProfileDrawer = () => {
     setProfileDrawerOpen(!profileDrawerOpen); // Toggle the state
   };
-  
+
+  const toggleMenu = () => {
+    setMenuOpen(!menuOpen);
+    console.log('Menu toggled:', !menuOpen);
+  };
 
 
   const openFileOverlay = async (fileId) => {
@@ -301,9 +306,20 @@ export default function Dashboard() {
             <button>Explore More Stories</button>
           </div>
         </div>
-
+        <button className="menu-button" onClick={toggleMenu}>
+          <ion-icon name="list-outline" size="large"></ion-icon>
+        </button>
 
       </header>
+      <div className={`header-buttons-mobile ${menuOpen ? 'open' : ''}`}>
+        <div className="book-button" onClick={() => document.querySelector(".center-section").scrollIntoView({ behavior: 'smooth' })}>
+          <button>View Your Books</button>
+        </div>
+        <div className="book-button" onClick={() => document.querySelector(".right-section").scrollIntoView({ behavior: 'smooth' })}>
+          <button>Explore More Stories</button>
+        </div>
+      </div>
+
       {/* Profile drawer */}
       < ProfileDrawer isOpen={profileDrawerOpen} onClose={toggleProfileDrawer} currentUser={currentUser} setLoading={setLoading} />
       <div className="container-fluid m-0 p-0">
@@ -385,7 +401,7 @@ export default function Dashboard() {
                 <div className="modal-body">
                   {selectedFile && (
                     <div className="content">
-                      <img src={selectedFile.coverPageURL} alt="Cover Page" style={{ width: "30%", margin: "10px" }} />
+                      <img src={selectedFile.coverPageURL} alt="Cover Page"/>
 
                       <div>
                         <h3>{selectedFile.title}</h3>
@@ -440,61 +456,6 @@ export default function Dashboard() {
             </motion.div>
           )}
         </AnimatePresence>
-
-
-
-        {/* <Modal show={showFileModal} onHide={() => setShowFileModal(false)}>
-          <Modal.Header closeButton>
-            <Modal.Title>File Details</Modal.Title>
-            <Button variant="secondary" onClick={toggleSave}>
-              {isSaved ? "Unsave" : "Save"}
-            </Button>
-          </Modal.Header>
-          <Modal.Body>
-            {selectedFile && (
-              <div>
-                <h4>Title: {selectedFile.title}</h4>
-                <p>Uploaded By: {selectedFile.uploaderEmail}</p>
-                <img src={selectedFile.coverPageURL} alt="Cover Page" style={{ width: "70%" }} />
-                <p>Description: {selectedFile.description}</p>
-              </div>
-            )}
-            <div>
-              <h4>Comments:</h4>
-              <Button onClick={handleToggleComments}>
-                {showComments ? "Hide Comments" : "Show Comments"}
-              </Button>
-              {showComments && fileComments.map((comment, index) => (
-                <div key={index}>
-                  <p>{comment.text}</p>
-                  <small>By: {comment.userEmail}</small>
-                  {comment.userEmail === (currentUser && currentUser.email) && (
-                    <Button onClick={() => handleDeleteComment(comment.id)}>Delete</Button>
-                  )}
-                </div>
-              ))}
-            </div>
-            <textarea
-              value={comment}
-              onChange={handleCommentChange}
-              placeholder="Add a comment..."
-              className="form-control mb-3"
-            />
-            {commentError && <div style={{ color: "red" }}>{commentError}</div>}
-            <Button
-              variant="primary"
-              onClick={() => handleCommentSubmit(selectedFile.id)}
-              disabled={comment.trim().length === 0 || loading}
-            >
-              Add Comment
-            </Button>
-          </Modal.Body>
-          <Modal.Footer>
-            <Button variant="primary" onClick={() => handleOpen(selectedFile.coverPageURL)}>
-              Open
-            </Button>
-          </Modal.Footer>
-        </Modal> */}
       </div>
     </div>
   );

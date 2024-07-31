@@ -1,16 +1,18 @@
-*{
+* {
     font-family: "Poppins";
 }
-body{
+
+body {
     margin: 0;
     padding: 0;
     width: 100vw;
     height: 100vh;
 }
+
 /* .scontainer{
     top: 70px;
 } */
-.signup-card{    
+.signup-card {
     background-color: #1c0831;
     padding: 50px;
     width: 33%;
@@ -21,12 +23,101 @@ body{
     border: 2px solid #52297a;
     transition: 0.3s ease-in-out;
 }
-.signup-card:hover{
+
+.signup-card:hover {
     box-shadow: 0 0 20px 2px #7f39c5;
 }
-.cool{
+
+.cool {
     width: 500px;
     height: 500px;
     margin: 20px;
     right: 205;
+}
+
+
+
+* {
+    font-family: "Poppins", sans-serif;
+    box-sizing: border-box;
+    /* Add this for better box-sizing handling */
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    width: 100vw;
+    height: 100vh;
+    overflow-x: hidden;
+    /* Prevent horizontal scroll */
+}
+
+.signup-card {
+    background-color: #1c0831;
+    padding: 50px;
+    width: 33%;
+    min-width: 300px;
+    margin: 0 auto;
+    /* Center the card horizontally */
+    border-radius: 25px;
+    color: white;
+    border: 2px solid #52297a;
+    transition: 0.3s ease-in-out;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    /* Add shadow to match previous styles */
+}
+
+.signup-card:hover {
+    box-shadow: 0 0 20px 2px #7f39c5;
+}
+
+.cool {
+    width: 500px;
+    height: 500px;
+    margin: 20px auto;
+    display: block;
+    /* Ensure it's centered */
+    right: 205px;
+    /* This seems misplaced, consider removing or adjusting */
+}
+
+@media (max-width: 768px) {
+    .signup-card {
+        width: 80%;
+        /* Increase width for smaller screens */
+        padding: 30px;
+        /* Adjust padding for smaller screens */
+        margin: 20px auto;
+        /* Center the card and add margin */
+    }
+
+    .cool {
+        width: 100%;
+        height: auto;
+        /* Ensure gif scales with its container */
+        margin: 20px auto;
+        /* Center the gif */
+        right: auto;
+        /* Remove misplaced right positioning */
+    }
+}
+
+@media (max-width: 576px) {
+    .signup-card {
+        width: 90%;
+        /* Increase width for very small screens */
+        padding: 20px;
+        /* Further adjust padding for smaller screens */
+    }
+
+    .cool {
+        width: 100%;
+        /* Ensure gif scales with its container */
+        height: auto;
+        /* Maintain aspect ratio */
+        margin: 10px auto;
+        /* Center the gif */
+        right: auto;
+        /* Remove misplaced right positioning */
+    }
 }

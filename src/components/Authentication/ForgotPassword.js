@@ -33,7 +33,6 @@ export default function ForgotPassword() {
     };
   }, []); // Empty dependency array to ensure effect runs only once
 
-
   async function handleSubmit(e) {
     e.preventDefault();
 
@@ -51,7 +50,7 @@ export default function ForgotPassword() {
   }
 
   return (
-    <body ref={vantaRef} id="body">
+    <div ref={vantaRef} id="body">
       <div className="forgot-card">
         <div className="card-body">
           <h2 className="text-center mb-4">Password Reset</h2>
@@ -69,12 +68,11 @@ export default function ForgotPassword() {
           <div className="w-100 text-center mt-3">
             <Link to="/login" className="linktext">Login</Link>
           </div>
-        </div>
-        <div className="w-100 text-center mt-5">
-          Need an account? <Link to="/signup" className="linktext">Sign Up</Link>
+          <div className="w-100 text-center mt-5">
+            Need an account? <Link to="/signup" className="linktext">Sign Up</Link>
+          </div>
         </div>
       </div>
-
-    </body>
+    </div>
   );
 }

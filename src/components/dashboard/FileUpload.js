@@ -113,9 +113,9 @@ export default function FileUpload({ currentUser }) {
                 <input type="text" className="form-control mb-2" placeholder="Title" value={title} onChange={handleTitleChange} />
                 <textarea className="form-control mb-2" placeholder="Description" value={description} onChange={handleDescriptionChange} />
                 {error && <p className="text-danger">{error}</p>}
-                <button onClick={handlePublish} className="bttn btn-success btn-block" disabled={loading}>
+                {/* <button onClick={handlePublish} className="bttn btn-success btn-block" disabled={loading}>
                     {loading ? <div className="spinner-border spinner-border-sm" role="status"></div> : "Publish"}
-                </button>
+                </button> */}
                 <button onClick={handleNext} className="bttn" disabled={loading}>
                     Next
                 </button>

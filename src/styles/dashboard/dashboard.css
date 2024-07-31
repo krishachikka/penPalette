@@ -2,6 +2,11 @@ body::-webkit-scrollbar {
   display: none;
 }
 
+@keyframes slideDown {
+  0% { opacity: 0; transform: translateY(-10%); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
 
 .container-fluid {
   background-color: #1c0831;
@@ -149,4 +154,159 @@ header {
 
 .logod {
   width: 50%;
+}
+
+.header-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.menu-button {
+  display: none;
+}
+
+.header-buttons-mobile {
+  display: none;
+  flex-direction: column;
+  gap: 10px;
+  position: fixed;
+  z-index: 99;
+  background-color: rgba(0, 0, 0, 0.482);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  padding: 10px;
+  border-radius: 8px;
+  width: 100%;
+  transform: translateX(-100%);
+  transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out;
+}
+
+.header-buttons-mobile.open {
+  display: flex;
+  visibility: visible;
+  opacity: 1;
+  animation: slideDown 0.3s ease-in-out forwards;
+}
+
+/* General Responsive Design */
+@media only screen and (max-width: 1200px) {
+  .container-fluid {
+    padding: 0 10px;
+  }
+}
+
+@media only screen and (max-width: 992px) {
+  .container-fluid {
+    padding: 0 5px;
+  }
+
+  .searchname {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  #searchbar {
+    width: 100%;
+    min-width: unset;
+  }
+  
+  .book-button {
+    margin: 5px 0;
+  }
+
+  .logod {
+    width: 100%;
+    text-align: center;
+    margin: 10px 0;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  header {
+    height: 15vh;
+    padding: 10px;
+  }
+
+  #profile-icon {
+    width: 20%;
+  }
+
+  .book-button button {
+    width: 100%;
+    padding: 10px;
+    font-size: 14px;
+  }
+
+  .form-control {
+    font-size: 16px;
+    padding: 8px;
+  }
+
+  .dashboard-container {
+    flex-direction: column;
+  }
+
+  .right-section,
+  .center-section {
+    padding: 10px;
+  }
+
+  .searchname {
+    width: 100%;
+  }
+
+  .others-file-card .card-body {
+    width: 100%;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  header {
+    padding: 10px 5px;
+  }
+
+  .button,
+  .form-control {
+    font-size: 14px;
+  }
+
+  .book-button button {
+    font-size: 12px;
+    padding: 8px;
+  }
+
+  .searchname {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  #searchbar {
+    width: 100%;
+    padding-left: 10px;
+  }
+
+  .profile-icon {
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .logod {
+    width: 80%;
+  }
+  .header-buttons {
+    display: none;
+  }
+
+  .menu-button {
+    display: block;
+    background-color: transparent;
+    color: white;
+    font-size: larger;
+    margin: 10px;
+  }
+}
+
+
+
+@media (max-width: 599px) {
+
 }

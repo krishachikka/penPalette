@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { db } from '../../firebase';
-import SideDrawer from './SideDrawer'; // Assuming you have a SideDrawer component similar to the one in TextEditor
+import SideDrawer from './SideDrawer'; // Import the SideDrawer component
 import "../../styles/Text_Editor/BookPreview.css";
 import { motion } from 'framer-motion';
 import logomeow from "../../images/logomeow.png";
@@ -32,10 +32,13 @@ function BookPreview() {
     const navigateToChapter = (index) => {
         setActiveChapterIndex(index);
         if (contentRef.current) {
-            contentRef.current.scrollTo({
-                top: contentRef.current.childNodes[index].offsetTop,
-                behavior: 'smooth'
-            });
+            const chapterElement = contentRef.current.querySelector(`#chapter-${index}`);
+            if (chapterElement) {
+                chapterElement.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
         }
         toggleDrawer(); // Close the drawer after navigating to the chapter
     };
@@ -49,7 +52,9 @@ function BookPreview() {
     };
 
     const transition = { duration: 0.5 };
-    // const isPublishDisabled = !chapters.length || !bookDetails.title;
+
+    const chapters = bookData.chapters || [];
+    const totalChapters = chapters.length;
 
     return (
         <motion.div
@@ -60,36 +65,46 @@ function BookPreview() {
             transition={transition}
             style={{ transition: 'background-color 0.5s ease, color 0.5s ease' }}
         >
+            <SideDrawer
+                isOpen={isDrawerOpen}
+                toggle={toggleDrawer}
+                chapters={chapters}
+                navigateToChapter={navigateToChapter}
+            />
             <div className="button-section">
-                <button className="Chplist" onClick={toggleDrawer}><ion-icon name="list" size="large"></ion-icon></button>
-                <img src={logomeow} alt="Meow" id="logoMeow"></img>
-                <button className={`themebtn ${mode === 'dark' ? 'dark-mode' : 'light-mode'}`} onClick={toggleMode}>
-                    <div className='circle'><ion-icon name="bulb-outline" size="large"></ion-icon></div>
+                <button className="Chplist" onClick={toggleDrawer}>
+                    <ion-icon name="list" size="large"></ion-icon>
                 </button>
-                <SideDrawer isOpen={isDrawerOpen} toggle={toggleDrawer} chapters={bookData.chapters} navigateToChapter={navigateToChapter} />
+                <img src={logomeow} alt="Meow" id="logoMeow" />
+                <button className={`themebtn ${mode === 'dark' ? 'dark-mode' : 'light-mode'}`} onClick={toggleMode}>
+                    <div className='circle'>
+                        <ion-icon name="bulb-outline" size="large"></ion-icon>
+                    </div>
+                </button>
             </div>
-            
+
             <div className="book-preview">
-                
                 <div className="content-section" ref={contentRef}>
                     <section className='title-section' style={{ backgroundImage: `url(${bookData.coverPageURL})` }}>
                         {bookData.coverPageURL && (
                             <div className='cover-page'>
-                            <img src={bookData.coverPageURL} alt="Cover Page" />
+                                <img src={bookData.coverPageURL} alt="Cover Page" />
                             </div>
                         )}
                         <div className='title-details'>
                             <h1>{bookData.title}</h1>
-                            <p>{bookData.description}</p>    
+                            <p>{bookData.description}</p>
                         </div>
                     </section>
-                    {bookData.chapters && bookData.chapters.length > 0 ? (
-                        bookData.chapters.map((chapter, index) => (
-                            <section className='chpContent'>
-                                <div key={index} id={`chapter-${index}`} className= {index === activeChapterIndex ? 'active-chapter' : ''}>
-                                    <h2>{chapter.name}</h2>
-                                    <div dangerouslySetInnerHTML={{ __html: chapter.content }} />
-                                </div>
+                    {chapters.length > 0 ? (
+                        chapters.map((chapter, index) => (
+                            <section
+                                key={index}
+                                id={`chapter-${index}`}
+                                className={`chpContent ${index === activeChapterIndex ? 'active-chapter' : ''}`}
+                            >
+                                <h2>{chapter.name}</h2>
+                                <div dangerouslySetInnerHTML={{ __html: chapter.content }} />
                             </section>
                         ))
                     ) : (

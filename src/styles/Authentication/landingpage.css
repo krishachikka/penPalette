@@ -1,8 +1,9 @@
-*{
+* {
     margin: 0;
     padding: 0;
 }
-.bg{
+
+.bg {
     margin: 0;
     width: 100%;
     height: 100%;
@@ -10,29 +11,35 @@
     overflow: hidden;
     /* background-color: #52297a; */
 }
-.block{
+
+.block {
     display: flex;
     flex-direction: column;
     align-items: center;
 }
+
 .logo {
     width: 35%;
     min-width: 300px;
 }
+
 .book {
     /* height: 250px; */
     width: 200px;
 }
+
 .titlel {
     color: white;
     text-align: center;
     margin-top: 50px;
 }
+
 .subtitle {
     color: white;
     text-align: center;
     margin-top: 20px;
 }
+
 .button-container {
     display: flex;
     justify-content: center;
@@ -49,13 +56,15 @@
     transition: 0.3s ease-in-out;
     border: 1px solid white;
 }
-.button-link{
+
+.button-link {
     text-decoration: none;
     color: white;
 }
-.buttonlp:hover{
+
+.buttonlp:hover {
     box-shadow: 0 0 7px 3px white;
-} 
+}
 
 .fade-in {
     opacity: 1;
@@ -78,6 +87,7 @@
         opacity: 0;
         transform: translateY(-20px);
     }
+
     100% {
         opacity: 1;
         transform: translateY(0);
@@ -89,6 +99,7 @@
         opacity: 0;
         transform: translateY(20px);
     }
+
     100% {
         opacity: 1;
         transform: translateY(0);
@@ -100,19 +111,23 @@
         opacity: 0;
         transform: translateY(20px);
     }
+
     100% {
         opacity: 1;
         transform: translateY(0);
     }
 }
-.features{
+
+.features {
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
     margin: 50px;
     justify-content: center;
 }
-.featureBox , .featureBox2{
+
+.featureBox,
+.featureBox2 {
     display: flex;
     flex-direction: row;
     /* border: 1px solid white; */
@@ -125,24 +140,221 @@
     background-color: rgba(255, 255, 255, 0.152);
     width: 60%;
 }
-.featureBox .headline{
+
+.featureBox .headline {
     text-align: right;
 }
-.ftImg{
+
+.ftImg {
     width: 180px;
 }
-.headline{
+
+.headline {
     padding: 20px;
     padding-bottom: 20px;
     font-size: 24px;
     font-weight: bold;
 }
-.featureBox p, .featureBox2 p{
+
+.featureBox p,
+.featureBox2 p {
     margin: 10px;
 }
-.footer{
+
+.footer {
     margin: 0;
     height: 150px;
     width: 100%;
     background-color: rgb(48, 1, 67);
+}
+
+
+
+
+
+
+
+/* Additional Responsive CSS */
+
+/* Adjustments for medium-sized screens (768px - 1024px) */
+@media (min-width: 768px) and (max-width: 1024px) {
+    .logo {
+        width: 40%;
+    }
+
+    .titlel {
+        font-size: 28px;
+    }
+
+    .subtitle {
+        font-size: 18px;
+    }
+
+    .buttonlp {
+        width: 50%;
+        max-width: 250px;
+        font-size: 16px;
+    }
+
+    .features {
+        margin: 20px;
+    }
+
+    .featureBox,
+    .featureBox2 {
+        width: 70%;
+    }
+
+    .ftImg {
+        width: 160px;
+    }
+}
+
+/* Adjustments for small-sized screens (480px - 767px) */
+@media (max-width: 767px) {
+    .logo {
+        width: 60%;
+    }
+
+    .titlel {
+        font-size: 24px;
+    }
+
+    .subtitle {
+        font-size: 16px;
+    }
+
+    .button-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .buttonlp {
+        width: 80%;
+        max-width: 300px;
+        font-size: 14px;
+    }
+
+    .features {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .featureBox,
+    .featureBox2 {
+        width: 90%;
+    }
+
+    .ftImg {
+        width: 140px;
+    }
+
+    .planer {
+        display: none;
+    }
+
+    .planel {
+        display: none;
+    }
+
+    .kids {
+        display: none;
+    }
+
+    .oldie {
+        display: none;
+    }
+
+
+}
+
+/* Adjustments for extra small screens (up to 479px) */
+@media (max-width: 479px) {
+    .logo {
+        width: 80%;
+    }
+
+    .titlel {
+        font-size: 20px;
+    }
+
+    .subtitle {
+        font-size: 14px;
+    }
+
+    .buttonlp {
+        width: 90%;
+        max-width: 250px;
+        font-size: 12px;
+    }
+
+    .features {
+        margin: 10px;
+    }
+
+    .featureBox,
+    .featureBox2 {
+        width: 100%;
+    }
+
+    .ftImg {
+        width: 120px;
+    }
+}
+
+
+/* landingpage.css */
+
+.footer {
+    background-color: #1c0831;
+    color: white;
+    padding: 20px;
+    text-align: center;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+}
+
+.footer .footer-content {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.footer .footer-content ion-icon {
+    font-size: 32px;
+    color: white;
+    cursor: pointer;
+}
+
+.footer p {
+    margin-top: 10px;
+    font-size: 14px;
+    opacity: 0.7;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+.fade-out {
+    animation: fadeOut 0.5s ease-in-out forwards;
+}
+
+@keyframes fadeOut {
+    0% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+        visibility: hidden;
+    }
 }
