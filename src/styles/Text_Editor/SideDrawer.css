@@ -5,15 +5,15 @@
   width: 250px; /* Adjust width as needed */
   position: fixed;
   top: 0;
-  left: -250px; /* Start closed */
+  left: -260px; /* Start closed */
   background-color: white;
-  box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.5);
+  /* box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.5); */
   transition: transform 0.3s ease-out;
   z-index: 999;
 }
 
 .side-drawer.open {
-  transform: translateX(250px); /* Slide in when open */
+  transform: translateX(260px); /* Slide in when open */
 }
 
 .side-drawer h2 {

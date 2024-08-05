@@ -71,7 +71,7 @@ function BookPreview() {
                 chapters={chapters}
                 navigateToChapter={navigateToChapter}
             />
-            <div className="button-section">
+            <div className="button-section bookPreview">
                 <button className="Chplist" onClick={toggleDrawer}>
                     <ion-icon name="list" size="large"></ion-icon>
                 </button>

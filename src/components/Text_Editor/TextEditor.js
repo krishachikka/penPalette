@@ -19,6 +19,8 @@ function TextEditor() {
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
     const editorRef = useRef(null);
     const [mode, setMode] = useState('light');
+    const [menuOpen, setMenuOpen] = useState(false);
+
     const [bookDetails, setBookDetails] = useState({
         title: '',
         description: '',
@@ -65,6 +67,11 @@ function TextEditor() {
 
     const toggleDrawer = () => {
         setIsDrawerOpen(!isDrawerOpen);
+    };
+
+    const toggleMenu = () => {
+        setMenuOpen(!menuOpen);
+        console.log('Menu toggled:', !menuOpen);
     };
 
     const goBack = () => {
@@ -285,126 +292,147 @@ function TextEditor() {
     };
 
     return (
-        <motion.div
-            className={`text-editor-container ${mode === 'dark' ? 'dark-mode' : 'light-mode'}`}
-            initial={{ opacity: 1 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={transition}
-            style={{ transition: 'background-color 0.5s ease, color 0.5s ease' }}
-        >
-            <div className="button-section">
-                <button className="save-btn" onClick={toggleDrawer}>Chapters</button>
+        <>
+                        <header>
+            <div className="button-section textEditor">
                 <SideDrawer isOpen={isDrawerOpen} toggle={toggleDrawer} chapters={chapters} navigateToChapter={navigateToChapter} />
-                <button className="go-back-button" onClick={goBack}>
-                    <ion-icon name="arrow-back" size="small"></ion-icon> Go Back
+                <button className="goback" onClick={goBack}>
+                        <ion-icon name="arrow-back" size="large"></ion-icon>
                 </button>
+                <div className='textEditor-header'>
+                    
+                    <button className="save-btn" onClick={toggleDrawer}>Chapters</button>
+                    <button className="add-btn" onClick={addChapter}>
+                        {editingIndex !== null ? 'Update' : 'Add'} <ion-icon name="share"></ion-icon>
+                    </button>
+                    <button className="publish-button" onClick={downloadPdf} disabled={isPublishDisabled}>
+                        Publish <ion-icon name="create"></ion-icon>
+                    </button>
+                </div>
+                <button className="chp-button" onClick={toggleDrawer}>
+                    <ion-icon name="list-outline" size="large"></ion-icon>
+                </button>
+                <button className="menu-button" onClick={toggleMenu}>
+                    <ion-icon name="create" size="large"></ion-icon>
+                </button>
+                <button className={`themebtn ${mode === 'dark' ? 'dark-mode' : 'light-mode'}`} onClick={toggleMode}>
+                    <div className='circle'><ion-icon name="bulb-outline" size="large"></ion-icon></div>
+                </button>
+            </div>
+            <div className={`textEditor-buttons-mobile ${menuOpen ? 'open' : ''}`}>
                 <button className="add-btn" onClick={addChapter}>
                     {editingIndex !== null ? 'Update' : 'Add'} <ion-icon name="share"></ion-icon>
                 </button>
                 <button className="publish-button" onClick={downloadPdf} disabled={isPublishDisabled}>
                     Publish <ion-icon name="create"></ion-icon>
                 </button>
-                <button className={`themebtn ${mode === 'dark' ? 'dark-mode' : 'light-mode'}`} onClick={toggleMode}>
-                    <div className='circle'><ion-icon name="bulb-outline" size="large"></ion-icon></div>
-                </button>
             </div>
+            </header>
+            <motion.div
+                className={`text-editor-container ${mode === 'dark' ? 'dark-mode' : 'light-mode'}`}
+                initial={{ opacity: 1 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={transition}
+                style={{ transition: 'background-color 0.5s ease, color 0.5s ease' }}
+            >
 
-            <div className="section title-section" style={{ backgroundImage: `url(${bookDetails.coverPageURL})` }}>
-                {bookDetails.coverPageURL && (
-                    <div className="cover-page">
-                        <img src={bookDetails.coverPageURL} alt="Cover Page" />
+                <div className="section title-section" style={{ backgroundImage: `url(${bookDetails.coverPageURL})` }}>
+                    {bookDetails.coverPageURL && (
+                        <div className="cover-page">
+                            <img src={bookDetails.coverPageURL} alt="Cover Page" />
+                        </div>
+                    )}
+                    <div className="title-description-container">
+                        <h1 className="titlek">{bookDetails.title}</h1>
+                        <p className="description">{bookDetails.description}</p>
                     </div>
-                )}
-                <div className="title-description-container">
-                    <h1 className="titlek">{bookDetails.title}</h1>
-                    <p className="description">{bookDetails.description}</p>
                 </div>
-            </div>
 
-            <div className="section email-section">
-                <p>Email: {bookDetails.email}</p>
-            </div>
-
-            {chapters.map((chapter, index) => (
-                <div key={index} id={`chapter-${index}`} className={`section editor-section ${index === activeChapterIndex ? 'active-chapter' : ''}`}>
-                    <h2>{chapter.name}</h2>
-                    <div dangerouslySetInnerHTML={{ __html: chapter.content }} />
-                    <button className="edit-btn" onClick={() => editChapter(index)}>Edit</button>
+                <div className="section email-section">
+                    <p>Email: {bookDetails.email}</p>
                 </div>
-            ))}
 
-            {/* <div className="hidden-pdf-container">
                 {chapters.map((chapter, index) => (
-                    <div key={index} id={`pdf-chapter-${index}`} className="pdf-chapter">
+                    <div key={index} id={`chapter-${index}`} className={`section editor-section ${index === activeChapterIndex ? 'active-chapter' : ''}`}>
                         <h2>{chapter.name}</h2>
                         <div dangerouslySetInnerHTML={{ __html: chapter.content }} />
+                        <button className="edit-btn" onClick={() => editChapter(index)}>Edit</button>
                     </div>
                 ))}
-            </div> */}
 
-            <div className="section editor-section">
-                <input
-                    type="text"
-                    value={chapterName}
-                    placeholder="Chapter Name"
-                    onChange={(e) => setChapterName(e.target.value)}
-                    className="input-field"
-                />
-                <br />
-                <JoditEditor
-                    value={content}
-                    config={editorConfig}
-                    tabIndex={1}
-                    onBlur={(newContent) => setContent(newContent)}
-                    className="editor"
-                    ref={editorRef}
-                />
-                <div style={{ display: 'flex', gap: '10px' }}>
-                    <label
-                        htmlFor="image-upload"
-                        className="save-btn"
-                        style={{
-                            display: 'inline-block',
-                            padding: '10px 20px',
-                            cursor: 'pointer',
-                            textAlign: 'center',
-                        }}
-                    >
-                        Upload Image
-                    </label>
+                {/* <div className="hidden-pdf-container">
+                    {chapters.map((chapter, index) => (
+                        <div key={index} id={`pdf-chapter-${index}`} className="pdf-chapter">
+                            <h2>{chapter.name}</h2>
+                            <div dangerouslySetInnerHTML={{ __html: chapter.content }} />
+                        </div>
+                    ))}
+                </div> */}
+
+                <div className="section editor-section">
                     <input
-
-                        id="image-upload"
-                        type="file"
-                        accept="image/*"
-                        onChange={handleImageUpload}
-                        style={{ display: 'none' }}
+                        type="text"
+                        value={chapterName}
+                        placeholder="Chapter Name"
+                        onChange={(e) => setChapterName(e.target.value)}
+                        className="input-field"
                     />
-
-                    <label
-                        className="save-btn"
-                        htmlFor="text-upload"
-                        style={{
-                            display: 'inline-block',
-                            padding: '10px 20px',
-                            cursor: 'pointer',
-                            textAlign: 'center',
-                        }}
-                    >
-                        Upload Text File
-                    </label>
-                    <input
-                        id="text-upload"
-                        type="file"
-                        accept=".txt"
-                        onChange={handleTextFileUpload}
-                        style={{ display: 'none' }}
+                    <br />
+                    <JoditEditor
+                        value={content}
+                        config={editorConfig}
+                        tabIndex={1}
+                        onBlur={(newContent) => setContent(newContent)}
+                        className="editor"
+                        ref={editorRef}
                     />
+                    <div className="textEditor-Bottom-btns" style={{ display: 'flex', gap: '10px' }}>
+                        <label
+                            htmlFor="image-upload"
+                            className="save-btn"
+                            style={{
+                                display: 'inline-block',
+                                padding: '10px 20px',
+                                cursor: 'pointer',
+                                textAlign: 'center',
+                            }}
+                        >
+                            Upload Image
+                        </label>
+                        <input
+
+                            id="image-upload"
+                            type="file"
+                            accept="image/*"
+                            onChange={handleImageUpload}
+                            style={{ display: 'none' }}
+                        />
+
+                        <label
+                            className="save-btn"
+                            htmlFor="text-upload"
+                            style={{
+                                display: 'inline-block',
+                                padding: '10px 20px',
+                                cursor: 'pointer',
+                                textAlign: 'center',
+                            }}
+                        >
+                            Upload Text File
+                        </label>
+                        <input
+                            id="text-upload"
+                            type="file"
+                            accept=".txt"
+                            onChange={handleTextFileUpload}
+                            style={{ display: 'none' }}
+                        />
+                    </div>
+
                 </div>
-
-            </div>
-        </motion.div>
+            </motion.div>
+        </>
     );
 }
 

@@ -1,7 +1,11 @@
 .book-preview{
     padding: 50px;
-    padding-top: 0;
+    margin-top: 5%;
     transition: all ease-in-out 0.3s;
+}
+.button-section.bookPreview{
+    position: fixed;
+    justify-content: space-between;
 }
 .side-drawer{
     padding-top: 20px;
@@ -54,4 +58,19 @@
 }
 #logoMeow{
     width: 5%;
+}
+@media only screen and (max-width: 768px) {
+    .book-preview{
+        padding: 10px;
+        margin-top: 10%;
+    }
+    .chpContent{
+        width: 90%;
+    }
+    .title-details h1{
+        padding: 15px;
+    }
+    #logoMeow{
+        width: 50px;
+    }
 }
