@@ -30,6 +30,7 @@
     background-position: center;
     background-repeat: no-repeat;
     border-radius: 25px;
+    font-size: medium;
 }
 
 .cover-page img {
@@ -244,11 +245,11 @@
 @media (max-width: 768px) {
     .text-editor-container {
         width: 100%;
-        padding: 10px;
+        /* padding: 10px; */
     }
 
     .button-section {
-        flex-direction: column;
+        /* flex-direction: column;    */
         align-items: stretch;
         height: auto;
         padding: 10px;
@@ -269,17 +270,20 @@
         padding: 10px;
         margin: 0;
     }
-
+    .title-details h1 {
+        background-color: rgba(255, 255, 255, 0.508);
+        padding: 5px;
+        border-radius: 15px;
+        font-size: medium;
+    }
     .title-section {
-        flex-direction: column;
-        align-items: center;
-        background-size: contain;
-        background-position: center;
+        font-size: small;
     }
 
     .cover-page img {
         max-width: 100%;
         margin-right: 0;
+        display: none;
     }
 
     .title-description-container {

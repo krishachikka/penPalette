@@ -46,6 +46,14 @@ body::-webkit-scrollbar {
   /* margin-top: 70px; */
   padding: 20px;
 }
+.row.upperCard{
+  display: flex;
+  flex-direction:  row;
+  flex-wrap: wrap;
+}
+.row.upperCard .cardWidth{
+  width: 25%;
+}
 
 .form-control {
   border-radius: 25px;
@@ -257,6 +265,31 @@ header {
   .others-file-card .card-body {
     width: 100%;
   }
+
+    
+    .row.upperCard {
+      display: flex; 
+      flex-wrap: nowrap; 
+      overflow-x: auto;
+      padding: 1rem; 
+      gap: 1rem; 
+      box-sizing: border-box; 
+    }
+  
+    .card {
+      flex: 0 0 auto; 
+      width: 200px; 
+      box-sizing: border-box; 
+      margin-right: 1rem; 
+    }
+  
+    .book-cover img {
+      display: block; 
+    }
+  
+    .row.upperCard .cardWidth{
+      width: auto;
+    }
 }
 
 @media only screen and (max-width: 600px) {
@@ -303,10 +336,28 @@ header {
     font-size: larger;
     margin: 10px;
   }
-}
+  .row.upperCard {
+    display: flex; 
+    flex-wrap: nowrap; 
+    overflow-x: auto; 
+    padding: 1rem; 
+    gap: 1rem; 
+    box-sizing: border-box; 
+  }
 
+  .card {
+    flex: 0 0 auto; 
+    width: 200px; 
+    box-sizing: border-box; 
+    margin-right: 1rem; 
+  }
 
+  .book-cover img {
+    display: block; 
+  }
 
-@media (max-width: 599px) {
-
-}
+  .row.upperCard .cardWidth{
+    width: auto;
+  }
+  
+}  

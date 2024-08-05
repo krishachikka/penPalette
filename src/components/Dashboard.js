@@ -339,9 +339,9 @@ export default function Dashboard() {
                 />
               </div>
             </div>
-            <div className="row">
+            <div className="row upperCard">
               {filteredFiles.map((file) => (
-                <div key={file.id} className="mb-4" style={{ width: "25%" }}>
+                <div key={file.id} className="mb-4 cardWidth">
                   <div className="layout" onClick={() => openFileOverlay(file.id)}>
                     <div className="actions">
                       <ion-icon name="bookmark"></ion-icon>
