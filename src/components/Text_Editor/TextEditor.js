@@ -293,7 +293,7 @@ function TextEditor() {
 
     return (
         <>
-                        <header>
+            <header>
             <div className="button-section textEditor">
                 <SideDrawer isOpen={isDrawerOpen} toggle={toggleDrawer} chapters={chapters} navigateToChapter={navigateToChapter} />
                 <button className="goback" onClick={goBack}>

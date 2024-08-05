@@ -7,6 +7,11 @@
     position: fixed;
     justify-content: space-between;
 }
+.imp-buttons{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
 .side-drawer{
     padding-top: 20px;
 }
