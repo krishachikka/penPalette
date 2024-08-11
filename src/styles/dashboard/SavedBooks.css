@@ -1,43 +1,87 @@
 .saved-books-container {
-    padding: 20px;
+    background-color: #1c0831;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 
 .saved-books-title {
-    font-size: 2em;
-    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    z-index: 999;
+    top: 0;
+    left: 0;
+    height: 10vh;
+    width: 100%;
+    padding: 5px;
+    background-color: rgb(41, 1, 75);
+    color: white;
+    font-size: x-large;
+}
+
+.saved-books-title img {
+    width: 70px;
 }
 
 .book-list {
     display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding: 1rem;
+    gap: 1rem;
+    box-sizing: border-box;
+    scrollbar-width: thin;
+    scrollbar-color: #888 transparent;
+}
+
+.book-list::-webkit-scrollbar {
+    height: 5px;
+}
+
+.book-list::-webkit-scrollbar-thumb {
+    background-color: #888;
+    border-radius: 60px;
+}
+
+.book-list::-webkit-scrollbar-track {
+    background: transparent;
 }
 
 .book-item {
+    display: flex;
+    flex-direction: column; /* Stack items vertically */
+    align-items: center; /* Center horizontally */
+    justify-content: center; 
     border: 1px solid #ddd;
     border-radius: 10px;
     overflow: hidden;
     width: 300px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s;
+    transition: all ease-in-out 0.3s;
+    flex-shrink: 0;
+    height: 500px;
 }
 
 .book-item:hover {
     transform: scale(1.02);
 }
 
-.book-cover {
-    width: 100%;
-    height: 200px;
-    object-fit: cover;
+.bookcover {
+    padding: 10px;
+    width: 200px;
+    height: 300px;
+    border-radius: 12%;
+    margin-top: 20px;
 }
 
 .book-details {
+    flex: 2; /* Take up available space */
     padding: 15px;
-}
-
-.book-details h3 {
-    margin: 10px 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Ensure the button is pushed to the bottom */
 }
 
 .book-details p {
@@ -45,17 +89,20 @@
     color: #666;
 }
 
-.continue-reading-btn {
-    background-color: #007bff;
+.reading.button {
+    background-color: black;
     color: white;
     border: none;
-    padding: 10px 15px;
-    border-radius: 5px;
     cursor: pointer;
-    font-size: 1em;
-    margin-top: 10px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    padding: 10px 15px;
+    bottom: 10px;
+    width: 200px;
 }
 
-.continue-reading-btn:hover {
-    background-color: #0056b3;
+.reading.button:hover {
+    background-color: #e8aef9;
+    color: black;
+    box-shadow: none;
 }

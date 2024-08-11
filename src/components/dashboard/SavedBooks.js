@@ -2,12 +2,20 @@ import React, { useState, useEffect } from 'react';
 import { db } from '../../firebase';
 import { useAuth } from '../../contexts/AuthContexts';
 import { useNavigate } from 'react-router-dom';
-import "../../styles/dashboard/SavedBooks.css"; // Import the CSS file for styling
+import "../../styles/dashboard/SavedBooks.css";
+import "../../styles/card.css";
+import logomeow from "../../images/logomeow.png";
+import booktop from "../../images/booktop.png"
+import bookside from "../../images/bookside.png"
 
 const SavedBooks = () => {
     const [savedFiles, setSavedFiles] = useState([]);
     const { currentUser } = useAuth();
     const navigate = useNavigate();
+
+    const goBack = () => {
+        navigate('/dashboard');
+    };
 
     useEffect(() => {
         if (currentUser) {
@@ -52,23 +60,29 @@ const SavedBooks = () => {
 
     return (
         <div className="saved-books-container">
-            <h1 className="saved-books-title">Saved Books</h1>
+            <header className="saved-books-title">
+                    <button className="goback" onClick={goBack}>
+                        <ion-icon name="arrow-back" size="large"></ion-icon>
+                    </button>
+                    <img src={logomeow} alt="Meow"></img>
+                    <h1>Saved Books</h1>
+            </header>
             <div className="book-list">
                 {savedFiles.length === 0 ? (
                     <p>No saved books.</p>
                 ) : (
                     savedFiles.map((file) => (
-                        <div key={file.id} className="book-item">
-                            <img src={file.coverPageURL} alt={file.title} className="book-cover" />
+                        <div key={file.id} className="book-item layout">
+                            <img src={file.coverPageURL} alt={file.title} className="bookcover" />
                             <div className="book-details">
-                                <h3>{file.title}</h3>
-                                <p>{file.description}</p>
+                                <h4>{file.title}</h4>
                                 <button
-                                    className="continue-reading-btn"
+                                    className="reading button"
                                     onClick={() => openFile(file.id, file.coverPageURL, file.createdBy)}
                                 >
                                     Continue Reading
                                 </button>
+                                {/* <p>{file.description}</p> */}
                             </div>
                         </div>
                     ))

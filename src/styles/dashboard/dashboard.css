@@ -1,8 +1,6 @@
 body::-webkit-scrollbar {
   display: none;
 }
-
-
 .card {
   height: 100px;
 }
