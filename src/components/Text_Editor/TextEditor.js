@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import html2canvas from 'html2canvas';
-import jsPDF from 'jspdf';
+// import html2canvas from 'html2canvas';
+// import jsPDF from 'jspdf';
 import { motion } from 'framer-motion';
 import JoditEditor from 'jodit-react';
 import { useAuth } from '../../contexts/AuthContexts';
@@ -20,6 +20,9 @@ function TextEditor() {
     const editorRef = useRef(null);
     const [mode, setMode] = useState('light');
     const [menuOpen, setMenuOpen] = useState(false);
+    const [tags, setTags] = useState([]);
+    const [newTag, setNewTag] = useState('');
+
 
     const [bookDetails, setBookDetails] = useState({
         title: '',
@@ -78,88 +81,88 @@ function TextEditor() {
         navigate('/dashboard');
     };
 
-    const downloadPdf = async () => {
-        if (!bookDetails.title) {
-            alert("File title is missing.");
-            return;
-        }
+    // const downloadPdf = async () => {
+    //     if (!bookDetails.title) {
+    //         alert("File title is missing.");
+    //         return;
+    //     }
 
-        if (chapters.length === 0) {
-            alert("No chapters to include in the PDF.");
-            return;
-        }
+    //     if (chapters.length === 0) {
+    //         alert("No chapters to include in the PDF.");
+    //         return;
+    //     }
 
-        const pdf = new jsPDF('p', 'pt', 'a4');
-        pdf.setFontSize(12);
+    //     const pdf = new jsPDF('p', 'pt', 'a4');
+    //     pdf.setFontSize(12);
 
-        try {
-            // Upload cover image to Firebase Storage if it's not already uploaded
-            if (!bookDetails.coverPageURL.startsWith('https://firebasestorage.googleapis.com')) {
-                const storageRef = storage.ref();
-                const imagesRef = storageRef.child(`cover_images/${bookDetails.title}-cover`);
+    // try {
+    //     // Upload cover image to Firebase Storage if it's not already uploaded
+    //     if (!bookDetails.coverPageURL.startsWith('https://firebasestorage.googleapis.com')) {
+    //         const storageRef = storage.ref();
+    //         const imagesRef = storageRef.child(`cover_images/${bookDetails.title}-cover`);
 
-                // Convert cover image URL to blob
-                const response = await fetch(bookDetails.coverPageURL);
-                const blob = await response.blob();
+    //         // Convert cover image URL to blob
+    //         const response = await fetch(bookDetails.coverPageURL);
+    //         const blob = await response.blob();
 
-                // Upload blob to Firebase Storage
-                const snapshot = await imagesRef.put(blob);
-                bookDetails.coverPageURL = await snapshot.ref.getDownloadURL();
-            }
+    //         // Upload blob to Firebase Storage
+    //         const snapshot = await imagesRef.put(blob);
+    //         bookDetails.coverPageURL = await snapshot.ref.getDownloadURL();
+    //     }
 
-            // Generate PDF with chapters
-            const pdfPromises = chapters.map((chapter, index) => {
-                return new Promise((resolve, reject) => {
-                    const chapterElement = document.getElementById(`pdf-chapter-${index}`);
-                    html2canvas(chapterElement, { scale: 2 }).then(canvas => {
-                        const imgData = canvas.toDataURL('image/png');
-                        const imgWidth = 595.28;
-                        const pageHeight = 842;
-                        const imgHeight = (canvas.height * imgWidth) / canvas.width;
+    //         // Generate PDF with chapters
+    //         const pdfPromises = chapters.map((chapter, index) => {
+    //             return new Promise((resolve, reject) => {
+    //                 const chapterElement = document.getElementById(`pdf-chapter-${index}`);
+    //                 html2canvas(chapterElement, { scale: 2 }).then(canvas => {
+    //                     const imgData = canvas.toDataURL('image/png');
+    //                     const imgWidth = 595.28;
+    //                     const pageHeight = 842;
+    //                     const imgHeight = (canvas.height * imgWidth) / canvas.width;
 
-                        pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, pageHeight);
+    //                     pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, pageHeight);
 
-                        if (index !== chapters.length - 1) {
-                            pdf.addPage();
-                        }
-                        resolve();
-                    }).catch(error => reject(error));
-                });
-            });
+    //                     if (index !== chapters.length - 1) {
+    //                         pdf.addPage();
+    //                     }
+    //                     resolve();
+    //                 }).catch(error => reject(error));
+    //             });
+    //         });
 
-            await Promise.all(pdfPromises);
+    //         await Promise.all(pdfPromises);
 
-            const fileName = `${bookDetails.title}.pdf`;
-            pdf.save(fileName);
+    //         const fileName = `${bookDetails.title}.pdf`;
+    //         pdf.save(fileName);
 
-            // Remove the existing book from the database if it exists
-            if (fileId) {
-                await db.ref(`files/${fileId}`).remove();
-            }
+    //         // Remove the existing book from the database if it exists
+    //         if (fileId) {
+    //             await db.ref(`files/${fileId}`).remove();
+    //         }
 
-            // Create new book with updated coverPageURL
-            const newFileRef = db.ref('files').push();
-            const newFileId = newFileRef.key; // Generate a new file ID
+    //         // Create new book with updated coverPageURL
+    //         const newFileRef = db.ref('files').push();
+    //         const newFileId = newFileRef.key; // Generate a new file ID
 
-            await newFileRef.set({
-                title: bookDetails.title,
-                description: bookDetails.description,
-                coverPageURL: bookDetails.coverPageURL,
-                pdfURL: '', // No PDF URL storage in this case
-                uploaderEmail: currentUser ? currentUser.email : 'abc@gmail.com',
-                createdBy: currentUser ? currentUser.uid : null,
-                createdAt: new Date().toISOString(),
-                views: 0,
-                chapters: chapters
-            });
+    //         await newFileRef.set({
+    //             title: bookDetails.title,
+    //             description: bookDetails.description,
+    //             coverPageURL: bookDetails.coverPageURL,
+    //             pdfURL: '', // No PDF URL storage in this case
+    //             uploaderEmail: currentUser ? currentUser.email : 'abc@gmail.com',
+    //             createdBy: currentUser ? currentUser.uid : null,
+    //             createdAt: new Date().toISOString(),
+    //             views: 0,
+    //             chapters: chapters
+    //         });
 
-            alert("Book created and published successfully!");
-            navigate(`/book/${newFileId}`);
-        } catch (error) {
-            console.error("Error publishing file:", error);
-            alert(`An error occurred while publishing the file: ${error.message}`);
-        }
-    };
+    //         alert("Book created and published successfully!");
+    //         navigate(`/book/${newFileId}`);
+    //     } catch (error) {
+    //         console.error("Error publishing file:", error);
+    //         alert(`An error occurred while publishing the file: ${error.message}`);
+    //     }
+    // };
 
 
     const handleImageUpload = async (event) => {
@@ -291,42 +294,105 @@ function TextEditor() {
         toggleDrawer();
     };
 
+    const addTag = (tag) => {
+        if (tag.trim() && !tags.includes(tag.trim())) {
+            setTags([...tags, tag.trim()]);
+            setNewTag('');
+        }
+    };
+
+
+
+    const publish = async () => {
+        try {
+            // Upload cover image to Firebase Storage if it's not already uploaded
+            if (bookDetails.coverPageURL && !bookDetails.coverPageURL.startsWith('https://firebasestorage.googleapis.com')) {
+                const storageRef = storage.ref();
+                const imagesRef = storageRef.child(`cover_images/${bookDetails.title}-cover`);
+
+                // Convert cover image URL to blob
+                const response = await fetch(bookDetails.coverPageURL);
+                const blob = await response.blob();
+
+                // Upload blob to Firebase Storage
+                const snapshot = await imagesRef.put(blob);
+                bookDetails.coverPageURL = await snapshot.ref.getDownloadURL();
+            }
+
+            // Check if title and chapters are provided
+            if (!bookDetails.title || chapters.length === 0) {
+                alert("Title and chapters are required.");
+                return;
+            }
+
+            // Remove the existing book from the database if it exists
+            if (fileId) {
+                await db.ref(`files/${fileId}`).remove();
+            }
+
+            // Create new book with updated coverPageURL
+            const newFileRef = db.ref('files').push();
+            const newFileId = newFileRef.key; // Generate a new file ID
+
+            await newFileRef.set({
+                title: bookDetails.title,
+                description: bookDetails.description,
+                coverPageURL: bookDetails.coverPageURL,
+                uploaderEmail: currentUser ? currentUser.email : 'Not logged in',
+                createdBy: currentUser ? currentUser.uid : null,
+                createdAt: new Date().toISOString(),
+                views: 0,
+                chapters: chapters,
+                tags: tags  // Add tags here
+            });
+
+            alert("Book published successfully!");
+            navigate(`/book/${newFileId}`);
+        } catch (error) {
+            console.error("Error publishing file:", error);
+            alert(`An error occurred while publishing the file: ${error.message}`);
+        }
+    };
+
+
+
     return (
         <>
             <header>
-            <div className="button-section textEditor">
-                <SideDrawer isOpen={isDrawerOpen} toggle={toggleDrawer} chapters={chapters} navigateToChapter={navigateToChapter} />
-                <button className="goback" onClick={goBack}>
+                <div className="button-section textEditor">
+                    <SideDrawer isOpen={isDrawerOpen} toggle={toggleDrawer} chapters={chapters} navigateToChapter={navigateToChapter} />
+                    <button className="goback" onClick={goBack}>
                         <ion-icon name="arrow-back" size="large"></ion-icon>
-                </button>
-                <div className='textEditor-header'>
-                    
-                    <button className="save-btn" onClick={toggleDrawer}>Chapters</button>
+                    </button>
+                    <div className='textEditor-header'>
+
+                        <button className="save-btn" onClick={toggleDrawer}>Chapters</button>
+                        <button className="add-btn" onClick={addChapter}>
+                            {editingIndex !== null ? 'Update' : 'Add'} <ion-icon name="share"></ion-icon>
+                        </button>
+                        <button className="publish-button" onClick={publish} disabled={isPublishDisabled}>
+                            Publish <ion-icon name="create"></ion-icon>
+                        </button>
+                    </div>
+                    <button className="chp-button" onClick={toggleDrawer}>
+                        <ion-icon name="list-outline" size="large"></ion-icon>
+                    </button>
+                    <button className="menu-button" onClick={toggleMenu}>
+                        <ion-icon name="create" size="large"></ion-icon>
+                    </button>
+                    <button className={`themebtn ${mode === 'dark' ? 'dark-mode' : 'light-mode'}`} onClick={toggleMode}>
+                        <div className='circle'><ion-icon name="bulb-outline" size="large"></ion-icon></div>
+                    </button>
+                </div>
+                <div className={`textEditor-buttons-mobile ${menuOpen ? 'open' : ''}`}>
                     <button className="add-btn" onClick={addChapter}>
                         {editingIndex !== null ? 'Update' : 'Add'} <ion-icon name="share"></ion-icon>
                     </button>
-                    <button className="publish-button" onClick={downloadPdf} disabled={isPublishDisabled}>
+                    <button className="publish-button" onClick={publish} disabled={isPublishDisabled}>
                         Publish <ion-icon name="create"></ion-icon>
                     </button>
+
                 </div>
-                <button className="chp-button" onClick={toggleDrawer}>
-                    <ion-icon name="list-outline" size="large"></ion-icon>
-                </button>
-                <button className="menu-button" onClick={toggleMenu}>
-                    <ion-icon name="create" size="large"></ion-icon>
-                </button>
-                <button className={`themebtn ${mode === 'dark' ? 'dark-mode' : 'light-mode'}`} onClick={toggleMode}>
-                    <div className='circle'><ion-icon name="bulb-outline" size="large"></ion-icon></div>
-                </button>
-            </div>
-            <div className={`textEditor-buttons-mobile ${menuOpen ? 'open' : ''}`}>
-                <button className="add-btn" onClick={addChapter}>
-                    {editingIndex !== null ? 'Update' : 'Add'} <ion-icon name="share"></ion-icon>
-                </button>
-                <button className="publish-button" onClick={downloadPdf} disabled={isPublishDisabled}>
-                    Publish <ion-icon name="create"></ion-icon>
-                </button>
-            </div>
             </header>
             <motion.div
                 className={`text-editor-container ${mode === 'dark' ? 'dark-mode' : 'light-mode'}`}
@@ -336,6 +402,8 @@ function TextEditor() {
                 transition={transition}
                 style={{ transition: 'background-color 0.5s ease, color 0.5s ease' }}
             >
+
+
 
                 <div className="section title-section" style={{ backgroundImage: `url(${bookDetails.coverPageURL})` }}>
                     {bookDetails.coverPageURL && (
@@ -361,14 +429,33 @@ function TextEditor() {
                     </div>
                 ))}
 
-                {/* <div className="hidden-pdf-container">
+                <div className="hidden-pdf-container">
                     {chapters.map((chapter, index) => (
                         <div key={index} id={`pdf-chapter-${index}`} className="pdf-chapter">
                             <h2>{chapter.name}</h2>
                             <div dangerouslySetInnerHTML={{ __html: chapter.content }} />
                         </div>
                     ))}
-                </div> */}
+                </div>
+
+                <div className="section tags-section">
+                    <input
+                        type="text"
+                        value={newTag}
+                        placeholder="Enter a tag"
+                        onChange={(e) => setNewTag(e.target.value)}
+                        className="input-field"
+                    />
+                    <button className="add-tag-btn" onClick={() => addTag(newTag)}>
+                        Add Tag
+                    </button>
+                    <div className="tags-list">
+                        {tags.map((tag, index) => (
+                            <span key={index} className="tag-item">{tag}</span>
+                        ))}
+                    </div>
+                </div>
+
 
                 <div className="section editor-section">
                     <input

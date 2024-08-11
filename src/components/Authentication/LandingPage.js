@@ -80,7 +80,7 @@ function LandingPage() {
     };
 
     return (
-        <div className={`bg ${fadeIn ? 'fade-in' : ''}`} ref={vantaRef} style={{ height: "100%" }} onClick={scrollToFeatures}>
+        <div className={`bg ${fadeIn ? 'fade-in' : ''}`} ref={vantaRef} style={{ height: "100%" }} >
             <section className="scrollableContent">
                 <img src={logo} alt="Logo" className={`logo ${fadeIn ? 'fade-in-logo' : ''}`} />
 
@@ -98,8 +98,22 @@ function LandingPage() {
                                 Get Started
                             </button>
                         </div>
-                        <div className="arrow-down-container" style={{ textAlign: "center", marginTop: "20px" }}>
-                            <ion-icon name="arrow-down-outline" style={{ color: "white", fontSize: "50px" }}></ion-icon>
+                        <div
+                            className="arrow-down-container"
+                            style={{
+                                textAlign: "center",
+                                marginTop: "-50px",
+                                cursor: "pointer",
+                            }}
+                            onClick={scrollToFeatures}
+                        >
+                            <ion-icon
+                                name="arrow-down-outline"
+                                style={{
+                                    color: "white",
+                                    fontSize: "50px",
+                                }}
+                            ></ion-icon>
                         </div>
                     </section>
                 </section>
@@ -183,7 +197,7 @@ function LandingPage() {
                     <p>&copy; 2024 PenPalette. All rights reserved.</p>
                 </footer>
             </section>
-        </div>
+        </div >
     );
 }
 

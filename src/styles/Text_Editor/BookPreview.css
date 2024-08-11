@@ -1,81 +1,237 @@
-.book-preview{
-    padding: 50px;
-    margin-top: 5%;
+.book-preview {
+    padding: 0px;
+    margin-top: 20px;
     transition: all ease-in-out 0.3s;
 }
-.button-section.bookPreview{
+
+.button-section.bookPreview {
     position: fixed;
     justify-content: space-between;
 }
-.imp-buttons{
+
+.imp-buttons {
     display: flex;
     flex-direction: row;
     justify-content: space-around;
 }
-.side-drawer{
+
+.side-drawer {
     padding-top: 20px;
 }
-.title-section{
+
+.title-section {
     border: 2px solid black;
     padding: 20px;
     margin: 20px;
 }
-.title-details h1{
+
+.title-details h1 {
     background-color: rgba(255, 255, 255, 0.508);
     padding: 40px;
     font-weight: bold;
+    border-radius: 20px;
 }
-.title-details{
+
+.title-details {
     background-color: rgba(0, 0, 0, 0.566);
     padding: 20px;
     color: white;
     border-radius: 20px;
 }
-.Chplist{
+
+.Chplist {
     background-color: transparent;
     color: white;
 }
-.chpContent{
+
+.chpContent {
     margin: auto;
     width: 70%;
 }
-.chpContent h2{
+
+.chpContent h2 {
     background-color: rgba(40, 1, 75, 0.726);
     padding: 20px;
     border-radius: 10px;
     color: white;
 }
-.drawerClosebtn{
+
+.drawerClosebtn {
     width: 80%;
-    background-color: rgb(41, 1, 75) ;
+    background-color: rgb(41, 1, 75);
 }
-.drawerClosebtn:hover{
+
+.drawerClosebtn:hover {
     color: black;
     background-color: rgb(240, 200, 251);
 }
-.dark-mode{
-    .side-drawer{
+
+.dark-mode {
+    .side-drawer {
         background-color: rgb(58, 39, 86);
     }
-    .side-drawer li:hover{
+
+    .side-drawer li:hover {
         background-color: black;
     }
 }
-#logoMeow{
+
+#logoMeow {
     width: 5%;
 }
+
 @media only screen and (max-width: 768px) {
-    .book-preview{
+
+    .title-section {
+        border: 2px solid black;
+        padding: 20px;
+        width: 90%;
+        margin: 35px;
+    }
+
+    .book-preview {
         padding: 10px;
         margin-top: 10%;
+        width: 100%;
     }
-    .chpContent{
+
+    .chpContent {
         width: 90%;
     }
-    .title-details h1{
+
+    .title-details h1 {
         padding: 15px;
     }
-    #logoMeow{
+
+    #logoMeow {
         width: 50px;
     }
+}
+
+@media only screen and (min-width: 768px) {
+
+    .title-section {
+        border: 2px solid black;
+        /* padding: 20px; */
+        width: 90%;
+        margin: 35px;
+    }
+
+    .book-preview {
+        /* padding: 10px; */
+        width: 90%;
+    }
+
+    .chpContent {
+        width: 90%;
+    }
+
+    .title-details h1 {
+        padding: 15px;
+    }
+
+    #logoMeow {
+        width: 50px;
+    }
+}
+
+
+
+
+
+@media only screen and (max-width: 430px) {
+
+    .title-section {
+        border: 2px solid black;
+        padding: 20px;
+        width: 90%;
+        margin: 15px;
+        margin-top: 10%;
+        height: 80px;
+    }
+
+    .book-preview {
+        padding: 10px;
+        margin-top: 10%;
+        width: 100%;
+    }
+
+    .title-section p {
+        font-size: 5px;
+        height: 10px;
+    }
+
+    .title-details h1 {
+        height: 10px;
+        font-size: 10px;
+        padding: 20px;
+        padding-top: 10px;
+        /* border: 10px solid red; */
+    }
+
+
+}
+
+@media only screen and (max-width: 320px) {
+
+    .title-section {
+        border: 2px solid black;
+        padding: 20px;
+        width: 90%;
+        margin: 15px;
+        margin-top: 10%;
+        height: 100px;
+
+    }
+
+
+    .title-section p {
+        font-size: 5px;
+        height: 10px;
+    }
+
+    .title-details h1 {
+        height: 10px;
+        font-size: 10px;
+        padding: 20px;
+        padding-top: 10px;
+        /* border: 10px solid red; */
+    }
+
+    .book-preview {
+        /* padding: 10px; */
+        margin-top: 15%;
+        width: 100%;
+    }
+
+
+}
+
+
+
+
+
+
+
+
+
+.navigation-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.prev-btn,
+.next-btn {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+}
+
+.prev-btn:disabled,
+.next-btn:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
 }

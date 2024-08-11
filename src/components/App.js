@@ -10,6 +10,7 @@ import LandingPage from "./Authentication/LandingPage";
 import TextEditor from "./Text_Editor/TextEditor";
 import BookPreview from "./Text_Editor/BookPreview";
 import Signup from "./Authentication/Signup";
+import SavedBooks from "./dashboard/SavedBooks";
 
 
 function App() {
@@ -26,6 +27,7 @@ function App() {
           <Route path="/dashboard/textEditor/:fileId" element={<TextEditor />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/book/:id" element={<PrivateRoute><BookPreview /></PrivateRoute>} />
+          <Route path="/saved-books" element={<PrivateRoute> <SavedBooks /></PrivateRoute>} />
         </Routes>
       </AuthProvider>
     </Router>

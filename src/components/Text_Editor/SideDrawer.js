@@ -6,7 +6,7 @@ const SideDrawer = ({ isOpen, toggle, chapters, navigateToChapter }) => {
 
     return (
         <div className={`side-drawer ${isOpen ? 'open' : ''}`}>
-            <h2>Chapters ({totalChapters})</h2>
+            <h2>{totalChapters} Chapters</h2>
             <ul>
                 {chapters && chapters.length > 0 ? (
                     chapters.map((chapter, index) => (

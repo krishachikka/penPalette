@@ -19,6 +19,10 @@ import logomeow from '../images/logomeow.png';
 export default function Dashboard() {
   const [fileData, setFileData] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
+  const [debouncedSearchQuery, setDebouncedSearchQuery] = useState('');
+  const [suggestions, setSuggestions] = useState([]);
+  const [savedFiles, setSavedFiles] = useState([]);
+
   const [loading, setLoading] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
   const [showFileModal, setShowFileModal] = useState(false);
@@ -31,6 +35,28 @@ export default function Dashboard() {
   const { currentUser, logout } = useAuth();
   const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
+
+
+  // Debounce the search query
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedSearchQuery(searchQuery);
+    }, 300); // Adjust the debounce delay as needed
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [searchQuery]);
+
+
+
+
+
+  // Clear the search input
+  const handleClearSearch = () => {
+    setSearchQuery('');
+    setDebouncedSearchQuery('');
+  };
 
   const toggleProfileDrawer = () => {
     setProfileDrawerOpen(!profileDrawerOpen); // Toggle the state
@@ -47,9 +73,9 @@ export default function Dashboard() {
     setSelectedFile(file);
     setShowFileModal(true);
     // Increment views count when the file is opened
-    if (file) {
-      handleFileClick(file.id, file.views || 0);
-    }
+    // if (file) {
+    //   handleFileClick(file.id, file.views || 0);
+    // }
   };
 
 
@@ -171,8 +197,28 @@ export default function Dashboard() {
     }
   };
 
+  const handleSuggestionClick = (suggestion) => {
+    setSearchQuery(suggestion);
+    setSuggestions([]);
+  };
+
+
+  // const handleSearchChange = (e) => {
+  //   setSearchQuery(e.target.value);
+  // };
+
   const handleSearchChange = (e) => {
-    setSearchQuery(e.target.value);
+    const query = e.target.value;
+    setSearchQuery(query);
+
+    if (query.length > 0) {
+      const filteredSuggestions = fileData
+        .filter(file => file.title.toLowerCase().includes(query.toLowerCase()))
+        .map(file => file.title);
+      setSuggestions(filteredSuggestions);
+    } else {
+      setSuggestions([]);
+    }
   };
 
   const formatDate = (timestamp) => {
@@ -283,10 +329,65 @@ export default function Dashboard() {
   // Add state for saving file
   const [isSaved, setIsSaved] = useState(false);
 
-  // Function to toggle save state
-  const toggleSave = () => {
-    setIsSaved(!isSaved);
+
+  const handleSave = async (fileId) => {
+
+    try {
+      const userRef = db.ref(`users/${currentUser.uid}/savedFiles`);
+      const snapshot = await userRef.child(fileId).once("value");
+
+      if (snapshot.exists()) {
+        // File is already saved, so unsave it
+        await userRef.child(fileId).remove();
+        setIsSaved(false);
+        showToast("Removed from saved books");
+      } else {
+        // File is not saved, so save it
+        await userRef.child(fileId).set(true);
+        setIsSaved(true);
+        showToast("Saved to your books");
+        setIsSaved(!isSaved);
+      }
+    } catch (error) {
+      console.error("Error saving file:", error);
+    }
   };
+
+
+  useEffect(() => {
+    if (currentUser) {
+      const fetchSavedFiles = async () => {
+        try {
+          // Fetch saved files for the current user
+          const savedFilesSnapshot = await db.ref(`users/${currentUser.uid}/savedFiles`).once("value");
+          const savedFilesData = savedFilesSnapshot.val() || {};
+          const savedFileIds = Object.keys(savedFilesData);
+
+          // Fetch all files
+          const filesSnapshot = await db.ref("files").once("value");
+          const allFilesData = filesSnapshot.val() || {};
+
+          // Filter files that are saved by the user
+          const savedFiles = Object.entries(allFilesData).filter(([key]) => savedFileIds.includes(key));
+
+          // Update state with saved files
+          setSavedFiles(savedFiles.map(([key, value]) => ({
+            id: key,
+            ...value,
+          })));
+        } catch (error) {
+          console.error("Error fetching saved files:", error);
+        }
+      };
+
+      fetchSavedFiles();
+    }
+  }, [currentUser]);
+
+  const handleSavedBooksClick = () => {
+    navigate('/saved-books'); // Navigate to the "Saved Books" route
+  };
+
 
   return (
     <div>
@@ -298,12 +399,15 @@ export default function Dashboard() {
         </div>
         <div className="header-buttons my-auto">
           {/* Button to go to the uploaded files section */}
+          <div className="book-button" onClick={handleSavedBooksClick} >
+            <button>Saved Books</button>
+          </div>
           <div className="book-button" onClick={() => document.querySelector(".center-section").scrollIntoView({ behavior: 'smooth' })}>
-            <button>View Your Books</button>
+            <button>My Books</button>
           </div>
           {/* Button to go to the section of exploring more stories */}
-          <div className="book-button" onClick={() => document.querySelector(".right-section").scrollIntoView({ behavior: 'smooth' })}>
-            <button>Explore More Stories</button>
+          <div className="book-button" onClick={() => document.querySelector(".container-fluid").scrollIntoView({ behavior: 'smooth' })}>
+            <button>Explore Stories</button>
           </div>
         </div>
         <button className="menu-button" onClick={toggleMenu}>
@@ -312,11 +416,14 @@ export default function Dashboard() {
 
       </header>
       <div className={`header-buttons-mobile ${menuOpen ? 'open' : ''}`}>
-        <div className="book-button" onClick={() => document.querySelector(".center-section").scrollIntoView({ behavior: 'smooth' })}>
-          <button>View Your Books</button>
+        <div className="book-button" onClick={handleSavedBooksClick} >
+          <button>Saved Books</button>
         </div>
-        <div className="book-button" onClick={() => document.querySelector(".right-section").scrollIntoView({ behavior: 'smooth' })}>
-          <button>Explore More Stories</button>
+        <div className="book-button" onClick={() => document.querySelector(".center-section").scrollIntoView({ behavior: 'smooth' })}>
+          <button>View My Books</button>
+        </div>
+        <div className="book-button" onClick={() => document.querySelector(".container-fluid").scrollIntoView({ behavior: 'smooth' })}>
+          <button>Explore Stories</button>
         </div>
       </div>
 
@@ -329,14 +436,39 @@ export default function Dashboard() {
             <div className="searchname">
               <h2 className="text-center mb-4" style={{ color: "white" }}>Explore more Stories</h2>
               <div className="row">
-                <input
+                {/* <input
                   type="text"
                   placeholder="Search by title..."
                   value={searchQuery}
                   onChange={handleSearchChange}
                   className="form-control mb-3 "
                   id="searchbar"
-                />
+                /> */}
+                <div className="search-container">
+                  <input
+                    type="text"
+                    placeholder="Search by title..."
+                    value={searchQuery}
+                    onChange={handleSearchChange}
+                    className="form-control mb-3"
+                    id="searchbar"
+                  />
+                  {searchQuery && (
+                    <button onClick={handleClearSearch} className="btn btn-secondary">
+                      Clear
+                    </button>
+                  )}
+                  {suggestions.length > 0 && (
+                    <ul className="suggestions-list">
+                      {suggestions.map((suggestion, index) => (
+                        <li key={index} onClick={() => handleSuggestionClick(suggestion)}>
+                          {suggestion}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+
               </div>
             </div>
             <div className="row upperCard">
@@ -396,25 +528,33 @@ export default function Dashboard() {
                   <button className="close" onClick={() => setShowFileModal(false)}>
                     <ion-icon name="close-circle" size="large"></ion-icon>
                   </button>
-
                 </div>
                 <div className="modal-body">
                   {selectedFile && (
                     <div className="content">
-                      <img src={selectedFile.coverPageURL} alt="Cover Page"/>
+                      <img src={selectedFile.coverPageURL} alt="Cover Page" />
 
                       <div>
                         <h3>{selectedFile.title}</h3>
                         <p><i>Uploaded By: {selectedFile.uploaderEmail}</i></p>
                         <p>Description: {selectedFile.description}</p>
+                        <p>
+                          <strong>Tags:</strong> {selectedFile.tags && selectedFile.tags.length > 0 ? (
+                            <span>{selectedFile.tags.join(", ")}</span>
+                          ) : (
+                            <span>No tags available</span>
+                          )}
+                        </p>
                       </div>
                     </div>
                   )}
                   <div>
-                    <p className="comflex"><h4 className="p-2">Comments <ion-icon name="chatbubble-outline"></ion-icon>  :</h4>
+                    <p className="comflex">
+                      <h4 className="p-2">Comments <ion-icon name="chatbubble-outline"></ion-icon> :</h4>
                       <button onClick={handleToggleComments} className="modalbtn">
                         {showComments ? "Hide Comments" : "Show Comments"} <ion-icon name="chatbubbles-outline"></ion-icon>
-                      </button></p>
+                      </button>
+                    </p>
                     {showComments && fileComments.map((comment, index) => (
                       <div className="comment m-2" key={index}>
                         <i><small>By: {comment.userEmail}</small></i>
@@ -444,11 +584,10 @@ export default function Dashboard() {
                   </div>
                 </div>
                 <div className="modal-footer">
-
                   <button className="modalbtn" onClick={() => openFile(selectedFile.id, selectedFile.fileURL, selectedFile.createdBy)}>
                     Read
                   </button>
-                  <button className="modalbtn" onClick={toggleSave}>
+                  <button className="modalbtn" onClick={() => handleSave(selectedFile.id)}>
                     {isSaved ? "Unsave" : "Save"}
                   </button>
                 </div>
@@ -456,6 +595,7 @@ export default function Dashboard() {
             </motion.div>
           )}
         </AnimatePresence>
+
       </div>
     </div>
   );

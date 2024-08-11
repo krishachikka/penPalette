@@ -1,0 +1,61 @@
+.saved-books-container {
+    padding: 20px;
+}
+
+.saved-books-title {
+    font-size: 2em;
+    margin-bottom: 20px;
+}
+
+.book-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.book-item {
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    overflow: hidden;
+    width: 300px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s;
+}
+
+.book-item:hover {
+    transform: scale(1.02);
+}
+
+.book-cover {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+.book-details {
+    padding: 15px;
+}
+
+.book-details h3 {
+    margin: 10px 0;
+}
+
+.book-details p {
+    font-size: 0.9em;
+    color: #666;
+}
+
+.continue-reading-btn {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    margin-top: 10px;
+}
+
+.continue-reading-btn:hover {
+    background-color: #0056b3;
+}

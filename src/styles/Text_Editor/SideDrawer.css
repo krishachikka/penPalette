@@ -2,10 +2,12 @@
 
 .side-drawer {
   height: 100%;
-  width: 250px; /* Adjust width as needed */
+  width: 250px;
+  /* Adjust width as needed */
   position: fixed;
   top: 0;
-  left: -260px; /* Start closed */
+  left: -260px;
+  /* Start closed */
   background-color: white;
   /* box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.5); */
   transition: transform 0.3s ease-out;
@@ -13,7 +15,8 @@
 }
 
 .side-drawer.open {
-  transform: translateX(260px); /* Slide in when open */
+  transform: translateX(260px);
+  /* Slide in when open */
 }
 
 .side-drawer h2 {

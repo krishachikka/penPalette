@@ -26,10 +26,65 @@ export default function UploadedFilesSection({ currentUser }) {
     const [editFile, setEditFile] = useState(null);
     const [showFileModal, setShowFileModal] = useState(false);
     const [fileComments, setFileComments] = useState([]);
-    const [searchQuery, setSearchQuery] = useState("");
     const [showComments, setShowComments] = useState(false);
     const [comment, setComment] = useState("");
     const [commentError, setCommentError] = useState("");
+    const [searchQuery, setSearchQuery] = useState("");
+    const [debouncedSearchQuery, setDebouncedSearchQuery] = useState('');
+    const [suggestions, setSuggestions] = useState([]);
+
+
+    const handleSuggestionClick = (suggestion) => {
+        setSearchQuery(suggestion);
+        setSuggestions([]);
+    };
+
+    // Clear the search input
+    const handleClearSearch = () => {
+        setSearchQuery('');
+        setDebouncedSearchQuery('');
+    };
+
+    useEffect(() => {
+        const unsubscribe = db.ref("files").on("value", (snapshot) => {
+            if (snapshot) {
+                const files = [];
+                snapshot.forEach((childSnapshot) => {
+                    const data = childSnapshot.val();
+                    if (data.createdBy === currentUser.uid) {
+                        files.push({
+                            id: childSnapshot.key,
+                            ...data,
+                            views: data.views || 0 // Ensure views property is included
+                        });
+                    }
+                });
+                setFileData(files);
+            } else {
+                setFileData([]);
+            }
+        });
+
+        return () => {
+            unsubscribe();
+        };
+    }, [currentUser]);
+
+
+
+    // Debounce the search query
+    useEffect(() => {
+        const handler = setTimeout(() => {
+            setDebouncedSearchQuery(searchQuery);
+        }, 300); // Adjust the debounce delay as needed
+
+        return () => {
+            clearTimeout(handler);
+        };
+    }, [searchQuery]);
+
+
+
 
     useEffect(() => {
         const unsubscribe = db.ref("files").on("value", (snapshot) => {
@@ -55,8 +110,19 @@ export default function UploadedFilesSection({ currentUser }) {
         };
     }, [currentUser]);
 
+
     const handleSearchChange = (e) => {
-        setSearchQuery(e.target.value);
+        const query = e.target.value;
+        setSearchQuery(query);
+
+        if (query.length > 0) {
+            const filteredSuggestions = fileData
+                .filter(file => file.title.toLowerCase().includes(query.toLowerCase()))
+                .map(file => file.title);
+            setSuggestions(filteredSuggestions);
+        } else {
+            setSuggestions([]);
+        }
     };
 
     const filteredFiles = fileData.filter(
@@ -292,6 +358,8 @@ export default function UploadedFilesSection({ currentUser }) {
         // Handle opening the file here
     };
 
+
+
     function formatDate(dateString) {
         const date = new Date(dateString);
         const day = date.getDate();
@@ -331,13 +399,38 @@ export default function UploadedFilesSection({ currentUser }) {
             <div className="searchname">
                 <h2 className="text-center mb-4" style={{ color: "white" }}>Your Uploaded Books</h2>
                 <div className="row">
-                    <input
+                    {/*} <input
                         type="text"
                         placeholder="Search by title..."
                         value={searchQuery}
                         onChange={handleSearchChange} className="form-control mb-3"
                         id="searchbar"
-                    /></div>
+                    /> */}
+                    <div className="search-container">
+                        <input
+                            type="text"
+                            placeholder="Search by title..."
+                            value={searchQuery}
+                            onChange={handleSearchChange}
+                            className="form-control mb-3"
+                            id="searchbar"
+                        />
+                        {searchQuery && (
+                            <button onClick={handleClearSearch} className="btn btn-secondary">
+                                Clear
+                            </button>
+                        )}
+                        {suggestions.length > 0 && (
+                            <ul className="suggestions-list">
+                                {suggestions.map((suggestion, index) => (
+                                    <li key={index} onClick={() => handleSuggestionClick(suggestion)}>
+                                        {suggestion}
+                                    </li>
+                                ))}
+                            </ul>
+                        )}
+                    </div>
+                </div>
             </div>
             <AnimatePresence>
                 {loading && (
@@ -362,7 +455,7 @@ export default function UploadedFilesSection({ currentUser }) {
                     </motion.p>
                 )}
             </AnimatePresence>
-            <div className="row">
+            <div className="row card-real">
                 {filteredFiles.map((file) => (
                     <motion.div
                         key={file.id}
@@ -385,9 +478,10 @@ export default function UploadedFilesSection({ currentUser }) {
                                     <div>
                                         <p className="card-text"><b>Uploaded on: </b>{formatDate(file.createdAt)}</p>
                                         <p className="card-text"><b>Uploaded at: </b>{formatTime(file.createdAt)}</p>
+                                        <p className="card-text"><b>Views: </b>{file.views}</p> {/* Display views count */}
                                     </div>
                                 </div>
-                                <div className="mt-3 d-flex mx-auto">
+                                <div className="buttons-container mt-3 d-flex mx-auto">
                                     <button
                                         className="bttn" style={{ backgroundColor: "skyblue" }}
                                         onClick={() => handleEdit(file)}
@@ -400,8 +494,6 @@ export default function UploadedFilesSection({ currentUser }) {
                                     >
                                         Delete
                                     </button>
-                                </div>
-                                <div className="mt-3 d-flex mx-auto">
                                     <button
                                         className="bttn btn-secondary"
                                         onClick={() => {
@@ -420,6 +512,9 @@ export default function UploadedFilesSection({ currentUser }) {
                                         Add
                                     </button>
                                 </div>
+                                <div className="mt-3 d-flex mx-auto">
+
+                                </div>
                             </div>
                         </div>
                     </motion.div>
@@ -429,7 +524,7 @@ export default function UploadedFilesSection({ currentUser }) {
             </div>
 
 
-            <AnimatePresence> 
+            <AnimatePresence>
                 {showConfirmDelete && (
                     <motion.div
                         className="modal-backdrop"
@@ -582,8 +677,7 @@ export default function UploadedFilesSection({ currentUser }) {
                             <div className="modal-footer">
                                 {selectedFile && (
                                     <button
-                                        className="bttn"
-                                        style={{ backgroundColor: "skyblue" }}
+                                        className="modalbtn"
                                         onClick={() => openFile(selectedFile.id, selectedFile.fileURL, selectedFile.createdBy)}
                                     >
                                         Read

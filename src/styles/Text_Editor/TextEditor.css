@@ -1,14 +1,20 @@
+.hidden-pdf-container {
+    display: none;
+}
+
 .text-editor-container {
     display: flex;
     flex-direction: column;
     align-items: center;
     /* padding: 20px; */
+    padding-top: 100px;
     font-family: Arial, sans-serif;
     /* height: 100vh; */
     box-sizing: border-box;
     background-color: black;
     transition: background-color 0.3s ease, color 0.3s ease;
 }
+
 .section {
     width: 80%;
     padding: 10px;
@@ -122,7 +128,7 @@
     margin-bottom: 10px;
 }
 
-.button-section{
+.button-section {
     display: flex;
     justify-content: space-between;
     width: 100%;
@@ -134,11 +140,14 @@
     padding: 20px;
     height: fit-content;
 }
-.textEditor-header{
+
+.textEditor-header {
     display: flex;
     justify-content: space-evenly;
     width: 100%;
 }
+
+
 .footer {
     margin-bottom: 0;
 }
@@ -234,14 +243,17 @@
     box-shadow: 0 2px 7px 3px white;
 }
 
-.goback,.menu-button,.chp-button {
+.goback,
+.menu-button,
+.chp-button {
     display: none;
     background-color: transparent;
     color: white;
     font-size: larger;
     margin: 10px;
-  }
-.goback{
+}
+
+.goback {
     display: block;
 }
 
@@ -262,7 +274,7 @@
     justify-content: center;
     align-items: center;
 }
-  
+
 .textEditor-buttons-mobile.open {
     display: flex;
     visibility: visible;
@@ -276,13 +288,15 @@
         width: 100%;
         padding: 10px;
     }
+
     .button-section {
-        flex-direction: row;   
+        flex-direction: row;
         align-items: stretch;
         height: auto;
         padding: 10px;
         position: static;
     }
+
     .publish-button,
     .add-btn,
     .save-btn,
@@ -291,20 +305,26 @@
         max-width: 50%;
         margin-bottom: 10px;
     }
-    .goback, .menu-button, .chp-button{
+
+    .goback,
+    .menu-button,
+    .chp-button {
         display: block;
     }
-    .section{
+
+    .section {
         width: 100%;
         padding: 10px;
         margin: 0;
     }
+
     .title-details h1 {
         background-color: rgba(255, 255, 255, 0.508);
         padding: 5px;
         border-radius: 15px;
         font-size: medium;
     }
+
     .title-section {
         font-size: small;
     }
@@ -349,18 +369,21 @@
         height: 300px;
     }
 
-    .button-section.textEditor .textEditor-header{
+    .button-section.textEditor .textEditor-header {
         display: none;
     }
-    .go-back-button p{
+
+    .go-back-button p {
         display: none;
     }
-    .go-back-button.goback{
+
+    .go-back-button.goback {
         min-width: 50px;
         width: 2px;
         padding: 3px;
     }
-    .textEditor-Bottom-btns{
+
+    .textEditor-Bottom-btns {
         flex-direction: column;
         justify-content: center;
         align-items: center;
