@@ -524,7 +524,7 @@ export default function Dashboard() {
                 onClick={(e) => e.stopPropagation()}
               >
                 <div className="modal-header">
-                  <h5 className="modal-title">File Details</h5>
+                  <h5 className="modal-title">Book Details</h5>
                   <button className="close" onClick={() => setShowFileModal(false)}>
                     <ion-icon name="close-circle" size="large"></ion-icon>
                   </button>
@@ -538,11 +538,24 @@ export default function Dashboard() {
                         <h3>{selectedFile.title}</h3>
                         <p><i>Uploaded By: {selectedFile.uploaderEmail}</i></p>
                         <p>Description: {selectedFile.description}</p>
-                        <p>
+                        {/* <p>
                           <strong>Tags:</strong> {selectedFile.tags && selectedFile.tags.length > 0 ? (
                             <span>{selectedFile.tags.join(", ")}</span>
                           ) : (
                             <span>No tags available</span>
+                          )}
+                        </p> */}
+                        <p>
+                          {selectedFile.tags && selectedFile.tags.length > 0 ? (
+                            <span>
+                              {selectedFile.tags.map((tag, index) => (
+                                <span key={index} className="tags">
+                                  {tag}
+                                </span>
+                              ))}
+                            </span>
+                          ) : (
+                            <span>No tags</span>
                           )}
                         </p>
                       </div>

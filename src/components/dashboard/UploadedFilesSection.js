@@ -650,9 +650,23 @@ export default function UploadedFilesSection({ currentUser }) {
                                             <h3>{selectedFile.title}</h3>
                                             <p><i>Uploaded By: {selectedFile.uploaderEmail}</i></p>
                                             <p>Description: {selectedFile.description}</p>
-                                        </div>
+                                            
+                                        </div>  
                                     </div>
                                 )}
+                                <p>
+                                    {selectedFile.tags && selectedFile.tags.length > 0 ? (
+                                        <span>
+                                        {selectedFile.tags.map((tag, index) => (
+                                            <span key={index} className="tags">
+                                            {tag}
+                                            </span>
+                                        ))}
+                                        </span>
+                                    ) : (
+                                        <span>No tags available</span>
+                                    )}
+                                </p>
                                 <div>
                                     <p className="comflex">
                                         <h4 className="p-2">Comments <ion-icon name="chatbubble-outline"></ion-icon>  :</h4>

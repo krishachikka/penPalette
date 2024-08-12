@@ -182,3 +182,20 @@
 .suggestions-list li:hover {
   background-color: #f0f0f0;
 }
+.tags{
+  background-color: gray;
+  padding: 8px 12px;
+  margin: 5px;
+  color: black;
+  border-radius: 24px;
+  white-space: nowrap;
+  flex: 0 1 auto;
+}
+.modal-body p{
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 10px;
+  height: auto; /* Ensure the height adjusts based on content */
+  overflow-y: auto; /* Vertical scrolling if content exceeds height */
+  box-sizing: border-box;
+}
