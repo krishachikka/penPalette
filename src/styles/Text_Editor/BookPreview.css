@@ -9,6 +9,11 @@
     justify-content: space-between;
 }
 
+.content-section{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
 .imp-buttons {
     display: flex;
     flex-direction: row;
@@ -22,6 +27,7 @@
 .title-section {
     border: 2px solid black;
     padding: 20px;
+    align-self: center;
     margin: 20px;
 }
 
@@ -108,47 +114,7 @@
     }
 }
 
-@media only screen and (min-width: 768px) {
-
-    .title-section {
-        border: 2px solid black;
-        /* padding: 20px; */
-        width: 90%;
-        margin: 35px;
-    }
-
-    .book-preview {
-        /* padding: 10px; */
-        width: 90%;
-    }
-
-    .chpContent {
-        width: 90%;
-    }
-
-    .title-details h1 {
-        padding: 15px;
-    }
-
-    #logoMeow {
-        width: 50px;
-    }
-}
-
-
-
-
-
 @media only screen and (max-width: 430px) {
-
-    .title-section {
-        border: 2px solid black;
-        padding: 20px;
-        width: 90%;
-        margin: 15px;
-        margin-top: 10%;
-        height: 80px;
-    }
 
     .book-preview {
         padding: 10px;
@@ -157,46 +123,11 @@
     }
 
     .title-section p {
-        font-size: 5px;
-        height: 10px;
-    }
-
-    .title-details h1 {
-        height: 10px;
         font-size: 10px;
-        padding: 20px;
-        padding-top: 10px;
-        /* border: 10px solid red; */
     }
-
-
 }
 
 @media only screen and (max-width: 320px) {
-
-    .title-section {
-        border: 2px solid black;
-        padding: 20px;
-        width: 90%;
-        margin: 15px;
-        margin-top: 10%;
-        height: 100px;
-
-    }
-
-
-    .title-section p {
-        font-size: 5px;
-        height: 10px;
-    }
-
-    .title-details h1 {
-        height: 10px;
-        font-size: 10px;
-        padding: 20px;
-        padding-top: 10px;
-        /* border: 10px solid red; */
-    }
 
     .book-preview {
         /* padding: 10px; */
@@ -204,16 +135,11 @@
         width: 100%;
     }
 
+    .title-section p{
+        font-size: 7px;
+    }
 
 }
-
-
-
-
-
-
-
-
 
 .navigation-buttons {
     display: flex;
@@ -223,11 +149,13 @@
 
 .prev-btn,
 .next-btn {
-    background-color: #007bff;
+    background-color: rgb(58, 39, 86);
+    border-radius: 24px;
     color: white;
     border: none;
     padding: 10px 20px;
     cursor: pointer;
+    margin: 10px;
 }
 
 .prev-btn:disabled,

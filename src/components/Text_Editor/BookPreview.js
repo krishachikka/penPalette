@@ -127,7 +127,7 @@ function BookPreview() {
                 </div>
                 <div className="navigation-buttons">
                     <button
-                        className="prev-btn"
+                        className="prev-btn "
                         onClick={showPreviousChapter}
                         disabled={activeChapterIndex === 0}
                     >

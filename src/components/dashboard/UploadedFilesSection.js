@@ -397,7 +397,7 @@ export default function UploadedFilesSection({ currentUser }) {
             <br />
             <br />
             <div className="searchname">
-                <h2 className="text-center mb-4" style={{ color: "white" }}>Your Uploaded Books</h2>
+                <h2 className="text-center mb-4" style={{ color: "white" }}>Your Published Books</h2>
                 <div className="row">
                     {/*} <input
                         type="text"
@@ -459,28 +459,26 @@ export default function UploadedFilesSection({ currentUser }) {
                 {filteredFiles.map((file) => (
                     <motion.div
                         key={file.id}
-                        className="col-lg-4 col-md-6 col-sm-12 mb-4"
+                        className=""
                         initial={{ opacity: 0, scale: 0.8 }}
                         animate={{ opacity: 1, scale: 1 }}
                         exit={{ opacity: 0, scale: 0.8 }}
                     >
-                        <div className="card flex bg-white shadow">
+                        <div className="cardbitch">
                             <div className="image-container">
                                 <img
                                     src={file.coverPageURL}
-                                    className="card-img-top"
                                     alt={file.title}
                                 />
                             </div>
                             <div className="card-body d-flex flex-column">
-                                <h5 className="card-title">{file.title}</h5>
-                                <div className="mt-auto d-flex justify-content-between">
-                                    <div>
+                                <h5 className="booktitle">{file.title}</h5>
+                                    <div className="bookInfo">
                                         <p className="card-text"><b>Uploaded on: </b>{formatDate(file.createdAt)}</p>
                                         <p className="card-text"><b>Uploaded at: </b>{formatTime(file.createdAt)}</p>
-                                        <p className="card-text"><b>Views: </b>{file.views}</p> {/* Display views count */}
+                                        <p className="card-text"><b>Views:  </b>  {file.views}  <ion-icon name="heart" id="viewicon"></ion-icon> </p> {/* Display views count */}
                                     </div>
-                                </div>
+                                
                                 <div className="buttons-container mt-3 d-flex mx-auto">
                                     <button
                                         className="bttn" style={{ backgroundColor: "skyblue" }}
@@ -495,7 +493,8 @@ export default function UploadedFilesSection({ currentUser }) {
                                         Delete
                                     </button>
                                     <button
-                                        className="bttn btn-secondary"
+                                        className="bttn"
+                                        style={{ backgroundColor: "darkgrey" }}
                                         onClick={() => {
                                             setShowFileModal(true);
                                             setSelectedFile(file);
@@ -519,8 +518,6 @@ export default function UploadedFilesSection({ currentUser }) {
                         </div>
                     </motion.div>
                 ))}
-
-
             </div>
 
 
