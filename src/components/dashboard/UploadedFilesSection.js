@@ -451,7 +451,7 @@ export default function UploadedFilesSection({ currentUser }) {
                         exit={{ opacity: 0 }}
                         className="text-center"
                     >
-                        No files found.
+                        No Books Published.
                     </motion.p>
                 )}
             </AnimatePresence>

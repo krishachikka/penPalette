@@ -179,7 +179,21 @@
   right: 0;
 }
 
+
+.card-real{
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  padding: 1rem;
+  gap: 1rem;
+  box-sizing: border-box;
+  scrollbar-width: thin;
+  scrollbar-color: #888 transparent;
+}
 .cardbitch {
+  display: flex;
+  flex-direction: column; /* Stack items vertically */
+  align-items: center; /* Center horizontally */
   border: 5px solid rgb(90, 3, 152);
   box-shadow: none;
   background-color: white;
@@ -253,10 +267,6 @@
     width: 100%;
   }
 
-  /* .image-container img {
-    width: 80%;
-  } */
-
   .card-body {
     padding: 15px;
   }
@@ -268,14 +278,13 @@
 }
 
 @media (max-width: 768px) {
-
   .card {
     width: 100%;
   }
 
   .card-body {
     padding: 10px;
-    height: 200px;
+    /* height: 200px; */
   }
 
   .card-title {
@@ -297,7 +306,6 @@
     width: 100%;
     margin-left: -10px;
     height: 80px;
-
   }
 
   .modal-content {
@@ -307,11 +315,6 @@
 }
 
 @media (max-width: 576px) {
-  .card-body {
-    /* padding: 5px; */
-    margin: -10px;
-  }
-
   .card-title {
     font-size: 1rem;
   }
@@ -346,10 +349,10 @@
     font-size: 1.2rem;
   }
 
-  .card-body {
+  /* .card-body {
     padding: -10px;
     margin: -10px;
-  }
+  } */
 
   .card-title {
     font-size: 0.9rem;
@@ -374,10 +377,12 @@
 .card-real {
   width: 99%;
   padding: 20px;
+  display: flex;
+  flex-direction: row;
 }
 
-.card-real .card {
+/* .card-real .card {
   border: 3px solid white;
   height: 500px;
   width: 400px;
-}
+} */
