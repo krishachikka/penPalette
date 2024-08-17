@@ -549,12 +549,12 @@ export default function UploadedFilesSection({ currentUser }) {
                                 <p>Are you sure you want to delete this file?</p>
                             </div>
                             <div className="modal-footer">
-                                <Button variant="secondary" onClick={() => setShowConfirmDelete(false)}>
+                                <button className="modalbtn" onClick={() => setShowConfirmDelete(false)}>
                                     Cancel
-                                </Button>
-                                <Button variant="danger" onClick={() => handleDelete(fileToDelete.id)}>
+                                </button>
+                                <button className="modalbtn" style={{backgroundColor:"#e83549"}} onClick={() => handleDelete(fileToDelete.id)}>
                                     Delete
-                                </Button>
+                                </button>
                             </div>
                         </motion.div>
                     </motion.div>
@@ -583,7 +583,7 @@ export default function UploadedFilesSection({ currentUser }) {
                                 <button className="close" onClick={() => setShowEditModal(false)}>
                                     <ion-icon name="close-circle" size="large"></ion-icon>
                                 </button>
-                                <Button variant="primary" onClick={saveEditedFile}>Save Changes</Button> {/* Moved "Save Changes" button here */}
+                                <button className="modalbtn" onClick={saveEditedFile}>Save Changes</button> {/* Moved "Save Changes" button here */}
                             </div>
 
                             <div className="modal-body">
@@ -709,9 +709,9 @@ export default function UploadedFilesSection({ currentUser }) {
                         Read
                         </button>
                     )}
-                    <button className="modalbtn" onClick={toggleSave}>
+                    {/* <button className="modalbtn" onClick={toggleSave}>
                         {selectedFile && selectedFile.isSaved ? "Unsave" : "Save"}
-                    </button>
+                    </button> */}
                     </div>
                 </motion.div>
                 </motion.div>

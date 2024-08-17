@@ -106,3 +106,13 @@
     color: black;
     box-shadow: none;
 }
+
+.Savedlistbuttons{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.bookMarkIcon{
+    margin: 5px;
+    cursor: pointer;
+}

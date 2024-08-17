@@ -267,6 +267,18 @@
   }
 }
 
+.urBooks{
+  display: flex;
+  padding: 20px;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  padding: 1rem;
+  gap: 1rem;
+  box-sizing: border-box;
+  scrollbar-width: thin;
+  scrollbar-color: #888 transparent;
+}
+
 @media (max-width: 768px) {
   .card {
     width: 100%;
@@ -364,16 +376,4 @@
   .buttons-container{
     padding-left: 10px;
   }
-}
-
-.urBooks{
-  display: flex;
-  padding: 20px;
-  flex-wrap: nowrap;
-  overflow-x: auto;
-  padding: 1rem;
-  gap: 1rem;
-  box-sizing: border-box;
-  scrollbar-width: thin;
-  scrollbar-color: #888 transparent;
 }

@@ -331,58 +331,74 @@ export default function Dashboard() {
 
 
   const handleSave = async (fileId) => {
-
     try {
       const userRef = db.ref(`users/${currentUser.uid}/savedFiles`);
       const snapshot = await userRef.child(fileId).once("value");
-
+  
       if (snapshot.exists()) {
         // File is already saved, so unsave it
         await userRef.child(fileId).remove();
-        setIsSaved(false);
+        setSavedFiles(prev => prev.filter(id => id !== fileId));
         showToast("Removed from saved books");
       } else {
         // File is not saved, so save it
         await userRef.child(fileId).set(true);
-        setIsSaved(true);
+        setSavedFiles(prev => [...prev, fileId]);
         showToast("Saved to your books");
-        setIsSaved(!isSaved);
       }
     } catch (error) {
       console.error("Error saving file:", error);
     }
   };
+  
 
+  // useEffect(() => {
+  //   if (currentUser) {
+  //     const fetchSavedFiles = async () => {
+  //       try {
+  //         // Fetch saved files for the current user
+  //         const savedFilesSnapshot = await db.ref(`users/${currentUser.uid}/savedFiles`).once("value");
+  //         const savedFilesData = savedFilesSnapshot.val() || {};
+  //         const savedFileIds = Object.keys(savedFilesData);
+
+  //         // Fetch all files
+  //         const filesSnapshot = await db.ref("files").once("value");
+  //         const allFilesData = filesSnapshot.val() || {};
+
+  //         // Filter files that are saved by the user
+  //         const savedFiles = Object.entries(allFilesData).filter(([key]) => savedFileIds.includes(key));
+
+  //         // Update state with saved files
+  //         setSavedFiles(savedFiles.map(([key, value]) => ({
+  //           id: key,
+  //           ...value,
+  //         })));
+  //       } catch (error) {
+  //         console.error("Error fetching saved files:", error);
+  //       }
+  //     };
+
+  //     fetchSavedFiles();
+  //   }
+  // }, [currentUser]);
 
   useEffect(() => {
     if (currentUser) {
       const fetchSavedFiles = async () => {
         try {
-          // Fetch saved files for the current user
           const savedFilesSnapshot = await db.ref(`users/${currentUser.uid}/savedFiles`).once("value");
           const savedFilesData = savedFilesSnapshot.val() || {};
           const savedFileIds = Object.keys(savedFilesData);
-
-          // Fetch all files
-          const filesSnapshot = await db.ref("files").once("value");
-          const allFilesData = filesSnapshot.val() || {};
-
-          // Filter files that are saved by the user
-          const savedFiles = Object.entries(allFilesData).filter(([key]) => savedFileIds.includes(key));
-
-          // Update state with saved files
-          setSavedFiles(savedFiles.map(([key, value]) => ({
-            id: key,
-            ...value,
-          })));
+          setSavedFiles(savedFileIds); // Store the IDs of saved files
         } catch (error) {
           console.error("Error fetching saved files:", error);
         }
       };
-
+  
       fetchSavedFiles();
     }
   }, [currentUser]);
+  
 
   const handleSavedBooksClick = () => {
     navigate('/saved-books'); // Navigate to the "Saved Books" route
@@ -476,7 +492,17 @@ export default function Dashboard() {
                 <div key={file.id} className="mb-4 cardWidth">
                   <div className="layout" onClick={() => openFileOverlay(file.id)}>
                     <div className="actions">
-                      <ion-icon name="bookmark"></ion-icon>
+                      <ion-icon
+                        name="bookmark"
+                        style={{
+                          color: savedFiles.includes(file.id) ? "#580391d1" : "gray",
+                          cursor: "pointer"
+                        }}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleSave(file.id);
+                        }}
+                      ></ion-icon>
                     </div>
                     <div className="book-cover">
                       <img className="book-top" src={booktop} alt="book-top" />
@@ -485,14 +511,13 @@ export default function Dashboard() {
                         alt="Cover Page"
                         className="card-img-top"
                         style={{ height: "250px", cursor: "pointer", borderRadius: "10px" }}
-
                       />
                       <img className="book-side" src={bookside} alt="book-side" />
                     </div>
                     <div className="preface">
                       <div className="title">{file.title}</div>
                       <div className="author">{file.uploaderEmail}</div>
-                      <p>Views : {file.views}</p>
+                      <p>Views: {file.views}</p>
                       <div className="body">
                         <p>{file.description}</p>
                       </div>
@@ -501,6 +526,7 @@ export default function Dashboard() {
                 </div>
               ))}
             </div>
+
           </div>
         </div>
         <div className="center-section">
@@ -599,10 +625,14 @@ export default function Dashboard() {
                   <button className="modalbtn" onClick={() => openFile(selectedFile.id, selectedFile.fileURL, selectedFile.createdBy)}>
                     Read
                   </button>
-                  <button className="modalbtn" onClick={() => handleSave(selectedFile.id)}>
-                    {isSaved ? "Unsave" : "Save"}
+                  <button
+                    className="modalbtn"
+                    onClick={() => handleSave(selectedFile.id)}
+                  >
+                    {savedFiles.includes(selectedFile.id) ? "Unsave" : "Save"}
                   </button>
                 </div>
+
               </motion.div>
             </motion.div>
           )}
