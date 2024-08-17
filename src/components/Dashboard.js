@@ -538,29 +538,10 @@ export default function Dashboard() {
                         <h3>{selectedFile.title}</h3>
                         <p><i>Uploaded By: {selectedFile.uploaderEmail}</i></p>
                         <p>Description: {selectedFile.description}</p>
-                        {/* <p>
-                          <strong>Tags:</strong> {selectedFile.tags && selectedFile.tags.length > 0 ? (
-                            <span>{selectedFile.tags.join(", ")}</span>
-                          ) : (
-                            <span>No tags available</span>
-                          )}
-                        </p> */}
-                        <p>
-                          {selectedFile.tags && selectedFile.tags.length > 0 ? (
-                            <span>
-                              {selectedFile.tags.map((tag, index) => (
-                                <span key={index} className="tags">
-                                  {tag}
-                                </span>
-                              ))}
-                            </span>
-                          ) : (
-                            <span>No tags</span>
-                          )}
-                        </p>
                       </div>
                     </div>
                   )}
+
                   <div>
                     <p className="comflex">
                       <h4 className="p-2">Comments <ion-icon name="chatbubble-outline"></ion-icon> :</h4>
@@ -578,6 +559,7 @@ export default function Dashboard() {
                       </div>
                     ))}
                   </div>
+
                   <div className="comm mb-3">
                     <textarea
                       value={comment}
@@ -596,6 +578,23 @@ export default function Dashboard() {
                     </button>
                   </div>
                 </div>
+
+                {/* New Section for Tags */}
+                <div className="modal-tags">
+                  <h5>Tags</h5>
+                  <div className="tags-container">
+                    {selectedFile.tags && selectedFile.tags.length > 0 ? (
+                      selectedFile.tags.map((tag, index) => (
+                        <span key={index} className="tag">
+                          {tag}
+                        </span>
+                      ))
+                    ) : (
+                      <span style={{color:"grey"}}>No tags available</span>
+                    )}
+                  </div>
+                </div>
+
                 <div className="modal-footer">
                   <button className="modalbtn" onClick={() => openFile(selectedFile.id, selectedFile.fileURL, selectedFile.createdBy)}>
                     Read
@@ -608,6 +607,7 @@ export default function Dashboard() {
             </motion.div>
           )}
         </AnimatePresence>
+
 
       </div>
     </div>

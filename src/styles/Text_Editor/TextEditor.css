@@ -282,6 +282,13 @@
     animation: slideDown 0.3s ease-in-out forwards;
 }
 
+.add-tag-btn{
+    background-color: #7f39c5;
+}
+.tag-item{
+    margin: 5px;
+    background-color: #ddc6f4;
+}
 /* General Mobile Styles */
 @media (max-width: 769px) {
     .text-editor-container {

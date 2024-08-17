@@ -446,7 +446,7 @@ function TextEditor() {
                         onChange={(e) => setNewTag(e.target.value)}
                         className="input-field"
                     />
-                    <button className="add-tag-btn" onClick={() => addTag(newTag)}>
+                    <button className="add-tag-btn bttn" onClick={() => addTag(newTag)}>
                         Add Tag
                     </button>
                     <div className="tags-list">

@@ -455,7 +455,7 @@ export default function UploadedFilesSection({ currentUser }) {
                     </motion.p>
                 )}
             </AnimatePresence>
-            <div className="row card-real">
+            <div className="urBooks">
                 {filteredFiles.map((file) => (
                     <motion.div
                         key={file.id}
@@ -518,8 +518,7 @@ export default function UploadedFilesSection({ currentUser }) {
                         </div>
                     </motion.div>
                 ))}
-            </div>
-
+                </div>
 
             <AnimatePresence>
                 {showConfirmDelete && (
@@ -621,87 +620,104 @@ export default function UploadedFilesSection({ currentUser }) {
 
 
             <AnimatePresence>
-                {showFileModal && (
-                    <motion.div
-                        className="modal-backdrop"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 0.92 }}
-                        exit={{ opacity: 0 }}
-                        onClick={() => setShowFileModal(false)}
-                    >
-                        <motion.div
-                            className="modal-content"
-                            initial={{ scale: 0.8, opacity: 0 }}
-                            animate={{ scale: 1, opacity: 1 }}
-                            exit={{ scale: 0.8, opacity: 0 }}
-                            onClick={(e) => e.stopPropagation()}
+            {showFileModal && (
+                <motion.div
+                className="modal-backdrop"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 0.92 }}
+                exit={{ opacity: 0 }}
+                onClick={() => setShowFileModal(false)}
+                >
+                <motion.div
+                    className="modal-content"
+                    initial={{ scale: 0.8, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    exit={{ scale: 0.8, opacity: 0 }}
+                    onClick={(e) => e.stopPropagation()}
+                >
+                    <div className="modal-header">
+                    <h5 className="modal-title">Book Details</h5>
+                    <button className="close" onClick={() => setShowFileModal(false)}>
+                        <ion-icon name="close-circle" size="large"></ion-icon>
+                    </button>
+                    </div>
+                    <div className="modal-body">
+                    {selectedFile && (
+                        <div className="content">
+                        <img
+                            src={selectedFile.coverPageURL}
+                            alt="Cover Page"
+                            style={{ width: "30%", margin: "10px" }}
+                        />
+                        <div>
+                            <h3>{selectedFile.title}</h3>
+                            <p><i>Uploaded By: {selectedFile.uploaderEmail}</i></p>
+                            <p>Description: {selectedFile.description}</p>
+                        </div>
+                        </div>
+                    )}
+                    <div>
+                        <p className="comflex">
+                        <h4 className="p-2">
+                            Comments <ion-icon name="chatbubble-outline"></ion-icon> :
+                        </h4>
+                        <button onClick={handleToggleComments} className="modalbtn">
+                            {showComments ? "Hide Comments" : "Show Comments"}{" "}
+                            <ion-icon name="chatbubbles-outline"></ion-icon>
+                        </button>
+                        </p>
+                        {showComments &&
+                        fileComments.map((comment, index) => (
+                            <div className="comment m-2" key={index}>
+                            <i><small>By: {comment.userEmail}</small></i>
+                            <p>{comment.text}</p>
+                            {comment.userEmail === (currentUser && currentUser.email) && (
+                                <button
+                                className="modalbtn"
+                                onClick={() => handleDeleteComment(comment.id)}
+                                >
+                                Delete
+                                </button>
+                            )}
+                            </div>
+                        ))}
+                    </div>
+                    </div>
+
+                    {/* New Section for Tags */}
+                    <div className="modal-tags">
+                        <h5>Tags</h5>
+                        <div className="tags-container">
+                            {selectedFile && selectedFile.tags && selectedFile.tags.length > 0 ? (
+                            selectedFile.tags.map((tag, index) => (
+                                <span key={index} className="tag">
+                                {tag}
+                                </span>
+                            ))
+                            ) : (
+                            <span style={{color:"grey"}}>No tags available</span>
+                            )}
+                        </div>
+                    </div>
+
+                    <div className="modal-footer">
+                    {selectedFile && (
+                        <button
+                        className="modalbtn"
+                        onClick={() => openFile(selectedFile.id, selectedFile.fileURL, selectedFile.createdBy)}
                         >
-                            <div className="modal-header">
-                                <h5 className="modal-title">File Details</h5>
-                                <button className="close" onClick={() => setShowFileModal(false)}>
-                                    <ion-icon name="close-circle" size="large"></ion-icon>
-                                </button>
-                            </div>
-                            <div className="modal-body">
-                                {selectedFile && (
-                                    <div className="content">
-                                        <img src={selectedFile.coverPageURL} alt="Cover Page" style={{ width: "30%", margin: "10px" }} />
-                                        <div>
-                                            <h3>{selectedFile.title}</h3>
-                                            <p><i>Uploaded By: {selectedFile.uploaderEmail}</i></p>
-                                            <p>Description: {selectedFile.description}</p>
-                                            
-                                        </div>  
-                                    </div>
-                                )}
-                                <p>
-                                    {selectedFile.tags && selectedFile.tags.length > 0 ? (
-                                        <span>
-                                        {selectedFile.tags.map((tag, index) => (
-                                            <span key={index} className="tags">
-                                            {tag}
-                                            </span>
-                                        ))}
-                                        </span>
-                                    ) : (
-                                        <span>No tags available</span>
-                                    )}
-                                </p>
-                                <div>
-                                    <p className="comflex">
-                                        <h4 className="p-2">Comments <ion-icon name="chatbubble-outline"></ion-icon>  :</h4>
-                                        <button onClick={handleToggleComments} className="modalbtn">
-                                            {showComments ? "Hide Comments" : "Show Comments"} <ion-icon name="chatbubbles-outline"></ion-icon>
-                                        </button>
-                                    </p>
-                                    {showComments && fileComments.map((comment, index) => (
-                                        <div className="comment m-2" key={index}>
-                                            <i><small>By: {comment.userEmail}</small></i>
-                                            <p>{comment.text}</p>
-                                            {comment.userEmail === (currentUser && currentUser.email) && (
-                                                <button className="modalbtn" onClick={() => handleDeleteComment(comment.id)}>Delete</button>
-                                            )}
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-                            <div className="modal-footer">
-                                {selectedFile && (
-                                    <button
-                                        className="modalbtn"
-                                        onClick={() => openFile(selectedFile.id, selectedFile.fileURL, selectedFile.createdBy)}
-                                    >
-                                        Read
-                                    </button>
-                                )}
-                                <button className="modalbtn" onClick={toggleSave}>
-                                    {selectedFile && selectedFile.isSaved ? "Unsave" : "Save"}
-                                </button>
-                            </div>
-                        </motion.div>
-                    </motion.div>
-                )}
+                        Read
+                        </button>
+                    )}
+                    <button className="modalbtn" onClick={toggleSave}>
+                        {selectedFile && selectedFile.isSaved ? "Unsave" : "Save"}
+                    </button>
+                    </div>
+                </motion.div>
+                </motion.div>
+            )}
             </AnimatePresence>
+
 
 
             <ToastContainer />

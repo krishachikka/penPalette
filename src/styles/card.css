@@ -179,17 +179,6 @@
   right: 0;
 }
 
-
-.card-real{
-  display: flex;
-  flex-wrap: nowrap;
-  overflow-x: auto;
-  padding: 1rem;
-  gap: 1rem;
-  box-sizing: border-box;
-  scrollbar-width: thin;
-  scrollbar-color: #888 transparent;
-}
 .cardbitch {
   display: flex;
   flex-direction: column; /* Stack items vertically */
@@ -201,6 +190,7 @@
   width: 380px;
   overflow: hidden;
   transition: all ease-in-out 0.3s;
+  margin: 20px;
 }
 
 .cardbitch:hover{
@@ -282,11 +272,6 @@
     width: 100%;
   }
 
-  .card-body {
-    padding: 10px;
-    /* height: 200px; */
-  }
-
   .card-title {
     font-size: 1.25rem;
   }
@@ -304,13 +289,17 @@
   .buttons-container {
     display: flex;
     width: 100%;
-    margin-left: -10px;
+    /* margin-left: -10px; */
     height: 80px;
   }
 
   .modal-content {
     width: 90%;
     margin: 10px auto;
+  }
+
+  .cardbitch{
+    margin: 10px;
   }
 }
 
@@ -337,29 +326,22 @@
   .card-img-top {
     width: 100%;
   }
-
-  .card-real {
-    display: flex;
-  }
-
 }
 
-@media (max-width: 350px) {
+@media (max-width: 380px) {
   .searchname h2 {
     font-size: 1.2rem;
   }
-
-  /* .card-body {
-    padding: -10px;
-    margin: -10px;
-  } */
-
+  .card-body {
+    margin: 10px;
+  }
   .card-title {
     font-size: 0.9rem;
   }
 
   .card-text {
     font-size: 0.7rem;
+    margin-left: 10px;
   }
 
   .bttn {
@@ -372,17 +354,26 @@
     width: 100%;
     margin: 0;
   }
+
+  .cardbitch{
+    width: 320px;
+  }
+  .booktitle, .bookInfo{
+    padding-left: 10px;
+  }
+  .buttons-container{
+    padding-left: 10px;
+  }
 }
 
-.card-real {
-  width: 99%;
-  padding: 20px;
+.urBooks{
   display: flex;
-  flex-direction: row;
+  padding: 20px;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  padding: 1rem;
+  gap: 1rem;
+  box-sizing: border-box;
+  scrollbar-width: thin;
+  scrollbar-color: #888 transparent;
 }
-
-/* .card-real .card {
-  border: 3px solid white;
-  height: 500px;
-  width: 400px;
-} */

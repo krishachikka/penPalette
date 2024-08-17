@@ -126,37 +126,6 @@
   color: white;
 }
 
-@media only screen and (max-width: 768px) {
-  .modal-content {
-    flex-direction: row;
-    max-width: 100%;
-  }
-
-  .content {
-    flex-direction: column;
-    text-align: justify;
-  }
-
-  .content img {
-    align-self: center;
-    width: 60%;
-  }
-
-  .comflex {
-    font-size: small;
-    display: flex;
-    flex-direction: column;
-  }
-}
-
-@media only screen and (max-width: 600px) {
-  #commentarea {
-    height: 20px;
-  }
-}
-
-
-
 .search-container {
   position: relative;
 }
@@ -182,20 +151,55 @@
 .suggestions-list li:hover {
   background-color: #f0f0f0;
 }
-.tags{
-  background-color: gray;
-  padding: 8px 12px;
-  margin: 5px;
-  color: black;
-  border-radius: 24px;
-  white-space: nowrap;
-  flex: 0 1 auto;
+
+.modal-tags {
+  border-top: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
+  padding: 20px;
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
-.modal-body p{
+.modal-tags h5{
+  color: white;
+  padding-bottom: 10px;
+}
+.tags-container {
   display: flex;
   flex-wrap: wrap;
-  margin-top: 10px;
-  height: auto; /* Ensure the height adjusts based on content */
-  overflow-y: auto; /* Vertical scrolling if content exceeds height */
-  box-sizing: border-box;
+  gap: 7px;
+}
+.tag {
+  background-color: #e0e0e0b0;
+  padding: 5px 10px;
+  border-radius: 15px;
+  font-size: 0.85rem;
+}
+
+@media only screen and (max-width: 768px) {
+  .modal-content {
+    flex-direction: row;
+    max-width: 100%;
+  }
+
+  .content {
+    flex-direction: column;
+    /* text-align: justify; */
+  }
+
+  .content img {
+    align-self: center;
+    width: 60%;
+  }
+
+  .comflex {
+    font-size: small;
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  #commentarea {
+    height: 20px;
+  }
 }
