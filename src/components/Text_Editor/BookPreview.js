@@ -1,7 +1,7 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { db } from '../../firebase';
-import SideDrawer from './SideDrawer'; // Import the SideDrawer component
+import SideDrawer from './SideDrawer';
 import "../../styles/Text_Editor/BookPreview.css";
 import { motion } from 'framer-motion';
 import logomeow from "../../images/logomeow.png";
@@ -14,6 +14,8 @@ function BookPreview() {
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
     const contentRef = useRef(null);
     const [mode, setMode] = useState('light');
+    const [fontSize, setFontSize] = useState(16); // default font size
+    const [isFontControlsOpen, setIsFontControlsOpen] = useState(false); // font controls
 
     useEffect(() => {
         const fetchBookData = async () => {
@@ -27,6 +29,10 @@ function BookPreview() {
 
     const toggleDrawer = () => {
         setIsDrawerOpen(!isDrawerOpen);
+    };
+
+    const toggleFontControls = () => {
+        setIsFontControlsOpen(!isFontControlsOpen);
     };
 
     const navigateToChapter = (index) => {
@@ -51,9 +57,13 @@ function BookPreview() {
         setActiveChapterIndex(prevIndex => Math.min(prevIndex + 1, (bookData.chapters || []).length - 1));
     };
 
-    if (!bookData) {
-        return <div>Loading...</div>;
-    }
+    const increaseFontSize = () => {
+        setFontSize(prevSize => Math.min(prevSize + 2, 32)); // Max font size limit
+    };
+
+    const decreaseFontSize = () => {
+        setFontSize(prevSize => Math.max(prevSize - 2, 12)); // Min font size limit
+    };
 
     const toggleMode = () => {
         setMode(mode === 'light' ? 'dark' : 'light');
@@ -62,6 +72,10 @@ function BookPreview() {
     const goBack = () => {
         navigate('/dashboard');
     };
+
+    if (!bookData) {
+        return <div>Loading...</div>;
+    }
 
     const transition = { duration: 0.5 };
 
@@ -83,25 +97,24 @@ function BookPreview() {
                 chapters={chapters}
                 navigateToChapter={navigateToChapter}
             />
-            <div className="button-section bookPreview">
-                <div className='imp-buttons'>
-                    <button className="goback" onClick={goBack}>
-                        <ion-icon name="arrow-back" size="large"></ion-icon>
-                    </button>
-                    <button className="Chplist" onClick={toggleDrawer}>
-                        <ion-icon name="list" size="large"></ion-icon>
-                    </button>
-                </div>
-                <img src={logomeow} alt="Meow" id="logoMeow" />
-                <button className={`themebtn ${mode === 'dark' ? 'dark-mode' : 'light-mode'}`} onClick={toggleMode}>
-                    <div className='circle'>
-                        <ion-icon name="bulb-outline" size="large"></ion-icon>
-                    </div>
-                </button>
+
+            {/* Slider Arrow for Font Controls */}
+            <div
+                className={`slider-arrow ${isFontControlsOpen ? 'open' : ''}`}
+                onClick={toggleFontControls}
+            >
+                <ion-icon name={isFontControlsOpen ? "chevron-forward-outline" : "chevron-back-outline"}></ion-icon>
+            </div>
+
+            {/* Font Controls */}
+            <div className={`font-controls ${isFontControlsOpen ? 'open' : ''}`}>
+                <button className="font-size-btn" onClick={decreaseFontSize}>A-</button>
+                <span className="font-size-display">{fontSize}px</span>
+                <button className="font-size-btn" onClick={increaseFontSize}>A+</button>
             </div>
 
             <div className="book-preview">
-                <div className="content-section" ref={contentRef}>
+                <div className="content-section" ref={contentRef} style={{ fontSize: `${fontSize}px` }}>
                     <section className='title-section' style={{ backgroundImage: `url(${bookData.coverPageURL})` }}>
                         {bookData.coverPageURL && (
                             <div className='cover-page'>
@@ -125,9 +138,26 @@ function BookPreview() {
                         <p>No chapters available</p>
                     )}
                 </div>
+
+                <div className="button-section bookPreview">
+                    <div className='imp-buttons'>
+                        <button className="goback" onClick={goBack}>
+                            <ion-icon name="arrow-back" size="large"></ion-icon>
+                        </button>
+                        <button className="Chplist" onClick={toggleDrawer}>
+                            <ion-icon name="list" size="large"></ion-icon>
+                        </button>
+                    </div>
+                    <img src={logomeow} alt="Meow" id="logoMeow" />
+                    <button className={`themebtn ${mode === 'dark' ? 'dark-mode' : 'light-mode'}`} onClick={toggleMode}>
+                        <div className='circle'>
+                            <ion-icon name="bulb-outline" size="large"></ion-icon>
+                        </div>
+                    </button>
+                </div>
                 <div className="navigation-buttons">
                     <button
-                        className="prev-btn "
+                        className="prev-btn"
                         onClick={showPreviousChapter}
                         disabled={activeChapterIndex === 0}
                     >

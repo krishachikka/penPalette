@@ -51,6 +51,7 @@ function TextEditor() {
                             coverPageURL: fileData.coverPageURL,
                             email: fileData.uploaderEmail || 'Not logged in',
                         });
+                        setTags(fileData.tags || []); // Retrieve and set tags here
                     }
                 } catch (error) {
                     console.error("Error fetching file data:", error);
@@ -67,6 +68,7 @@ function TextEditor() {
 
         fetchFileData();
     }, [fileId, location.state, currentUser]);
+
 
     const toggleDrawer = () => {
         setIsDrawerOpen(!isDrawerOpen);
@@ -343,7 +345,7 @@ function TextEditor() {
                 createdAt: new Date().toISOString(),
                 views: 0,
                 chapters: chapters,
-                tags: tags  // Add tags here
+                tags: tags // Save tags here
             });
 
             alert("Book published successfully!");
@@ -353,6 +355,7 @@ function TextEditor() {
             alert(`An error occurred while publishing the file: ${error.message}`);
         }
     };
+
 
 
 

@@ -1,4 +1,4 @@
-.loader{
+.loader {
     display: flex;
     height: 100vh;
     justify-content: center;
@@ -6,14 +6,16 @@
     padding: 100px;
     background-color: #4e2478;
 }
+
 @media (max-width: 768px) {
-    .loader img{
+    .loader img {
         padding: 60px auto;
         width: 100%;
     }
 }
+
 @media (max-width: 560px) {
-    .loader img{
+    .loader img {
         width: 90vw;
         padding: auto;
     }

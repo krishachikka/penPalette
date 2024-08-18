@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { storage, db } from "../../firebase";
 import { useNavigate } from "react-router-dom";
@@ -124,18 +125,18 @@ export default function FileUpload({ currentUser }) {
                 </button>
             </div>
             {showSuccessModal && (
-                <div className="modal" style={{ display: "block",width: "100vw",backgroundColor: "rgba(0, 0, 0, 0.5)", color: "black"}}>
+                <div className="modal" style={{ display: "block", width: "100vw", backgroundColor: "rgba(0, 0, 0, 0.5)", color: "black" }}>
                     <div className="modal-content" style={{ backgroundColor: "white", margin: "15% auto", padding: "20px", border: "1px solid #888", width: "50%" }}>
-                        <div className="modal-header" style={{color:"black"}}>
-                        <ion-icon name="happy-outline" size="large"></ion-icon>
+                        <div className="modal-header" style={{ color: "black" }}>
+                            <ion-icon name="happy-outline" size="large"></ion-icon>
                             <h5 className="modal-title" >Book Uploaded Successfully!</h5>
-                            <button type="button" className="close" style={{border: "none", backgroundColor:"transparent", color:"black"}} onClick={() => setShowSuccessModal(false)}>
+                            <button type="button" className="close" style={{ border: "none", backgroundColor: "transparent", color: "black" }} onClick={() => setShowSuccessModal(false)}>
                                 <ion-icon name="close-circle" size="large"></ion-icon>
                             </button>
                         </div>
-                        <div className="modal-body d-flex flex-row justify-items-center" style={{color:"black"}}>
+                        <div className="modal-body d-flex flex-row justify-items-center" style={{ color: "black" }}>
                             {coverPagePreview && (
-                                <img src={coverPagePreview} alt="Uploaded Cover Page" style={{ maxWidth: '20%'}} />
+                                <img src={coverPagePreview} alt="Uploaded Cover Page" style={{ maxWidth: '20%' }} />
                             )}
                             <h6>Your Story has been successfully uploaded.</h6>
                         </div>

@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { Button, Spinner, Modal, Form } from "react-bootstrap";
 import { db } from "../../firebase";
@@ -132,12 +133,12 @@ export default function UploadedFilesSection({ currentUser }) {
             file.title.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
-
     const handleAdd = async (file) => {
         try {
             // Retrieve additional details (title, uploaderEmail, description, coverPageURL) for the book
             const fileDetailsSnapshot = await db.ref(`files/${file.id}`).once('value');
-            const { title, uploaderEmail, description, coverPageURL } = fileDetailsSnapshot.val();
+            const { title, uploaderEmail, description, coverPageURL, tags } = fileDetailsSnapshot.val();
+
 
             // Navigate to the text editor route with the file ID and other details
             navigate(`/dashboard/textEditor/${file.id}`, {
@@ -145,6 +146,7 @@ export default function UploadedFilesSection({ currentUser }) {
                     fileTitle: title,
                     fileUploaderEmail: uploaderEmail,
                     fileDescription: description,
+                    tags: tags, // Pass the entire tags array
                     coverPageURL // Pass the cover page URL to the text editor
                 }
             });
@@ -152,6 +154,7 @@ export default function UploadedFilesSection({ currentUser }) {
             console.error("Error retrieving file details:", error);
         }
     };
+
 
     const showToast = (message) => {
         try {

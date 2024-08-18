@@ -1,6 +1,13 @@
 @keyframes slideDown {
-  0% { opacity: 0; transform: translateY(-10%); }
-  100% { opacity: 1; transform: translateY(0); }
+  0% {
+    opacity: 0;
+    transform: translateY(-10%);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .profile-drawer {
@@ -69,22 +76,25 @@
   margin-bottom: 10px;
 }
 
-.card-body.drawer{
+.card-body.drawer {
   margin: 10px;
   display: flex;
   flex-direction: column;
   justify-content: center;
 }
-.button.logout{
+
+.button.logout {
   width: 100%;
 }
 
-.card-body.fileUpload{
+.card-body.fileUpload {
   margin: 10px;
 }
-.form-control.mb-2{
+
+.form-control.mb-2 {
   width: 90%;
 }
+
 @media (max-width: 768px) {
   .profile-drawer {
     width: 100%;
@@ -96,10 +106,12 @@
     width: 100%;
     font-size: small;
   }
-  .button.logout{
+
+  .button.logout {
     font-size: smaller;
     width: 50%;
   }
+
   #btnicon {
     font-size: 18px;
   }

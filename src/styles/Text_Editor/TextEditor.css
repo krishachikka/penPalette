@@ -285,9 +285,11 @@
 .add-tag-btn {
     background-color: #7f39c5;
 }
-.add-tag-btn:hover{
+
+.add-tag-btn:hover {
     background-color: #b46aff;
 }
+
 .tag-item {
     margin: 5px;
     background-color: #ddc6f4;
@@ -306,6 +308,7 @@
         height: auto;
         padding: 10px;
         position: static;
+        left: 0px;
     }
 
     .publish-button,
