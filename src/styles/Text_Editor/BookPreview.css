@@ -9,11 +9,12 @@
     justify-content: space-between;
 }
 
-.content-section{
+.content-section {
     display: flex;
     flex-direction: column;
     justify-content: center;
 }
+
 .imp-buttons {
     display: flex;
     flex-direction: row;
@@ -137,7 +138,7 @@
         width: 50px;
     }
 
-    .navigation-buttons{
+    .navigation-buttons {
         justify-content: space-between;
     }
 }
@@ -163,7 +164,7 @@
         width: 100%;
     }
 
-    .title-section p{
+    .title-section p {
         font-size: 7px;
     }
 

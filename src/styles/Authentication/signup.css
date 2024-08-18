@@ -1,7 +1,10 @@
-
 * {
     font-family: "Poppins", sans-serif;
     box-sizing: border-box;
+}
+
+html {
+    padding-top: 0px;
 }
 
 body {
@@ -35,12 +38,12 @@ body {
     box-shadow: 0 0 20px 2px #7f39c5;
 }
 
-.logosignup{
+.logosignup {
     height: auto;
     position: absolute;
 }
 
-.cardbody{
+.cardbody {
     width: 90%;
 }
 
@@ -50,7 +53,8 @@ body {
         padding: 30px;
         margin: 20px auto;
     }
-    .logosignup{
+
+    .logosignup {
         position: relative;
         width: 60%;
     }

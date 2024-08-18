@@ -11,11 +11,18 @@ import "../../styles/animation.css";
 export default function Login() {
   const emailRef = useRef();
   const passwordRef = useRef();
-  const { login } = useAuth();
+  const { login, currentUser } = useAuth(); // Access currentUser from the auth context
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const vantaRef = useRef(null); // Create a ref for Vanta Waves
+
+  // Redirect if user is already logged in
+  useEffect(() => {
+    if (currentUser) {
+      navigate("/dashboard"); // Redirect to dashboard if logged in
+    }
+  }, [currentUser, navigate]);
 
   useEffect(() => {
     const vantaEffect = WAVES({
@@ -36,7 +43,7 @@ export default function Login() {
     return () => {
       if (vantaEffect) vantaEffect.destroy();
     };
-  }, []); // Empty dependency array to ensure effect runs only once
+  }, []);
 
   useEffect(() => {
     const eyeball = (event) => {

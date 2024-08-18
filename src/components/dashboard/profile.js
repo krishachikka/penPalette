@@ -47,7 +47,7 @@ export default function Profile() {
             <h2 className="text-center" style={{ color: 'white' }}>
                 Profile
             </h2>
-            <div className="card-body">
+            <div className="card-body drawer">
                 {error && <div className="alert alert-danger">{error}</div>}
                 <p>
                     <strong>Username:</strong> {username}
@@ -55,8 +55,8 @@ export default function Profile() {
                 <p>
                     <strong>Email:</strong> {currentUser?.email}
                 </p>
-                <div className="w-100 text-center mt-2">
-                    <button className="button" onClick={handleLogout}>
+                <div className="">
+                    <button className="button logout" onClick={handleLogout}>
                         Log Out
                     </button>
                 </div>

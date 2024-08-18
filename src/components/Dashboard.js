@@ -15,6 +15,8 @@ import booktop from '../images/booktop.png';
 import bookside from '../images/bookside.png';
 import logo from '../images/logo.png';
 import logomeow from '../images/logomeow.png';
+import LoadingCatAnimation from "./LoadingCatAnimation";
+import Footer from "./Footer";
 
 export default function Dashboard() {
   const [fileData, setFileData] = useState([]);
@@ -102,6 +104,7 @@ export default function Dashboard() {
 
   useEffect(() => {
     const fetchFiles = () => {
+      setLoading(true); // Set loading to true before fetching data
       db.ref("files").on("value", async (snapshot) => {
         const data = snapshot.val();
         if (data) {
@@ -119,6 +122,7 @@ export default function Dashboard() {
         } else {
           setFileData([]);
         }
+        setLoading(false); // Set loading to false after fetching data
       });
     };
 
@@ -126,6 +130,7 @@ export default function Dashboard() {
 
     return () => db.ref("files").off("value");
   }, []);
+
 
 
   useEffect(() => {
@@ -431,52 +436,56 @@ export default function Dashboard() {
 
   return (
     <div>
-      <header className="blur-lg">
-        <div className="profile-icon" onClick={toggleProfileDrawer}>
-          {/* <ion-icon name="person-circle" size="large" id="profile-icon"></ion-icon> */}
-          <img src={logomeow} alt="Meow" id="profile-icon"></img>
-          <img src={logo} alt="Pen Palette" className="logod"></img>
-        </div>
-        <div className="header-buttons my-auto">
-          {/* Button to go to the uploaded files section */}
-          <div className="book-button" onClick={handleSavedBooksClick} >
-            <button>Saved Books</button>
-          </div>
-          <div className="book-button" onClick={() => document.querySelector(".center-section").scrollIntoView({ behavior: 'smooth' })}>
-            <button>My Books</button>
-          </div>
-          {/* Button to go to the section of exploring more stories */}
-          <div className="book-button" onClick={() => document.querySelector(".container-fluid").scrollIntoView({ behavior: 'smooth' })}>
-            <button>Explore Stories</button>
-          </div>
-        </div>
-        <button className="menu-button" onClick={toggleMenu}>
-          <ion-icon name="list-outline" size="large"></ion-icon>
-        </button>
+      {loading ? (
+        <LoadingCatAnimation /> // Show loading animation while loading
+      ) : (
+        <div>
+          <header className="blur-lg">
+            <div className="profile-icon" onClick={toggleProfileDrawer}>
+              {/* <ion-icon name="person-circle" size="large" id="profile-icon"></ion-icon> */}
+              <img src={logomeow} alt="Meow" id="profile-icon"></img>
+              <img src={logo} alt="Pen Palette" className="logod"></img>
+            </div>
+            <div className="header-buttons my-auto">
+              {/* Button to go to the uploaded files section */}
+              <div className="book-button" onClick={handleSavedBooksClick} >
+                <button>Saved Books</button>
+              </div>
+              <div className="book-button" onClick={() => document.querySelector(".center-section").scrollIntoView({ behavior: 'smooth' })}>
+                <button>My Books</button>
+              </div>
+              {/* Button to go to the section of exploring more stories */}
+              <div className="book-button" onClick={() => document.querySelector(".container-fluid").scrollIntoView({ behavior: 'smooth' })}>
+                <button>Explore Stories</button>
+              </div>
+            </div>
+            <button className="menu-button" onClick={toggleMenu}>
+              <ion-icon name="list-outline" size="large"></ion-icon>
+            </button>
 
-      </header>
-      <div className={`header-buttons-mobile ${menuOpen ? 'open' : ''}`}>
-        <div className="book-button" onClick={handleSavedBooksClick} >
-          <button>Saved Books</button>
-        </div>
-        <div className="book-button" onClick={() => document.querySelector(".center-section").scrollIntoView({ behavior: 'smooth' })}>
-          <button>View My Books</button>
-        </div>
-        <div className="book-button" onClick={() => document.querySelector(".container-fluid").scrollIntoView({ behavior: 'smooth' })}>
-          <button>Explore Stories</button>
-        </div>
-      </div>
+          </header>
+          <div className={`header-buttons-mobile ${menuOpen ? 'open' : ''}`}>
+            <div className="book-button" onClick={handleSavedBooksClick} >
+              <button>Saved Books</button>
+            </div>
+            <div className="book-button" onClick={() => document.querySelector(".center-section").scrollIntoView({ behavior: 'smooth' })}>
+              <button>View My Books</button>
+            </div>
+            <div className="book-button" onClick={() => document.querySelector(".container-fluid").scrollIntoView({ behavior: 'smooth' })}>
+              <button>Explore Stories</button>
+            </div>
+          </div>
 
-      {/* Profile drawer */}
-      < ProfileDrawer isOpen={profileDrawerOpen} onClose={toggleProfileDrawer} currentUser={currentUser} setLoading={setLoading} />
-      <div className="container-fluid m-0 p-0">
-        <div className="dashboard-container">
+          {/* Profile drawer */}
+          < ProfileDrawer isOpen={profileDrawerOpen} onClose={toggleProfileDrawer} currentUser={currentUser} setLoading={setLoading} />
+          <div className="container-fluid m-0 p-0">
+            <div className="dashboard-container">
 
-          <div className="right-section">
-            <div className="searchname">
-              <h2 className="text-center mb-4" style={{ color: "white" }}>Explore more Stories</h2>
-              <div className="row">
-                {/* <input
+              <div className="right-section">
+                <div className="searchname">
+                  <h2 className="text-center mb-4" style={{ color: "white" }}>Explore more Stories</h2>
+                  <div className="row">
+                    {/* <input
                   type="text"
                   placeholder="Search by title..."
                   value={searchQuery}
@@ -484,187 +493,187 @@ export default function Dashboard() {
                   className="form-control mb-3 "
                   id="searchbar"
                 /> */}
-                <div className="search-container">
-                  <input
-                    type="text"
-                    placeholder="Search by title..."
-                    value={searchQuery}
-                    onChange={handleSearchChange}
-                    className="form-control"
-                    id="searchbar"
-                  />
-                  {searchQuery && (
-                    <button onClick={handleClearSearch} className="modalbtn">
-                      Clear
-                    </button>
-                  )}
-                  {suggestions.length > 0 && (
-                    <ul className="suggestions-list">
-                      {suggestions.map((suggestion, index) => (
-                        <li key={index} onClick={() => handleSuggestionClick(suggestion)}>
-                          {suggestion}
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                </div>
+                    <div className="search-container">
+                      <input
+                        type="text"
+                        placeholder="Search by title..."
+                        value={searchQuery}
+                        onChange={handleSearchChange}
+                        className="form-control"
+                        id="searchbar"
+                      />
+                      {searchQuery && (
+                        <button onClick={handleClearSearch} className="modalbtn">
+                          Clear
+                        </button>
+                      )}
+                      {suggestions.length > 0 && (
+                        <ul className="suggestions-list">
+                          {suggestions.map((suggestion, index) => (
+                            <li key={index} onClick={() => handleSuggestionClick(suggestion)}>
+                              {suggestion}
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+                    </div>
 
+
+                  </div>
+                </div>
+                <div className="row upperCard">
+                  {filteredFiles.map((file) => (
+                    <div key={file.id} className="mb-4 cardWidth">
+                      <div className="layout" onClick={() => openFileOverlay(file.id)}>
+                        <div className="actions">
+                          <ion-icon
+                            name="bookmark"
+                            style={{
+                              color: savedFiles.includes(file.id) ? "#580391d1" : "gray",
+                              cursor: "pointer"
+                            }}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleSave(file.id);
+                            }}
+                          ></ion-icon>
+                        </div>
+                        <div className="book-cover">
+                          <img className="book-top" src={booktop} alt="book-top" />
+                          <img
+                            src={file.coverPageURL}
+                            alt="Cover Page"
+                            className="card-img-top"
+                            style={{ height: "250px", cursor: "pointer", borderRadius: "10px" }}
+                          />
+                          <img className="book-side" src={bookside} alt="book-side" />
+                        </div>
+                        <div className="preface">
+                          <div className="title">{file.title}</div>
+                          <div className="author">{file.uploaderUsername}</div>
+                          <p>Views: {file.views}</p>
+                          <div className="body">
+                            <p>{file.description}</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
 
               </div>
             </div>
-            <div className="row upperCard">
-              {filteredFiles.map((file) => (
-                <div key={file.id} className="mb-4 cardWidth">
-                  <div className="layout" onClick={() => openFileOverlay(file.id)}>
-                    <div className="actions">
-                      <ion-icon
-                        name="bookmark"
-                        style={{
-                          color: savedFiles.includes(file.id) ? "#580391d1" : "gray",
-                          cursor: "pointer"
-                        }}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleSave(file.id);
-                        }}
-                      ></ion-icon>
-                    </div>
-                    <div className="book-cover">
-                      <img className="book-top" src={booktop} alt="book-top" />
-                      <img
-                        src={file.coverPageURL}
-                        alt="Cover Page"
-                        className="card-img-top"
-                        style={{ height: "250px", cursor: "pointer", borderRadius: "10px" }}
-                      />
-                      <img className="book-side" src={bookside} alt="book-side" />
-                    </div>
-                    <div className="preface">
-                      <div className="title">{file.title}</div>
-                      <div className="author">{file.uploaderUsername}</div>
-                      <p>Views: {file.views}</p>
-                      <div className="body">
-                        <p>{file.description}</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              ))}
+            <div className="center-section">
+              <UploadedFilesSection fileData={fileData} currentUser={currentUser} />
             </div>
 
-          </div>
-        </div>
-        <div className="center-section">
-          <UploadedFilesSection fileData={fileData} currentUser={currentUser} />
-        </div>
+            <AnimatePresence>
+              {showFileModal && (
+                <motion.div
+                  className="modal-backdrop"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 0.92 }}
+                  exit={{ opacity: 0 }}
+                  onClick={() => setShowFileModal(false)}
+                >
+                  <motion.div
+                    className="modal-content"
+                    initial={{ scale: 0.8, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    exit={{ scale: 0.8, opacity: 0 }}
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    <div className="modal-header">
+                      <h5 className="modal-title">Book Details</h5>
+                      <button className="close" onClick={() => setShowFileModal(false)}>
+                        <ion-icon name="close-circle" size="large"></ion-icon>
+                      </button>
+                    </div>
+                    <div className="modal-body">
+                      {selectedFile && (
+                        <div className="content">
+                          <img src={selectedFile.coverPageURL} alt="Cover Page" />
 
-        <AnimatePresence>
-          {showFileModal && (
-            <motion.div
-              className="modal-backdrop"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 0.92 }}
-              exit={{ opacity: 0 }}
-              onClick={() => setShowFileModal(false)}
-            >
-              <motion.div
-                className="modal-content"
-                initial={{ scale: 0.8, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                exit={{ scale: 0.8, opacity: 0 }}
-                onClick={(e) => e.stopPropagation()}
-              >
-                <div className="modal-header">
-                  <h5 className="modal-title">Book Details</h5>
-                  <button className="close" onClick={() => setShowFileModal(false)}>
-                    <ion-icon name="close-circle" size="large"></ion-icon>
-                  </button>
-                </div>
-                <div className="modal-body">
-                  {selectedFile && (
-                    <div className="content">
-                      <img src={selectedFile.coverPageURL} alt="Cover Page" />
+                          <div>
+                            <h3>{selectedFile.title}</h3>
+                            <p><i>Uploaded By: {selectedFile.uploaderUsername}</i></p>
+                            <p>Description: {selectedFile.description}</p>
+                          </div>
+                        </div>
+                      )}
 
                       <div>
-                        <h3>{selectedFile.title}</h3>
-                        <p><i>Uploaded By: {selectedFile.uploaderUsername}</i></p>
-                        <p>Description: {selectedFile.description}</p>
+                        <p className="comflex">
+                          <h4 className="p-2">Comments <ion-icon name="chatbubble-outline"></ion-icon> :</h4>
+                          <button onClick={handleToggleComments} className="modalbtn">
+                            {showComments ? "Hide Comments" : "Show Comments"} <ion-icon name="chatbubbles-outline"></ion-icon>
+                          </button>
+                        </p>
+                        {showComments && fileComments.map((comment, index) => (
+                          <div className="comment m-2" key={index}>
+                            <i><small>By: {comment.userEmail}</small></i>
+                            <p>{comment.text}</p>
+                            {comment.userEmail === (currentUser && currentUser.email) && (
+                              <button className="modalbtn" onClick={() => handleDeleteComment(comment.id)}>Delete</button>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+
+                      <div className="comm mb-3">
+                        <textarea
+                          value={comment}
+                          onChange={handleCommentChange}
+                          placeholder="Add a comment..."
+                          className="form-control mb-1"
+                          id="commentarea"
+                        />
+                        {commentError && <div style={{ color: "red" }}>{commentError}</div>}
+                        <button
+                          className="commentbtn"
+                          onClick={() => handleCommentSubmit(selectedFile.id)}
+                          disabled={comment.trim().length === 0 || loading}
+                        >
+                          <ion-icon name="send" size="large"></ion-icon>
+                        </button>
                       </div>
                     </div>
-                  )}
 
-                  <div>
-                    <p className="comflex">
-                      <h4 className="p-2">Comments <ion-icon name="chatbubble-outline"></ion-icon> :</h4>
-                      <button onClick={handleToggleComments} className="modalbtn">
-                        {showComments ? "Hide Comments" : "Show Comments"} <ion-icon name="chatbubbles-outline"></ion-icon>
-                      </button>
-                    </p>
-                    {showComments && fileComments.map((comment, index) => (
-                      <div className="comment m-2" key={index}>
-                        <i><small>By: {comment.userEmail}</small></i>
-                        <p>{comment.text}</p>
-                        {comment.userEmail === (currentUser && currentUser.email) && (
-                          <button className="modalbtn" onClick={() => handleDeleteComment(comment.id)}>Delete</button>
+                    {/* New Section for Tags */}
+                    <div className="modal-tags">
+                      <h5>Tags</h5>
+                      <div className="tags-container">
+                        {selectedFile.tags && selectedFile.tags.length > 0 ? (
+                          selectedFile.tags.map((tag, index) => (
+                            <span key={index} className="tag">
+                              {tag}
+                            </span>
+                          ))
+                        ) : (
+                          <span style={{ color: "grey" }}>No tags available</span>
                         )}
                       </div>
-                    ))}
-                  </div>
+                    </div>
 
-                  <div className="comm mb-3">
-                    <textarea
-                      value={comment}
-                      onChange={handleCommentChange}
-                      placeholder="Add a comment..."
-                      className="form-control mb-1"
-                      id="commentarea"
-                    />
-                    {commentError && <div style={{ color: "red" }}>{commentError}</div>}
-                    <button
-                      className="commentbtn"
-                      onClick={() => handleCommentSubmit(selectedFile.id)}
-                      disabled={comment.trim().length === 0 || loading}
-                    >
-                      <ion-icon name="send" size="large"></ion-icon>
-                    </button>
-                  </div>
-                </div>
+                    <div className="modal-footer">
+                      <button className="modalbtn" onClick={() => openFile(selectedFile.id, selectedFile.fileURL, selectedFile.createdBy)}>
+                        Read
+                      </button>
+                      <button
+                        className="modalbtn"
+                        onClick={() => handleSave(selectedFile.id)}
+                      >
+                        {savedFiles.includes(selectedFile.id) ? "Unsave" : "Save"}
+                      </button>
+                    </div>
 
-                {/* New Section for Tags */}
-                <div className="modal-tags">
-                  <h5>Tags</h5>
-                  <div className="tags-container">
-                    {selectedFile.tags && selectedFile.tags.length > 0 ? (
-                      selectedFile.tags.map((tag, index) => (
-                        <span key={index} className="tag">
-                          {tag}
-                        </span>
-                      ))
-                    ) : (
-                      <span style={{ color: "grey" }}>No tags available</span>
-                    )}
-                  </div>
-                </div>
-
-                <div className="modal-footer">
-                  <button className="modalbtn" onClick={() => openFile(selectedFile.id, selectedFile.fileURL, selectedFile.createdBy)}>
-                    Read
-                  </button>
-                  <button
-                    className="modalbtn"
-                    onClick={() => handleSave(selectedFile.id)}
-                  >
-                    {savedFiles.includes(selectedFile.id) ? "Unsave" : "Save"}
-                  </button>
-                </div>
-
-              </motion.div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-
-
-      </div>
+                  </motion.div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

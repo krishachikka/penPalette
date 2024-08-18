@@ -16,17 +16,37 @@ function Signup() {
   const navigate = useNavigate();
   const vantaRef = useRef(null);
 
+  // Helper functions for validation
+  const validateEmail = (email) => /\S+@\S+\.\S+/.test(email);
+  const validatePassword = (password) => password.length >= 6; // Example: minimum length of 6
+  const validateUsername = (username) => username.trim().length > 0;
+
   async function handleSubmit(e) {
     e.preventDefault();
 
-    if (passwordRef.current.value !== passwordConfirmRef.current.value) {
+    const email = emailRef.current.value;
+    const password = passwordRef.current.value;
+    const passwordConfirm = passwordConfirmRef.current.value;
+    const username = usernameRef.current.value;
+
+    // Basic validation
+    if (!validateEmail(email)) {
+      return setError('Invalid email address');
+    }
+    if (!validatePassword(password)) {
+      return setError('Password must be at least 6 characters long');
+    }
+    if (password !== passwordConfirm) {
       return setError('Passwords do not match');
+    }
+    if (!validateUsername(username)) {
+      return setError('Username cannot be empty');
     }
 
     try {
       setError('');
       setLoading(true);
-      await signup(emailRef.current.value, passwordRef.current.value, usernameRef.current.value);
+      await signup(email, password, username);
       navigate('/dashboard'); // Redirect to dashboard after successful signup
     } catch {
       setError('Failed to create an account');
@@ -58,7 +78,7 @@ function Signup() {
 
   return (
     <body ref={vantaRef}>
-      <img src={logo} alt="Logo" className="logosignup"/>
+      <img src={logo} alt="Logo" className="logosignup" />
       <div className="scontainer">
         <div className="signup-card">
           <div className="cardbody">
@@ -110,7 +130,7 @@ function Signup() {
               </button>
             </form>
           </div>
-          <div className="text-center mt-3">
+          <div className="text-center mt-10">
             Already have an account? <Link to="/login" className="linktext">Log In</Link>
           </div>
         </div>

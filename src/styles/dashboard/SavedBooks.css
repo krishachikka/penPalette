@@ -52,9 +52,11 @@
 
 .book-item {
     display: flex;
-    flex-direction: column; /* Stack items vertically */
-    align-items: center; /* Center horizontally */
-    justify-content: center; 
+    flex-direction: column;
+    /* Stack items vertically */
+    align-items: center;
+    /* Center horizontally */
+    justify-content: center;
     border: 1px solid #ddd;
     border-radius: 10px;
     overflow: hidden;
@@ -78,11 +80,13 @@
 }
 
 .book-details {
-    flex: 2; /* Take up available space */
+    flex: 2;
+    /* Take up available space */
     padding: 15px;
     display: flex;
     flex-direction: column;
-    justify-content: space-between; /* Ensure the button is pushed to the bottom */
+    justify-content: space-between;
+    /* Ensure the button is pushed to the bottom */
 }
 
 .book-details p {
@@ -108,12 +112,13 @@
     box-shadow: none;
 }
 
-.Savedlistbuttons{
+.Savedlistbuttons {
     display: flex;
     justify-content: center;
     align-items: center;
 }
-.bookMarkIcon{
+
+.bookMarkIcon {
     margin: 5px;
     cursor: pointer;
 }

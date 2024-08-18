@@ -14,6 +14,7 @@ import kids from "../../images/landing/children.png"
 import planer from "../../images/landing/planeright.png"
 import planel from "../../images/landing/planeleft.png"
 import 'aos/dist/aos.css';
+import Footer from "../Footer";
 
 function LandingPage() {
     const vantaRef = useRef(null);
@@ -179,23 +180,7 @@ function LandingPage() {
                         ></img>
                     </section>
                 </section>
-                <footer className="footer">
-                    <div className="footer-content">
-                        <div className="footer-icon" onClick={() => handleSocialIconClick("https://www.facebook.com/")}>
-                            <ion-icon name="logo-facebook"></ion-icon>
-                        </div>
-                        <div className="footer-icon" onClick={() => handleSocialIconClick("https://twitter.com/")}>
-                            <ion-icon name="logo-twitter"></ion-icon>
-                        </div>
-                        <div className="footer-icon" onClick={() => handleSocialIconClick("https://www.instagram.com/")}>
-                            <ion-icon name="logo-instagram"></ion-icon>
-                        </div>
-                        <div className="footer-icon" onClick={() => handleSocialIconClick("https://www.linkedin.com/")}>
-                            <ion-icon name="logo-linkedin"></ion-icon>
-                        </div>
-                    </div>
-                    <p>&copy; 2024 PenPalette. All rights reserved.</p>
-                </footer>
+                <Footer />
             </section>
         </div>
     );

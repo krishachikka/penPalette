@@ -104,7 +104,7 @@ export default function FileUpload({ currentUser }) {
     return (
         <div className="file-upload-container mb-3">
             <h2 className="text-center mb-4">Story Details</h2>
-            <div className="card-body">
+            <div className="card-body fileUpload">
                 <input id="coverPageInput" type="file" accept="image/*" className="form-control mb-2" onChange={handleCoverPageChange} />
 
                 {coverPagePreview && (

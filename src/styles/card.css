@@ -147,7 +147,7 @@
   gap: 1;
 }
 
-#viewicon{
+#viewicon {
   color: black;
   font-size: larger;
 }
@@ -181,8 +181,10 @@
 
 .cardbitch {
   display: flex;
-  flex-direction: column; /* Stack items vertically */
-  align-items: center; /* Center horizontally */
+  flex-direction: column;
+  /* Stack items vertically */
+  align-items: center;
+  /* Center horizontally */
   border: 5px solid rgb(90, 3, 152);
   box-shadow: none;
   background-color: white;
@@ -193,15 +195,16 @@
   margin: 20px;
 }
 
-.cardbitch:hover{
+.cardbitch:hover {
   translate: 0 -2%;
 }
 
-.booktitle{
+.booktitle {
   padding: 5px;
   font-weight: bold;
   font-size: 1.5rem;
 }
+
 .card-img-top {
   width: 160px;
   border-radius: 15px;
@@ -267,7 +270,7 @@
   }
 }
 
-.urBooks{
+.urBooks {
   display: flex;
   padding: 20px;
   flex-wrap: nowrap;
@@ -310,7 +313,7 @@
     margin: 10px auto;
   }
 
-  .cardbitch{
+  .cardbitch {
     margin: 10px;
   }
 }
@@ -344,9 +347,11 @@
   .searchname h2 {
     font-size: 1.2rem;
   }
+
   .card-body {
     margin: 10px;
   }
+
   .card-title {
     font-size: 0.9rem;
   }
@@ -367,13 +372,16 @@
     margin: 0;
   }
 
-  .cardbitch{
+  .cardbitch {
     width: 320px;
   }
-  .booktitle, .bookInfo{
+
+  .booktitle,
+  .bookInfo {
     padding-left: 10px;
   }
-  .buttons-container{
+
+  .buttons-container {
     padding-left: 10px;
   }
 }
