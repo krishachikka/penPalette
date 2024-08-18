@@ -34,6 +34,7 @@
     box-sizing: border-box;
     scrollbar-width: thin;
     scrollbar-color: #888 transparent;
+    color: white;
 }
 
 .book-list::-webkit-scrollbar {

@@ -128,6 +128,44 @@
 
 .search-container {
   position: relative;
+  width: 100%;
+  max-width: 600px;
+  /* Adjust based on your design */
+  margin: 0 auto;
+  /* Center align container */
+}
+
+input[type="text"] {
+  width: calc(100% - 90px);
+  /* Adjust width to accommodate the clear button */
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+input[type="text"]:focus {
+  border-color: #007bff;
+  outline: none;
+  box-shadow: 0 2px 6px rgba(0, 123, 255, 0.3);
+}
+
+.btn-secondary {
+  margin-left: 10px;
+  padding: 10px 15px;
+  font-size: 16px;
+  border-radius: 4px;
+  border: none;
+  background-color: #6c757d;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.btn-secondary:hover {
+  background-color: #5a6268;
 }
 
 .suggestions-list {
@@ -135,39 +173,51 @@
   top: 100%;
   left: 0;
   width: 100%;
-  background: black;
+  background: rgba(0, 0, 0, 0.5);
   border: 1px solid #ddd;
   border-radius: 4px;
   max-height: 200px;
   overflow-y: auto;
   z-index: 1000;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .suggestions-list li {
-  padding: 8px;
+  list-style: none;
+  padding: 10px;
   cursor: pointer;
+  font-size: 16px;
+  transition: ease-in 0.3s;
 }
 
 .suggestions-list li:hover {
-  background-color: #f0f0f097;
+  background-color: #f0f0f0;
+  color: black;
+  border-radius: 20px;
 }
+
 
 .modal-tags {
   border-top: 1px solid #ccc;
+  border-radius: 20px;
   border-bottom: 1px solid #ccc;
   padding: 20px;
   margin-top: 10px;
   margin-bottom: 10px;
 }
-.modal-tags h5{
+
+.modal-tags h5 {
   color: white;
   padding-bottom: 10px;
+  border-radius: 20px;
 }
+
 .tags-container {
   display: flex;
   flex-wrap: wrap;
   gap: 7px;
 }
+
 .tag {
   background-color: #e0e0e0b0;
   padding: 5px 10px;

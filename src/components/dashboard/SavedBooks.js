@@ -70,7 +70,7 @@ const SavedBooks = () => {
             } else {
                 await userRef.child(fileId).set(true);
                 setSavedFiles(prev => [...prev, fileId]);
-                showToast("Saved to your books");
+                showToast("Saved to your book list");
             }
         } catch (error) {
             console.error("Error saving file:", error);

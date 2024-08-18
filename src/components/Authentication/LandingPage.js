@@ -197,7 +197,7 @@ function LandingPage() {
                     <p>&copy; 2024 PenPalette. All rights reserved.</p>
                 </footer>
             </section>
-        </div >
+        </div>
     );
 }
 

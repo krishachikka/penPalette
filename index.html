@@ -1,0 +1,32 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link rel="stylesheet" href="style.css" />
+    <title>Smiley Face Eyes Follow Mouse Cursor</title>
+  </head>
+  <body>
+    <div class="face">
+      <div class="eyes">
+        <div class="eye"></div>
+        <div class="eye"></div>
+      </div>
+    </div>
+    <script>
+      document.querySelector("body").addEventListener("mousemove", eyeball);
+      function eyeball() {
+        var eye = document.querySelectorAll(".eye");
+        eye.forEach(function(eye) {
+          // x & y are variables and x represents the x coordinate of the mouse and y represents the coordinate of the mouse.
+          let x = eye.getBoundingClientRect().left + eye.clientWidth / 2;
+          let y = eye.getBoundingClientRect().top + eye.clientHeight / 2;
+          let radian = Math.atan2(event.pageX - x, event.pageY - y);
+          //   rot is a variable (short for rotate)
+          let rot = radian * (180 / Math.PI) * -1 + 270;
+          eye.style.transform = "rotate(" + rot + "deg)";
+        });
+      }
+    </script>
+  </body>
+</html>

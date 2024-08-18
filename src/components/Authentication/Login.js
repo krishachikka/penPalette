@@ -6,6 +6,7 @@ import WAVES from 'vanta/src/vanta.waves'; // Import Vanta Waves
 import "../../styles/Authentication/landingpage.css"; // Import the CSS file
 import logo from "../../images/logo.png";
 import cool from "../../images/cool.gif";
+import "../../styles/animation.css";
 
 export default function Login() {
   const emailRef = useRef();
@@ -36,6 +37,25 @@ export default function Login() {
       if (vantaEffect) vantaEffect.destroy();
     };
   }, []); // Empty dependency array to ensure effect runs only once
+
+  useEffect(() => {
+    const eyeball = (event) => {
+      const eyes = document.querySelectorAll(".eye");
+      eyes.forEach((eye) => {
+        let x = eye.getBoundingClientRect().left + eye.clientWidth / 2;
+        let y = eye.getBoundingClientRect().top + eye.clientHeight / 2;
+        let radian = Math.atan2(event.pageX - x, event.pageY - y);
+        let rot = radian * (180 / Math.PI) * -1 + 270;
+        eye.style.transform = `rotate(${rot}deg)`;
+      });
+    };
+
+    document.querySelector("body").addEventListener("mousemove", eyeball);
+
+    return () => {
+      document.querySelector("body").removeEventListener("mousemove", eyeball);
+    };
+  }, []);
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -90,7 +110,12 @@ export default function Login() {
               Need an account? <Link to="/signup" className="linktext">Sign Up</Link>
             </div>
           </div>
-          <img className="cool" src={cool} alt="cool" />
+          <div className="face">
+            <div className="eyes">
+              <div className="eye"></div>
+              <div className="eye"></div>
+            </div>
+          </div>
         </div>
 
         {/* Additional content at the bottom */}

@@ -5,7 +5,6 @@ body {
     height: 100%;
     font-family: "Poppins", sans-serif;
     overflow-x: hidden;
-    /* Prevent horizontal scroll */
 }
 
 .bg {
@@ -92,16 +91,8 @@ body {
 
 .logosml {
     height: auto;
-    /* Ensure logo scales with its container */
     max-width: 100%;
     margin-bottom: 20px;
-    /* Space between logo and form */
-}
-
-.cool {
-    max-width: 100%;
-    height: auto;
-    /* Ensure gif scales with its container */
 }
 
 @media (min-width: 768px) {
@@ -110,20 +101,12 @@ body {
         justify-content: space-between;
         align-items: flex-start;
         padding: 0 50px;
-
-
-
-
-        /* Increase padding for larger screens */
     }
 
     .login-card {
         width: 45%;
-        /* Adjust width for larger screens */
         max-width: 400px;
-        /* Limit maximum width on larger screens */
         margin-left: auto;
-        /* Push login card to the right */
         margin-right: auto;
     }
 }
@@ -131,11 +114,5 @@ body {
 @media (max-width: 576px) {
     .login-card {
         padding: 30px;
-        /* Adjust padding for smaller screens */
     }
-
-    .cool {
-        display: none;
-    }
-
 }
