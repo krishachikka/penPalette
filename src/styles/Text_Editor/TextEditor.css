@@ -285,7 +285,9 @@
 .add-tag-btn {
     background-color: #7f39c5;
 }
-
+.add-tag-btn:hover{
+    background-color: #b46aff;
+}
 .tag-item {
     margin: 5px;
     background-color: #ddc6f4;
