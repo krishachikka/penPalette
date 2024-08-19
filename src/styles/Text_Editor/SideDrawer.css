@@ -42,3 +42,10 @@
   bottom: 16px;
   left: 16px;
 }
+
+
+.side-drawer ul li.active-chapter {
+  background-color: #f0f0f0;
+  /* Highlight color */
+  font-weight: bold;
+}

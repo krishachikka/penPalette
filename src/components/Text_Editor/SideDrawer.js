@@ -1,7 +1,7 @@
 import React from 'react';
 import '../../styles/Text_Editor/SideDrawer.css';
 
-const SideDrawer = ({ isOpen, toggle, chapters, navigateToChapter }) => {
+const SideDrawer = ({ isOpen, toggle, chapters, navigateToChapter, activeChapterIndex }) => {
     const totalChapters = chapters ? chapters.length : 0;
 
     return (
@@ -13,6 +13,7 @@ const SideDrawer = ({ isOpen, toggle, chapters, navigateToChapter }) => {
                         <li
                             key={index}
                             onClick={() => navigateToChapter(index)}
+                            className={index === activeChapterIndex ? 'active-chapter' : ''}
                         >
                             {index + 1}. {chapter.name}
                         </li>

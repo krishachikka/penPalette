@@ -13,6 +13,7 @@ function BookPreview() {
     const [activeChapterIndex, setActiveChapterIndex] = useState(0);
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
     const contentRef = useRef(null);
+    const titleRef = useRef(null); // New ref for title section
     const [mode, setMode] = useState('light');
     const [fontSize, setFontSize] = useState(16); // default font size
     const [isFontControlsOpen, setIsFontControlsOpen] = useState(false); // font controls
@@ -35,8 +36,7 @@ function BookPreview() {
         setIsFontControlsOpen(!isFontControlsOpen);
     };
 
-    const navigateToChapter = (index) => {
-        setActiveChapterIndex(index);
+    const scrollToChapter = (index) => {
         if (contentRef.current) {
             const chapterElement = contentRef.current.querySelector(`#chapter-${index}`);
             if (chapterElement) {
@@ -46,15 +46,37 @@ function BookPreview() {
                 });
             }
         }
+    };
+
+    const scrollToTitleSection = () => {
+        if (titleRef.current) {
+            titleRef.current.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+    };
+
+    const navigateToChapter = (index) => {
+        setActiveChapterIndex(index);
+        scrollToChapter(index);
+        scrollToTitleSection();
+        window.scrollTo({ top: 0, behavior: 'smooth' }); // Scroll to top of the page
         toggleDrawer(); // Close the drawer after navigating to the chapter
     };
 
     const showPreviousChapter = () => {
-        setActiveChapterIndex(prevIndex => Math.max(prevIndex - 1, 0));
+        const newIndex = Math.max(activeChapterIndex - 1, 0);
+        setActiveChapterIndex(newIndex);
+        scrollToChapter(newIndex);
+        setTimeout(scrollToTitleSection, 100); // Delay to ensure smooth scrolling
     };
 
     const showNextChapter = () => {
-        setActiveChapterIndex(prevIndex => Math.min(prevIndex + 1, (bookData.chapters || []).length - 1));
+        const newIndex = Math.min(activeChapterIndex + 1, (bookData.chapters || []).length - 1);
+        setActiveChapterIndex(newIndex);
+        scrollToChapter(newIndex);
+        setTimeout(scrollToTitleSection, 100); // Delay to ensure smooth scrolling
     };
 
     const increaseFontSize = () => {
@@ -96,6 +118,7 @@ function BookPreview() {
                 toggle={toggleDrawer}
                 chapters={chapters}
                 navigateToChapter={navigateToChapter}
+                activeChapterIndex={activeChapterIndex} // Pass the active chapter index
             />
 
             {/* Slider Arrow for Font Controls */}
@@ -115,7 +138,11 @@ function BookPreview() {
 
             <div className="book-preview">
                 <div className="content-section" ref={contentRef} style={{ fontSize: `${fontSize}px` }}>
-                    <section className='title-section' style={{ backgroundImage: `url(${bookData.coverPageURL})` }}>
+                    <section
+                        className='title-section'
+                        ref={titleRef} // Attach ref here
+                        style={{ backgroundImage: `url(${bookData.coverPageURL})` }}
+                    >
                         {bookData.coverPageURL && (
                             <div className='cover-page'>
                                 <img src={bookData.coverPageURL} alt="Cover Page" />

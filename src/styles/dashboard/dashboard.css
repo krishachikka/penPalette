@@ -360,7 +360,7 @@ header {
     display: flex;
     flex-wrap: nowrap;
     overflow-x: auto;
-    padding: 1rem;
+    padding: 10px;
     gap: 1rem;
     box-sizing: border-box;
   }
