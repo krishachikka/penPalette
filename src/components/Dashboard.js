@@ -8,7 +8,7 @@ import { db, storage } from "../firebase";
 import UploadedFilesSection from "./dashboard/UploadedFilesSection";
 import "../styles/dashboard/dashboard.css";
 import ProfileDrawer from "./dashboard/profileDrawer";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "../styles/modal.css";
 import "../styles/card.css";
 import booktop from '../images/booktop.png';
@@ -16,7 +16,7 @@ import bookside from '../images/bookside.png';
 import logo from '../images/logo.png';
 import logomeow from '../images/logomeow.png';
 import LoadingCatAnimation from "./LoadingCatAnimation";
-import Footer from "./Footer";
+
 
 export default function Dashboard() {
   const [fileData, setFileData] = useState([]);
@@ -240,15 +240,17 @@ export default function Dashboard() {
     const query = e.target.value;
     setSearchQuery(query);
 
+    // Filter files based on search query and exclude those created by the current user
     if (query.length > 0) {
-      const filteredSuggestions = fileData
-        .filter(file => file.title.toLowerCase().includes(query.toLowerCase()))
-        .map(file => file.title);
-      setSuggestions(filteredSuggestions);
+      const filteredFiles = fileData
+        .filter(file => file.createdBy !== (currentUser && currentUser.uid) &&
+          file.title.toLowerCase().includes(query.toLowerCase()));
+      setSuggestions(filteredFiles.map(file => file.title));
     } else {
       setSuggestions([]);
     }
   };
+
 
   const formatDate = (timestamp) => {
     const date = new Date(timestamp);
@@ -297,7 +299,6 @@ export default function Dashboard() {
     }
 
     try {
-      setLoading(true);
       await db.ref(`files/${fileId}/comments`).push({
         text: comment,
         userEmail: (currentUser && currentUser.email) || "Unknown",
@@ -307,7 +308,6 @@ export default function Dashboard() {
     } catch (error) {
       console.error(error);
     } finally {
-      setLoading(false);
     }
   };
 
@@ -318,14 +318,12 @@ export default function Dashboard() {
   const handleDeleteComment = async (commentId) => {
     if (window.confirm("Are you sure you want to delete this comment?")) {
       try {
-        setLoading(true);
         await db.ref(`files/${selectedFile.id}/comments/${commentId}`).remove();
         // Update fileComments state after deleting the comment
         setFileComments(prevComments => prevComments.filter(comment => comment.id !== commentId));
       } catch (error) {
         console.error(error);
       } finally {
-        setLoading(false);
       }
     }
   };
