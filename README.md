@@ -1,4 +1,9 @@
-# Getting Started with Create React App
+# PenPalette
+
+---
+https://github.com/user-attachments/assets/86826da7-c078-4a05-8843-e4829ad0d4af
+
+
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
